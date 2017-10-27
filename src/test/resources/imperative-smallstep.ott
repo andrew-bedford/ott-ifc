@@ -1,0 +1,53 @@
+metavar variable, x ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }} 
+metavar location, l ::= {{ coq nat }}
+indexvar index, i, j, n ::= {{ coq nat }}
+
+grammar
+arith_expr, a :: ae_ ::=
+    | x                                 ::  :: variable
+    | n                                 ::  :: int
+    | a1 + a2                           ::  :: addition
+    | a1 * a2                           ::  :: multiplication
+
+bool_expr, b :: be_ ::=
+    | true                              ::  :: true
+    | false                             ::  :: false
+    | a1 < a2                           ::  :: less_than
+
+commands, c :: cmd_ ::=
+    | skip                              ::  :: skip
+    | x := a                            ::  :: assignment
+    | c1 ; c2                           ::  :: sequence
+    | if b then c1 else c2 end          ::  :: if
+    | while b do c end                  ::  :: while 
+
+store, s :: store_ ::=
+   | empty                              ::  :: empty
+   | s , variable |-> n                 ::  :: cell
+
+formula :: formula_ ::=
+    | s ( x ) = n                       ::  :: lookup
+
+% Small-step semantics
+defns
+Jop :: JO_ ::= 
+
+defn 
+a , s --> a' , s' :: :: arith_ops :: ao_ by
+
+------------------------ :: constant
+n, s --> n, s 
+
+
+%s(x) = n
+%-------------- :: var
+%x , s --> n , s
+
+
+%a1, s --> a1', s
+%----------------------- :: add
+%a1 + a2, s --> a1' + a2, s
+
+%a2, s --> a2', s
+%----------------------- :: add
+%n + a2, s --> n + m, s
