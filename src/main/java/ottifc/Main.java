@@ -2,6 +2,7 @@ package ottifc;
 
 import helpers.FileHelper;
 import helpers.ParameterHelper;
+import ottifc.ott.Specification;
 
 import java.io.File;
 
@@ -21,9 +22,17 @@ public class Main {
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
             System.out.println("---------------------------------------------");
-            System.out.println("|             Original Ott                  |");
+            System.out.println("|             Original ott                  |");
             System.out.println("---------------------------------------------");
             System.out.println(fileContents);
+
+
+            System.out.println("---------------------------------------------");
+            System.out.println("|                 ott-ifc                   |");
+            System.out.println("---------------------------------------------");
+            Specification spec = new Specification(fileContents);
+            spec.getVars("metavar");
+            spec.getVars("indexvar");
         }
 
     }
