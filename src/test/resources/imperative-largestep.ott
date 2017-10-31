@@ -38,9 +38,11 @@ terminals :: terminals_ ::=
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
   | |->                                ::   :: mapsto     {{ tex \mapsto }}
   | -->                                ::   :: red        {{ tex \longrightarrow }}
-  | ||                                 ::   :: bigstep
+  | ||                                 ::   :: bigstep    {{ tex \Downarrow }}
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
   | '}'                                ::   :: rightbrace {{ tex \} }}
+  | '<'                                ::   :: leftangle {{ tex \langle}}
+  | '>'                                ::   :: rightangle {{ tex \rangle}}
 
 %----------------------------------------------------------------%
 %                    BIG-STEP SEMANTICS                        %
@@ -113,7 +115,7 @@ defn
 <if b then c1 else c2 end, s> || <skip, s'>
 
 <b, s> || <false, s>
-<c1, s> || <skip, s'>
+<c2, s> || <skip, s'>
 ---------------------------------------------------------------- :: if_false
 <if b then c1 else c2 end, s> || <skip, s'>
 
