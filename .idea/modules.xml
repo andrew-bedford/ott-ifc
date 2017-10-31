@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/mechanism-generator.iml" filepath="$PROJECT_DIR$/mechanism-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ott-ifc.iml" filepath="$PROJECT_DIR$/.idea/ott-ifc.iml" />
     </modules>
   </component>
 </project>

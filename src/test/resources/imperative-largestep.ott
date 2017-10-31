@@ -38,106 +38,92 @@ terminals :: terminals_ ::=
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
   | |->                                ::   :: mapsto     {{ tex \mapsto }}
   | -->                                ::   :: red        {{ tex \longrightarrow }}
+  | ||                                 ::   :: bigstep
   | '{'                                ::   :: leftbrace  {{ tex \{ }}
   | '}'                                ::   :: rightbrace {{ tex \} }}
-  | '<'                                ::   :: leftangle {{ tex \langle}}
-  | '>'                                ::   :: rightangle {{ tex \rangle}}
 
 %----------------------------------------------------------------%
-%                    SMALL-STEP SEMANTICS                        %
+%                    BIG-STEP SEMANTICS                        %
 %----------------------------------------------------------------%
 defns
 Jop :: '' ::= 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< a , s > --> < a' , s' > :: :: arith_ops :: 'aexp_' by
+< a , s > || < a' , s' > :: :: arith_ops :: 'aexp_' by
 
 ----------------- :: int_constant
-<n, s> --> <n, s>
+<n, s> || <n, s>
 
 s(x) = n
 ----------------- :: lookup
-<x, s> --> <n, s>
+<x, s> || <n, s>
 
 %%% Addition %%%
-<a1, s> --> <a1', s>
------------------------------- :: add_aexp_aexp
-<a1 + a2, s> --> <a1' + a2, s>
-
-<a2, s> --> <a2', s>
------------------------------ :: add_int_aexp
-<n1 + a2, s> --> <n1 + n2, s>
-
+<a1, s> || <n1, s>
+<a2, s> || <n2, s>
 n1 + n2 = n3
-------------------------:: add_int_int
-<n1 + n2, s> --> <n3, s>
+------------------------------ :: add
+<a1 + a2, s> || <n3, s>
+
 
 %%% Multiplication %%%
-<a1, s> --> <a1', s>
------------------------------- :: mult_aexp_aexp
-<a1 * a2, s> --> <a1' * a2, s>
-
-<a2, s> --> <a2', s>
------------------------------ :: mult_int_aexp
-<n1 * a2, s> --> <n1 * n2, s>
-
+<a1, s> || <n1, s>
+<a2, s> || <n2, s>
 n1 * n2 = n3
------------------------- :: mult_int_int
-<n1 * n2, s> --> <n3, s>
+------------------------------ :: mult
+<a1 * a2, s> || <n3, s>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Boolean Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< b , s > --> < b' , s' > :: :: bool_ops :: 'bexp_' by
+< b , s > || < b' , s' > :: :: bool_ops :: 'bexp_' by
 
-<a1, s> --> <a1', s>
------------------------------- :: lt_aexp_aexp
-<a1 < a2, s> --> <a1' < a2, s>
-
-<a2, s> --> <a2', s>
------------------------------ :: lt_int_aexp
-<n1 < a2, s> --> <n1 < n2, s>
-
+<a1, s> || <n1, s>
+<a2, s> || <n2, s>
 n1 < n2 = true
------------------------- :: lt_int_int
-<n1 < n2, s> --> <true, s>
+------------------------------ :: lt_true
+<a1 < a2, s> || <true, s>
 
+<a1, s> || <n1, s>
+<a2, s> || <n2, s>
 n1 < n2 = false
------------------------- :: lt_int_int
-<n1 < n2, s> --> <false, s>
+------------------------------ :: lt_false
+<a1 < a2, s> || <false, s>
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< c , s > --> < c' , s' > :: :: cmd_ops :: 'cmd_' by
+< c , s > || < c' , s' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
-<a, s> --> <a', s>
------------------------------ :: assign_aexp
-<x := a, s> --> <x := a', s>
-
------------------------------ :: assign_int
-<x := n, s> --> <skip, s[x |-> n]>
+<a, s> || <n, s>
+----------------------------- :: assign
+<x := a, s> || <skip, s[x |-> n]>
 
 %%% Sequence %%%
-<c1, s> --> <c1', s'>
--------------------------------- :: seq1
-<c1 ; c2, s> --> <c1' ; c2, s'>
-
---------------------------- :: seq2
-<skip ; c2, s> --> <c2, s>
-
+<c1, s> || <skip, s'>
+<c2, s'> || <skip, s''>
+-------------------------------- :: sequence
+<c1 ; c2, s> || <skip, s''>
 
 %%% If %%%
-<b, s> --> <b', s>
----------------------------------------------------------------- :: if_eval
-<if b then c1 else c2 end, s> --> <if b' then c1 else c2 end, s>
-
+<b, s> || <true, s>
+<c1, s> || <skip, s'>
 ---------------------------------------------------------------- :: if_true
-<if true then c1 else c2 end, s> --> <c1, s>
+<if b then c1 else c2 end, s> || <skip, s'>
 
+<b, s> || <false, s>
+<c1, s> || <skip, s'>
 ---------------------------------------------------------------- :: if_false
-<if false then c1 else c2 end, s> --> <c2, s>
+<if b then c1 else c2 end, s> || <skip, s'>
 
 %%% While %%%
---------------------------------------------------------------------------- :: while
-<while b do c end, s> --> <if b then c ; while b do c end else skip end, s>
+<b, s> || <true, s>
+<c, s> || <skip, s'>
+<while b do c end, s'> || <skip, s''>
+--------------------------------------------------------------------------- :: while_true
+<while b do c end, s> || <skip, s''>
+
+<b, s> || <false, s>
+--------------------------------------------------------------------------- :: while_false
+<while b do c end, s> || <skip, s>
