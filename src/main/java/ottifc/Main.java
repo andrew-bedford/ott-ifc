@@ -33,6 +33,7 @@ public class Main {
             Specification spec = new Specification(fileContents);
             spec.getVars("metavar");
             spec.getVars("indexvar");
+            System.out.println(fileContents.replaceAll("<", "<G, pc, "));
         }
 
     }
