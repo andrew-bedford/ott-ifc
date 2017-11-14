@@ -20,6 +20,12 @@ public class Specification {
         String[] specLines = _specification.split("\n");
         for(String line : specLines) {
             String trimmedLine = line.trim();
+            if (trimmedLine.startsWith("grammar")) {
+                System.out.println("GRAMMAR BEGINS : " + trimmedLine);
+            }
+            else if (trimmedLine.startsWith("defns")) {
+                System.out.println("DEFINITIONS BEGINS : " + trimmedLine);
+            }
             if (trimmedLine.startsWith(vartype)) {
                 String[] metavars = trimmedLine.substring(trimmedLine.indexOf(" "), trimmedLine.length()).split("::=")[0].split(",");
                 for (String metavar : metavars) {
