@@ -81,7 +81,7 @@ We present a tool called \ottifc, that can automatically generate information-fl
 
 %Problem and Motivation: Clearly state the problem being addressed and explain the reasons for seeking a solution to this problem.
 \section{Introduction}
-Language-based security~\cite{DBLP:conf/dagstuhl/SchneiderMH01} is an active field of research in which techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, are used to enforce security policies. One of the most studied security policy is called \emph{non-interference}. It essentially states that private information may not interfere with the publicly observable behavior of the program. For example, Listings~\ref{listing:explicit-flow} and \ref{listing:implicit-flow} both violate non-interference because someone observing the contents of \lstinline{public} could learn something about \lstinline{private}.
+Language-based security~\cite{DBLP:conf/dagstuhl/SchneiderMH01} is an active field of research in which techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, are used to enforce security policies. One of the most studied security policy is called \emph{non-interference}. It essentially states that private information may not interfere with the publicly observable behavior of a program. For example, Listings~\ref{listing:explicit-flow} and \ref{listing:implicit-flow} both violate non-interference because someone observing the contents of \lstinline{public} could learn something about \lstinline{private}.
 
 \begin{lstlisting}[captionpos=b, caption=Insecure explicit flow, label=listing:explicit-flow]
   public := private
@@ -96,6 +96,8 @@ Language-based security~\cite{DBLP:conf/dagstuhl/SchneiderMH01} is an active fie
 \end{lstlisting}
 
 Mechanisms that enforce non-interference are called \\\emph{information-flow control mechanisms}, as they track and control where information may flow during the execution of a program.
+
+
 
 In order to help language-based security researchers develop sound
 
@@ -127,6 +129,26 @@ commands, c :: cmd_ ::=
   | c1 ; c2           
   | if b then c1 else c2 end
   | while b do c end   
+\end{lstlisting}
+
+\begin{lstlisting}
+  %%% Assignment %%%
+  <a, s> || <n, s>
+  ---------------------------------
+  <x := a, s> || <skip, s[x |-> n]>
+\end{lstlisting}
+
+\begin{lstlisting}
+  %%% If %%%
+  <b, s> || <true, s>
+  <c1, s> || <skip, s'>
+  --------------------------------------------
+  <if b then c1 else c2 end, s> || <skip, s'>
+  
+  <b, s> || <false, s>
+  <c2, s> || <skip, s'>
+  --------------------------------------------
+  <if b then c1 else c2 end, s> || <skip, s'>
 \end{lstlisting}
 
 \section{Current Status and Future Work}

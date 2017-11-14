@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3518e6c6-4601-4012-a6e9-b2dab6daec1b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/latex/paper/main.pdf" afterPath="$PROJECT_DIR$/src/main/latex/paper/main.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" afterPath="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/latex/paper/definitions.tex" afterPath="$PROJECT_DIR$/src/main/latex/paper/definitions.tex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/latex/paper/main.tex" afterPath="$PROJECT_DIR$/src/main/latex/paper/main.tex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/latex/paper/references.bib" afterPath="$PROJECT_DIR$/src/main/latex/paper/references.bib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resources/imperative-smallstep.ott" afterPath="$PROJECT_DIR$/src/test/resources/imperative-smallstep.ott" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/src/test/resources/imperative-smallstep.ott">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1071">
-              <caret line="32" column="54" lean-forward="true" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
+              <caret line="32" column="54" lean-forward="false" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -77,8 +72,8 @@
       <file leaf-file-name="imperative-largestep.ott" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/resources/imperative-largestep.ott">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="21" selection-end-column="53" />
+            <state relative-caret-position="459">
+              <caret line="110" column="10" lean-forward="true" selection-start-line="110" selection-start-column="10" selection-end-line="110" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -896,15 +891,15 @@
     <entry file="file://$PROJECT_DIR$/src/test/resources/imperative-smallstep.ott">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1071">
-          <caret line="32" column="54" lean-forward="true" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
+          <caret line="32" column="54" lean-forward="false" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/resources/imperative-largestep.ott">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="21" selection-end-column="53" />
+        <state relative-caret-position="459">
+          <caret line="110" column="10" lean-forward="true" selection-start-line="110" selection-start-column="10" selection-end-line="110" selection-end-column="10" />
           <folding />
         </state>
       </provider>
