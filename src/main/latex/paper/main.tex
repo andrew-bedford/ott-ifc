@@ -105,17 +105,18 @@ Most information-flow control mechanisms seek to enforce a policy called \emph{n
 
 Techniques for tracking and controlling explicit and implicit flows at the language level are well known~\cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/RussoS10}, and are used in this work. 
 
-
+%The generated mechanisms enforce non-interference and take into account explicit and implicit flows. 
 
 %Approach and Uniqueness: Describe your approach in attacking the problem and clearly state how your approach is novel.
 \section{Approach and Uniqueness}
-We have developped a tool called \ottifc\ that can generate basic information-flow control mechanisms from programming language specifications (i.e., syntax and semantics). The generated mechanisms enforce non-interference and take into account explicit and implicit flows. To the best of our knowledge, we are the first ones to accomplish this; they are usually designed and implemented from the ground-up by a human.
+We have developped a tool called \ottifc\ that can generate basic information-flow control mechanisms from programming language specifications (i.e., syntax and semantics). To the best of our knowledge, we are the first ones to achieve this; they are usually designed and implemented from the ground-up by a human.
 
-As the name implies, \ottifc\ uses Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as its input (and output) language. Ott is a programming language specification tool which 
+As the name implies, \ottifc\ uses Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as its input/output language. Ott is a tool that takes as input a programming language's syntax and semantics, written in a concise ASCII notation that ressembles what one would write in informal mathematics, and generates LaTeX, Coq or Isabelle/HOL versions of the definition.
 
+\ottifc\ makes two assumptions about the language's specification: (1) that its syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that its semantics program configurations be of the form $\langle command, memory\rangle$. 
 
-
-\begin{lstlisting}[captionpos=b,caption=Ott syntax of a simple imperative language]
+To illustrate our approach, consider the simple imperative language of Listing~\ref{listing:input-syntax}.
+\begin{lstlisting}[label=listing:input-syntax,captionpos=b,caption=Ott syntax of a simple imperative language]
   arith_expr, a ::= x | n | a1 + a2 | a1 * a2 
   bool_expr, b ::= true | false | a1 < a2
   commands, c ::= skip | x := a | c1 ; c2 | 
@@ -123,32 +124,64 @@ As the name implies, \ottifc\ uses Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} a
                   while b do c end   
 \end{lstlisting}
 
-\begin{lstlisting}[captionpos=b,caption={Ott big-step semantics of the assign command}]
-  <a, s> || <n, s>
-  ---------------------------------
-  <x := a, s> || <skip, s[x |-> n]>
-\end{lstlisting}
 
-\begin{lstlisting}[captionpos=b,caption={Ott big-step semantics of the if command}]
-  <b, s> || <true, s>
-  <c1, s> || <skip, s1>
+We start by inserting in all the rules a typing environment \lstinline{E} which maps variables to their level of information, and a program counter \lstinline{pc} is used to keep track of the level of information that influenced the control-flow.
+
+\newpage
+To prevent explicit flows, we identify the semantics rules that may modify the memory \lstinline{m} (e.g., Listing~\ref{listing:input-semantics-assign}). 
+
+\begin{lstlisting}[label=listing:input-semantics-assign,captionpos=b,caption={Ott big-step semantics of the assign command}]
+  <a, m> || <n, m>
+  ---------------------------------
+  <x := a, m> || <skip, m[x |-> n]>
+\end{lstlisting}
+In each of those rules, we insert a condition to ensure that we are not storing private information in a public variable.
+
+%\begin{lstlisting}[label=listing:input-semantics-assign,captionpos=b,caption={Ott big-step semantics of the assign command}]
+%  <a, m> || <n, m>
+%  E |- a : ta
+%  E |- x : tx
+%  ta <= tx
+%  ---------------------------------
+%  <x:=a, m, E, pc> || <skip, m[x |-> n], E[x |-> ta], pc>
+%\end{lstlisting}
+
+To prevent implicit flows, we identify commands that may influence the control-flow of the application. That is, commands for which a program configuration may lead to two different program configurations (e.g., Listing~\ref{listing:input-semantics-if}).
+
+\begin{lstlisting}[label=listing:input-semantics-if, captionpos=b,caption={Ott big-step semantics of the if command}]
+  <b, m> || <true, m>
+  <c1, m> || <skip, m1>
   --------------------------------------------
-  <if b then c1 else c2 end, s> || <skip, s1>
+  <if b then c1 else c2 end, m> || <skip, m1>
   
-  <b, s> || <false, s>
-  <c2, s> || <skip, s2>
+  <b, m> || <false, m>
+  <c2, m> || <skip, m2>
   --------------------------------------------
-  <if b then c1 else c2 end, s> || <skip, s2>
+  <if b then c1 else c2 end, m> || <skip, m2>
+\end{lstlisting}
+We then update to the program counter \lstinline{pc} with the level of the expressions that are present in the rule (only \lstinline{b} in this case).
+\begin{lstlisting}[label=listing:output-semantics-if, captionpos=b,caption={Instrumented semantics of the if command}]
+  <b, m> || <true, m>
+  E |- b : tb
+  <c1, m, E, pc |_| tb> || <skip, m1, E1, pc1>
+  --------------------------------------------
+  <if b then c1 else c2 end, m, E, pc> || <skip, m1, E1, pc>
+  
+  <b, m> || <false, m>
+  E |- b : tb
+  <c2, m, E, pc |_| tb> || <skip, m2, E2, pc2>
+  --------------------------------------------
+  <if b then c1 else c2 end, m, E, pc> || <skip, m2, E2, pc>
 \end{lstlisting}
 
 \section{Current Status and Future Work}
-We have implemented a prototype of our algorithm~\cite{GitHub:ott-ifc} and validated that it works on two simple imperative languages: one defined using small-step semantics and the other using big-step semantics. We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
+We have implemented a prototype of our algorithm and validated that it works on two  imperative languages: one defined using small-step semantics and the other using big-step semantics. We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
 
 Before our tool can be of real use to most researchers, much work remains to be done.
 
-\paragraph{Language Support} \ottifc~ currently makes two assumptions about the language: (1) that the syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that the program configurations be of the form $\langle command, memory\rangle$. While these assumptions simplify the implementation, it also restricts the types of languages that can be used in \ottifc. For example, most functional languages would not be supported because, in those languages, functions can be expressions. We are currently in the process of building a repository of formalized languages so that we can test our approach on additional languages. 
+\paragraph{Language Support} Our assumptions restricts the types of languages that can be used in \ottifc. For example, most functional languages would not be supported because, in those languages, functions can be expressions. We are currently in the process of building a repository of formalized languages so that we can test and extend our approach to a wider range of languages.
 
-\paragraph{Parametrization} For the moment, \ottifc\ only generates one type of information-flow control mechanism: a type system which enforces termination-insensitive non-interference. We plan on parametrizing our tool so that users can choose the type of mechanism to generate (e.g., type system, monitor) and choose some of its features (e.g., flow-sensitivity, termination-sensitivity, progress-sensitivity).
+\paragraph{Parametrization} For the moment, \ottifc\ only generates one type of information-flow control mechanism: a monitor. We plan on parametrizing our tool so that users can choose the type of mechanism to generate (e.g., type system, monitor) and choose some of its features (e.g., flow-sensitivity, termination-sensitivity, progress-sensitivity).
 
 \paragraph{Generating Formal Proofs} We expect that some users will use the mechanisms generated by \ottifc\ as a foundation to build better and more precise mechanisms. One of the most grueling task when building an information-flow control mechanism is to prove its soundness. In order to help those users, we plan on generating a skeleton of the proof in Coq or Isabelle/HOL (both languages are supported by Ott).
 
