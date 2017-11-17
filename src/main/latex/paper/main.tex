@@ -58,7 +58,7 @@
 \begin{document}
 
 %% Title information
-\title[ott-ifc]{Automatically Generating Information-Flow Control Mechanisms: A First Step}
+\title[ott-ifc]{\ottifc: Automatically Generating Information-Flow Control Mechanisms}
 
 
 %% Author information
@@ -74,16 +74,22 @@
 
 %% Abstract
 \begin{abstract}
-Designing sound information-flow control mechanisms can be a challenging and error-prone task, particularly when dealing with complex programming languages. To make this task easier, we have developped a tool called \ottifc\ that can automatically generate information-flow control mechanisms from programming language specifications (i.e., syntax and semantics).
+We present \ottifc\, a tool that can automatically generate information-flow control mechanisms from programming language specifications (i.e., syntax and semantics).
 \end{abstract}
 
 \maketitle
 
 %Problem and Motivation: Clearly state the problem being addressed and explain the reasons for seeking a solution to this problem.
-\section{Introduction}
-Information-flow control mechanisms are... 
+\section{Problem and Motivation}
+Modern operating systems rely mostly on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released for processing. To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea being to use techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, to enforce information-flow policies (e.g., information from a private file should not saved in a public file). Mechanisms that enforce information-flow policies (e.g., \cite{DBLP:journals/compsec/BedfordCDKT17}) are called \emph{information-flow control mechanisms}. 
 
-Language-based security~\cite{DBLP:conf/dagstuhl/SchneiderMH01} is an active field of research in which techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, are used to enforce security policies. One of the most studied security policy is called \emph{non-interference}. It essentially states that private information may not interfere with the publicly observable behavior of a program. For example, Listings~\ref{listing:explicit-flow} and \ref{listing:implicit-flow} both violate non-interference because someone observing the contents of \lstinline{public} could learn something about \lstinline{private}.
+Due to the numerous ways through which information may flow in a program, developping sound information-flow control mechanisms can be a challenging and error-prone task, particularly when dealing with complex programming languages. To help with this task, we have developped a tool called \ottifc\ that can automatically generate information-flow control mechanisms from programming language specifications (i.e., syntax and semantics).
+
+%This is usually done by associating sensitive information with a label, which is then propagated whenever the information is used; a process called tainting. 
+
+
+\section{Background and Related Work}
+One of the most studied information-flow policy is called \emph{non-interference}. It essentially states that private information may not interfere with the publicly observable behavior of a program. In other words, that private information may not flow to public information. For example, Listings~\ref{listing:explicit-flow} and \ref{listing:implicit-flow} both violate non-interference because someone observing the contents of \lstinline{public} could learn something about \lstinline{private}.
 
 \begin{lstlisting}[captionpos=b, caption=Insecure explicit flow, label=listing:explicit-flow]
   public := private
@@ -112,52 +118,38 @@ We chose to use Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as our input languag
 
 
 
-\begin{lstlisting}[captionpos=b,caption=Syntax of a simple imperative language]
-arith_expr, a :: ae_ ::=
-  | x         
-  | n                        
-  | a1 + a2                  
-  | a1 * a2                       
-
-bool_expr, b :: be_ ::=
-  | true                        
-  | false   
-  | a1 < a2          
-
-commands, c :: cmd_ ::=
-  | skip    
-  | x := a 
-  | c1 ; c2           
-  | if b then c1 else c2 end
-  | while b do c end   
+\begin{lstlisting}[captionpos=b,caption=Ott syntax of a simple imperative language]
+  arith_expr, a ::= x | n | a1 + a2 | a1 * a2 
+  bool_expr, b ::= true | false | a1 < a2
+  commands, c ::= skip | x := a | c1 ; c2 | 
+                  if b then c1 else c2 end | 
+                  while b do c end   
 \end{lstlisting}
 
-\begin{lstlisting}
-  %%% Assignment %%%
+\begin{lstlisting}[captionpos=b,caption={Ott big-step semantics of the assign command}]
   <a, s> || <n, s>
   ---------------------------------
   <x := a, s> || <skip, s[x |-> n]>
 \end{lstlisting}
 
-\begin{lstlisting}
-  %%% If %%%
+\begin{lstlisting}[captionpos=b,caption={Ott big-step semantics of the if command}]
   <b, s> || <true, s>
-  <c1, s> || <skip, s'>
+  <c1, s> || <skip, s1>
   --------------------------------------------
-  <if b then c1 else c2 end, s> || <skip, s'>
+  <if b then c1 else c2 end, s> || <skip, s1>
   
   <b, s> || <false, s>
-  <c2, s> || <skip, s'>
+  <c2, s> || <skip, s2>
   --------------------------------------------
-  <if b then c1 else c2 end, s> || <skip, s'>
+  <if b then c1 else c2 end, s> || <skip, s2>
 \end{lstlisting}
 
 \section{Current Status and Future Work}
-We have implemented a prototype of our algorithm and validated that it works on two simple imperative languages: one defined using small-step semantics and the other using large-step semantics. We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
+We have implemented a prototype of our algorithm~\cite{GitHub:ott-ifc} and validated that it works on two simple imperative languages: one defined using small-step semantics and the other using big-step semantics. We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
 
 Before our tool can be of real use to most researchers, much work remains to be done.
 
-\paragraph{Language Support} \ottifc~ currently makes two assumptions about the language: (1) that the syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that the program configurations be of the form $\langle command, memory\rangle$. While these assumptions helped simplify the implementation, it also restricts the types of languages that can be used in \ottifc. For example, most functional languages would not be supported because in those languages functions can be expressions. We are currently in the process of building a repository of formalized languages so that we can test our approach on additional languages. 
+\paragraph{Language Support} \ottifc~ currently makes two assumptions about the language: (1) that the syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that the program configurations be of the form $\langle command, memory\rangle$. While these assumptions simplify the implementation, it also restricts the types of languages that can be used in \ottifc. For example, most functional languages would not be supported because, in those languages, functions can be expressions. We are currently in the process of building a repository of formalized languages so that we can test our approach on additional languages. 
 
 \paragraph{Parametrization} For the moment, \ottifc\ only generates one type of information-flow control mechanism: a type system which enforces termination-insensitive non-interference. We plan on parametrizing our tool so that users can choose the type of mechanism to generate (e.g., type system, monitor) and choose some of its features (e.g., flow-sensitivity, termination-sensitivity, progress-sensitivity).
 
