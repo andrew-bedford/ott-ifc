@@ -83,13 +83,13 @@ We present \ottifc\, a tool that can automatically generate information-flow con
 \section{Problem and Motivation}
 Modern operating systems rely mostly on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released for processing. To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea being to use techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, to enforce information-flow policies (e.g., information from a private file should not saved in a public file). Mechanisms that enforce information-flow policies (e.g., \cite{DBLP:journals/compsec/BedfordCDKT17}) are called \emph{information-flow control mechanisms}. 
 
-Due to the numerous ways through which information may flow in a program, developping sound information-flow control mechanisms can be a challenging and error-prone task, particularly when dealing with complex programming languages. To help with this task, we have developped a tool called \ottifc\ that can automatically generate information-flow control mechanisms from programming language specifications (i.e., syntax and semantics).
+Due to the numerous ways through which information may flow in a program, developping sound information-flow control mechanisms can be a challenging and error-prone task, particularly when dealing with complex programming languages.
 
 %This is usually done by associating sensitive information with a label, which is then propagated whenever the information is used; a process called tainting. 
 
-
+%Background and Related Work: Describe the specialized (but pertinent) background necessary to appreciate the work. Include references to the literature where appropriate, and briefly explain where your work departs from that done by others.
 \section{Background and Related Work}
-One of the most studied information-flow policy is called \emph{non-interference}. It essentially states that private information may not interfere with the publicly observable behavior of a program. In other words, that private information may not flow to public information. For example, Listings~\ref{listing:explicit-flow} and \ref{listing:implicit-flow} both violate non-interference because someone observing the contents of \lstinline{public} could learn something about \lstinline{private}.
+Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}. It essentially states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, a mechanism must take into account two types of information flows: \emph{explicit flow} and \emph{implicit flow}~\cite{DBLP:journals/cacm/Denning76}. An insecure explicit information flow (Listing~\ref{listing:explicit-flow}) occurs when a private information flows directly into public information. An insecure implicit information flow (Listing~\ref{listing:implicit-flow}) occurs when private information influences public information through the control-flow of the application.
 
 \begin{lstlisting}[captionpos=b, caption=Insecure explicit flow, label=listing:explicit-flow]
   public := private
@@ -102,19 +102,16 @@ One of the most studied information-flow policy is called \emph{non-interference
     public := 1
   end
 \end{lstlisting}
-Mechanisms that enforce non-interference are called \\\emph{information-flow control mechanisms}, as they track and control where information may flow during the execution of a program.
+
+Techniques for tracking and controlling explicit and implicit flows at the language level are well known~\cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/RussoS10}, and are used in this work. 
 
 
 
-In order to help language-based security researchers develop sound
-
-%there are only a handful of information-flow control mechanisms for "real" languages. most papers
-
-%Background and Related Work: Describe the specialized (but pertinent) background necessary to appreciate the work. Include references to the literature where appropriate, and briefly explain where your work departs from that done by others.
-
-
+%Approach and Uniqueness: Describe your approach in attacking the problem and clearly state how your approach is novel.
 \section{Approach and Uniqueness}
-We chose to use Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as our input language. Ott is a programming language specification tool which 
+We have developped a tool called \ottifc\ that can generate basic information-flow control mechanisms from programming language specifications (i.e., syntax and semantics). The generated mechanisms enforce non-interference and take into account explicit and implicit flows. To the best of our knowledge, we are the first ones to accomplish this; they are usually designed and implemented from the ground-up by a human.
+
+As the name implies, \ottifc\ uses Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as its input (and output) language. Ott is a programming language specification tool which 
 
 
 
