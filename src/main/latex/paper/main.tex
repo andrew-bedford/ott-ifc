@@ -52,6 +52,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{todonotes}
 
 \input{definitions.tex}
 
@@ -81,20 +82,23 @@ We present \ottifc\, a tool that can automatically generate information-flow con
 
 %Problem and Motivation: Clearly state the problem being addressed and explain the reasons for seeking a solution to this problem.
 \section{Problem and Motivation}
-Modern operating systems rely mostly on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released for processing. To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea being to use techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, to enforce information-flow policies (e.g., information from a private file should not saved in a public file). Mechanisms that enforce information-flow policies (e.g., \cite{DBLP:journals/compsec/BedfordCDKT17}) are called \emph{information-flow control mechanisms}. 
+Modern operating systems rely mostly on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released for processing. To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea is to use techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, to enforce information-flow policies (e.g., information from a private file should not saved in a public file). Mechanisms that enforce such policies (e.g., \cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/ChudnovN10,DBLP:journals/compsec/BedfordCDKT17}) are called \emph{information-flow control mechanisms}. 
 
-Due to the numerous ways through which information may flow in a program, developping sound information-flow control mechanisms can be a challenging and error-prone task, particularly when dealing with complex programming languages.
+Due to the numerous ways through which information may flow in a program, developping sound information-flow control mechanisms can be a laborious and error-prone task, particularly when dealing with complex programming languages.
 
 %This is usually done by associating sensitive information with a label, which is then propagated whenever the information is used; a process called tainting. 
 
 %Background and Related Work: Describe the specialized (but pertinent) background necessary to appreciate the work. Include references to the literature where appropriate, and briefly explain where your work departs from that done by others.
 \section{Background and Related Work}
-Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}. It essentially states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, a mechanism must take into account two types of information flows: \emph{explicit flow} and \emph{implicit flow}~\cite{DBLP:journals/cacm/Denning76}. An insecure explicit information flow (Listing~\ref{listing:explicit-flow}) occurs when a private information flows directly into public information. An insecure implicit information flow (Listing~\ref{listing:implicit-flow}) occurs when private information influences public information through the control-flow of the application.
+Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}, which essentially states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, a mechanism must take into account two types of information flows: \emph{explicit flow} and \emph{implicit flow}~\cite{DBLP:journals/cacm/Denning76}. 
 
+An insecure explicit information flow (Listing~\ref{listing:explicit-flow}) occurs when private information flows directly into public information. 
 \begin{lstlisting}[captionpos=b, caption=Insecure explicit flow, label=listing:explicit-flow]
   public := private
 \end{lstlisting}
+Explicit flows can be prevented by associating labels to sensitive information and propagating them whenever the information is used; a process called tainting.
 
+An insecure implicit information flow (Listing~\ref{listing:implicit-flow}) occurs when private information influences public information through the control-flow of the application.
 \begin{lstlisting}[captionpos=b, caption=Insecure implicit flow, label=listing:implicit-flow]
   if (private > 0) then
     public := 0
@@ -102,8 +106,9 @@ Most information-flow control mechanisms seek to enforce a policy called \emph{n
     public := 1
   end
 \end{lstlisting}
+Implicit flows can be prevented using a program counter, $pc$, which keeps track of the context in which a command is executed.
 
-Techniques for tracking and controlling explicit and implicit flows at the language level are well known~\cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/RussoS10}, and are used in this work. 
+%These well known techniques~\cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/RussoS10}, and are used in this work. 
 
 %The generated mechanisms enforce non-interference and take into account explicit and implicit flows. 
 
@@ -113,7 +118,7 @@ We have developped a tool called \ottifc\ that can generate basic information-fl
 
 As the name implies, \ottifc\ uses Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10} as its input/output language. Ott is a tool that takes as input a programming language's syntax and semantics, written in a concise ASCII notation that ressembles what one would write in informal mathematics, and generates LaTeX, Coq or Isabelle/HOL versions of the definition.
 
-\ottifc\ makes two assumptions about the language's specification: (1) that its syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that its semantics program configurations be of the form $\langle command, memory\rangle$. 
+\ottifc\ makes two assumptions about the language's specification: (1) that its syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and (2) that its program configurations be of the form $\langle command, memory, outputs\rangle$. 
 
 To illustrate our approach, consider the simple imperative language of Listing~\ref{listing:input-syntax}.
 \begin{lstlisting}[label=listing:input-syntax,captionpos=b,caption=Ott syntax of a simple imperative language]
@@ -174,6 +179,7 @@ We then update to the program counter \lstinline{pc} with the level of the expre
   <if b then c1 else c2 end, m, E, pc> || <skip, m2, E2, pc>
 \end{lstlisting}
 
+%Results and Contributions: Clearly show how the results of your work contribute to computer science and explain the significance of those results.
 \section{Current Status and Future Work}
 We have implemented a prototype of our algorithm and validated that it works on two  imperative languages: one defined using small-step semantics and the other using big-step semantics. We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
 
