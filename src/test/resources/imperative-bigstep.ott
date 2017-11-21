@@ -1,4 +1,5 @@
-metavar variable, x ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }} 
+metavar variable, x ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
+metavar channel, c ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
 metavar integer, n ::= {{ coq nat }} {{ lex  numeral }}
 indexvar index, i, j ::= {{ coq nat }}
 
@@ -14,13 +15,15 @@ bool_expr, b :: be_ ::=
     | false                             ::  :: false
     | a1 < a2                           ::  :: less_than
 
-commands, c :: cmd_ ::=
+commands, cmd :: cmd_ ::=
     | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
-    | c1 ; c2                           ::  :: sequence
-    | if b then c1 else c2 end          ::  :: if
-    | while b do c end                  ::  :: while 
+    | cmd1 ; cmd2                           ::  :: sequence
+    | if b then cmd1 else cmd2 end          ::  :: if
+    | while b do cmd end                  ::  :: while
+    | read x from c                     ::  :: read
+    | write x to c                      ::  :: write
 
 memory, m :: memory_ ::=
    | empty                              ::  :: empty
@@ -96,7 +99,7 @@ n1 < n2 = false
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< c , m > || < c' , m' > :: :: cmd_ops :: 'cmd_' by
+< cmd , m > || < cmd' , m' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
 <a, m> || <n, m>
@@ -104,29 +107,37 @@ defn
 <x := a, m> || <stop, m[x |-> n]>
 
 %%% Sequence %%%
-<c1, m> || <stop, m'>
-<c2, m'> || <stop, m''>
+<cmd1, m> || <stop, m'>
+<cmd2, m'> || <stop, m''>
 -------------------------------- :: sequence
-<c1 ; c2, m> || <stop, m''>
+<cmd1 ; cmd2, m> || <stop, m''>
 
 %%% If %%%
 <b, m> || <true, m>
-<c1, m> || <stop, m'>
+<cmd1, m> || <stop, m'>
 ---------------------------------------------------------------- :: if_true
-<if b then c1 else c2 end, m> || <stop, m'>
+<if b then cmd1 else cmd2 end, m> || <stop, m'>
 
 <b, m> || <false, m>
-<c2, m> || <stop, m'>
+<cmd2, m> || <stop, m'>
 ---------------------------------------------------------------- :: if_false
-<if b then c1 else c2 end, m> || <stop, m'>
+<if b then cmd1 else cmd2 end, m> || <stop, m'>
 
 %%% While %%%
 <b, m> || <true, m>
-<c, m> || <stop, m'>
-<while b do c end, m'> || <stop, m''>
+<cmd, m> || <stop, m'>
+<while b do cmd end, m'> || <stop, m''>
 --------------------------------------------------------------------------- :: while_true
-<while b do c end, m> || <stop, m''>
+<while b do cmd end, m> || <stop, m''>
 
 <b, m> || <false, m>
 --------------------------------------------------------------------------- :: while_false
-<while b do c end, m> || <stop, m>
+<while b do cmd end, m> || <stop, m>
+
+m(c) = n
+--------------------------------------------------------------------------- :: read
+<read x from c, m> || <stop, m[x |-> n]>
+
+m(x) = n
+--------------------------------------------------------------------------- :: write
+<write x to c, m> || <stop, m[c |-> n]>

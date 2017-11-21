@@ -52,18 +52,5 @@ public class Main {
         }
     }
 
-    //TODO Generate the regex patterns from the syntax instead of using a hard-coded one. The hard-coded one is used only for the proof-of-concept.
-    public boolean containsExpression(String s) {
-        Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|true|false");
-        Matcher m = p.matcher(s);
-        return m.matches();
 
-    }
-
-    //TODO See containsExpression's TODO
-    public boolean containsCommand(String s) {
-        Pattern p = Pattern.compile("skip|x := a|x := n|c1 ; c2|while b do c end|if b then|(c[0-9\\']?)");
-        Matcher m = p.matcher(s);
-        return m.matches();
-    }
 }
