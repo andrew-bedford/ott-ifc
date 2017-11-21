@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ParameterHelper.parse(args);
 
         if (ParameterHelper.isEmpty() || ParameterHelper.contains("-help")) {
@@ -26,18 +26,20 @@ public class Main {
             verifyFileExists(filePath);
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
-            System.out.println("---------------------------------------------");
-            System.out.println("|             Original ott                  |");
-            System.out.println("---------------------------------------------");
+            System.err.println("---------------------------------------------");
+            System.err.println("|             Original ott                  |");
+            System.err.println("---------------------------------------------");
+            Thread.sleep(100);
             System.out.println(fileContents);
 
 
-            System.out.println("---------------------------------------------");
-            System.out.println("|                 ott-ifc                   |");
-            System.out.println("---------------------------------------------");
+            System.err.println("---------------------------------------------");
+            System.err.println("|                 ott-ifc                   |");
+            System.err.println("---------------------------------------------");
+            Thread.sleep(100);
             Specification spec = new Specification(fileContents);
-            spec.getVars("metavar");
-            spec.getVars("indexvar");
+            //spec.getVars("metavar");
+            //spec.getVars("indexvar");
 
             Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             m.generate();

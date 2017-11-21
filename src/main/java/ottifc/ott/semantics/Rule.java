@@ -3,14 +3,19 @@ package ottifc.ott.semantics;
 import ottifc.ott.Specification;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Rule {
     String _rule;
     State _initialState;
     State _finalState;
     String _separator;
-    List<String> _preconditions;
+    String _stepSymbol;
+    Set<String> _preconditions;
 
     public Rule(String rule) {
         _rule = rule;
@@ -20,10 +25,57 @@ public class Rule {
         _finalState = extractFinalState();
     }
 
-    private List<String> extractPreconditions() {
-        List<String> preconditions = new ArrayList<String>();
-        String s = _rule.split("----")[0];
+    public Set<String> getPreconditions() {
+        return _preconditions;
+    }
 
+    public void addPrecondition(String precondition) {
+        _preconditions.add(precondition);
+    }
+
+    public State getInitialState() {
+        return _initialState;
+    }
+
+    public State getFinalState() {
+        return _finalState;
+    }
+
+    public String toString() {
+        return _rule;
+    }
+
+    public void print() {
+        for(String precondition : _preconditions) {
+            System.out.println(precondition);
+        }
+        System.out.println(_separator);
+        System.out.println(String.format("%s %s %s", _initialState.toString(), _stepSymbol, _finalState.toString()));
+
+    }
+
+    //TODO Delegate to Rule/State object instead
+    public void insertIntoAllStates(String s) {
+        getInitialState().insertVariable(s);
+        getFinalState().insertVariable(s);
+        for(String precondition : _preconditions) {
+            precondition = precondition.replaceAll("<", String.format("<%s, ", s));
+            //precondition = precondition.replaceAll("--> <", String.format("--> <%s, ", s));
+            //precondition = precondition.replaceAll("\\|\\| <", String.format("|| <%s, ", s));
+        }
+
+    }
+
+    private Set<String> extractPreconditions() {
+        Set<String> preconditions = new HashSet<String>();
+        String s = _rule.split("----")[0];
+        String[] lines = s.split("\r\n");
+        for(String line : lines) {
+            if (!line.trim().isEmpty()) {
+                preconditions.add(line.trim());
+            }
+        }
+        return preconditions;
     }
 
     private String extractSeparator() {
@@ -43,8 +95,27 @@ public class Rule {
         return s[s.length-1].contains("::");
     }
 
-    public void print() {
-        System.out.println(_rule);
+    public Set<String> getExpressionVariablesUsedInPreconditions() {
+        Set<String> expressionVariables = new HashSet<>();
+        for(String precondition: _preconditions) {
+            Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|(ch[0-9\\']?)|true|false");
+            Matcher m = p.matcher(precondition);
+            while (m.find()) {
+                expressionVariables.add(m.group());
+            }
+        }
+        return expressionVariables;
+    }
+
+    public Set<String> getExpressionVariablesUsedInPreconditionsWithoutConstants() {
+        Set<String> expressionVariables = getExpressionVariablesUsedInPreconditions();
+        Set<String> filteredSet = new HashSet<>();
+        for(String expressionVariable : expressionVariables) {
+            if (!expressionVariable.startsWith("true") && !expressionVariable.startsWith("false") && !expressionVariable.startsWith("n")) {
+                filteredSet.add(expressionVariable);
+            }
+        }
+        return filteredSet;
     }
 
     private State extractFinalState() {
@@ -55,7 +126,7 @@ public class Rule {
             finalState = s[s.length - 1].split("-->")[1];
         }
         else if (lastLine.contains("||")) {
-            finalState = s[s.length - 1].split("||")[1];
+            finalState = s[s.length - 1].split("\\|\\|")[1];
         }
         return new State(finalState);
     }
@@ -65,10 +136,12 @@ public class Rule {
         String finalState = "";
         String lastLine = s[s.length-1].trim();
         if (lastLine.contains("-->")) {
+            _stepSymbol = "-->";
             finalState = s[s.length - 1].split("-->")[0].trim();
         }
         else if (lastLine.contains("||")) {
-            finalState = s[s.length - 1].split("||")[0].trim();
+            _stepSymbol = "||";
+            finalState = s[s.length - 1].split("\\|\\|")[0].trim();
         }
         return new State(finalState);
     }

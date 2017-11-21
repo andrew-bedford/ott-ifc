@@ -22,6 +22,10 @@ public class Specification {
         _rules = extractRules();
     }
 
+    public List<Rule> getRules() {
+        return _rules;
+    }
+
     //TODO Use enum for the vartype?
     public Set<String> getVars(String vartype) {
         Set<String> setOfVars = new HashSet<>();
@@ -72,7 +76,7 @@ public class Specification {
 
     }
 
-    public List<Rule> extractRules() {
+    private List<Rule> extractRules() {
         List<Rule> rules = new ArrayList<Rule>();
         String[] specParagraphs = _specification.split(("\r\n\r\n")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
         for(String s: specParagraphs) {
@@ -107,14 +111,6 @@ public class Specification {
         String[] specLines = _specification.split("\r\n");
 
         return null;
-    }
-
-
-    //TODO Delegate to Rule/State object instead
-    public void insertIntoAllStates(String s) {
-        _specification = _specification.replaceAll("\n<", String.format("\n<%s, ", s));
-        _specification = _specification.replaceAll("--> <", String.format("--> <%s, ", s));
-        _specification = _specification.replaceAll("\\|\\| <", String.format("|| <%s, ", s));
     }
 
     public void print() {

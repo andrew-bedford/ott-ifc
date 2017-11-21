@@ -1,5 +1,5 @@
 metavar variable, x ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
-metavar channel, c ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
+metavar channel, ch ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
 metavar integer, n ::= {{ coq nat }} {{ lex  numeral }}
 indexvar index, i, j ::= {{ coq nat }}
 
@@ -22,22 +22,22 @@ commands, cmd :: cmd_ ::=
     | cmd1 ; cmd2                           ::  :: sequence
     | if b then cmd1 else cmd2 end          ::  :: if
     | while b do cmd end                  ::  :: while
-    | read x from c                     ::  :: read
-    | write x to c                      ::  :: write
+    | read x from ch                     ::  :: read
+    | write x to ch                      ::  :: write
 
 memory, m :: memory_ ::=
    | empty                              ::  :: empty
    | m [ x |-> n ]                      ::  :: update_variable
-   | m [ c |-> n ]                      ::  :: update_channel
+   | m [ ch |-> n ]                      ::  :: update_channel
 
 output, o :: output_ ::=
    | none                               ::  :: none
-   | o '::' ( c <- n )                   ::  :: append
+   | o '::' ( ch - n )                   ::  :: append
 
 formula :: formula_ ::=
    | judgement                          ::  :: judgement
    | m ( x ) = n                        ::  :: lookup
-   | m ( c ) = n                        ::  :: channel_lookup
+   | m ( ch ) = n                        ::  :: channel_lookup
    | n1 + n2 = n3                       ::  :: addition
    | n1 * n2 = n3                       ::  :: multiplication
    | n1 < n2 = true                     ::  :: lt_true
@@ -141,10 +141,10 @@ defn
 --------------------------------------------------------------------------- :: while_false
 <while b do cmd end, m, o> || <stop, m, o>
 
-m(c) = n
+m(ch) = n
 --------------------------------------------------------------------------- :: read
-<read x from c, m, o> || <stop, m[x |-> n], o>
+<read x from ch, m, o> || <stop, m[x |-> n], o>
 
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to c, m, o> || <stop, m[c |-> n], o::(c <- n)>
+<write x to ch, m, o> || <stop, m[ch |-> n], o::(ch - n)>
