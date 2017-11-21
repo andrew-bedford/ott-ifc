@@ -2,9 +2,14 @@ package ottifc;
 
 import helpers.FileHelper;
 import helpers.ParameterHelper;
+import ottifc.ifc.Monitor;
+import ottifc.ifc.Option;
 import ottifc.ott.Specification;
 
 import java.io.File;
+import java.util.EnumSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,7 +38,9 @@ public class Main {
             Specification spec = new Specification(fileContents);
             spec.getVars("metavar");
             spec.getVars("indexvar");
-            System.out.println(fileContents.replaceAll("<", "<G, pc, "));
+
+            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            m.generate();
         }
 
     }
@@ -43,5 +50,20 @@ public class Main {
             System.err.println("Error: File '"+filePath+"' not found.");
             System.exit(1);
         }
+    }
+
+    //TODO Generate the regex patterns from the syntax instead of using a hard-coded one. The hard-coded one is used only for the proof-of-concept.
+    public boolean containsExpression(String s) {
+        Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|true|false");
+        Matcher m = p.matcher(s);
+        return m.matches();
+
+    }
+
+    //TODO See containsExpression's TODO
+    public boolean containsCommand(String s) {
+        Pattern p = Pattern.compile("skip|x := a|x := n|c1 ; c2|while b do c end|if b then|(c[0-9\\']?)");
+        Matcher m = p.matcher(s);
+        return m.matches();
     }
 }

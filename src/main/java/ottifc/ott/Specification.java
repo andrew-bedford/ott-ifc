@@ -1,16 +1,24 @@
 package ottifc.ott;
 
+import ottifc.ott.semantics.Rule;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Specification {
     String _specification;
+    String _stepSymbol;
+    List<Rule> _rules; //We use a list to preserve the original rule order
 
     public Specification(String specification) {
         _specification = specification;
         removeAnnotationsFromSpecification();
+        _stepSymbol = extractStepSymbol();
+        _rules = extractRules();
     }
 
     //TODO Use enum for the vartype?
@@ -40,7 +48,7 @@ public class Specification {
     }
 
     /**
-     * Removes annotations (i.e., blocks that have the form {{ ... }}) from the specification
+     * Removes annotations (i.e., blocks that have the form {{ ... }}) from the specification so that they do not interfere with our analysis
      */
     private void removeAnnotationsFromSpecification() {
         Pattern p = Pattern.compile("\\{\\{(.|\\s)*?\\}\\}", Pattern.MULTILINE);
@@ -51,10 +59,52 @@ public class Specification {
         }
     }
 
+    public List<Rule> extractRules() {
+        List<Rule> rules = new ArrayList<Rule>();
+        String[] specParagraphs = _specification.split(("\n\n")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
+        for(String s: specParagraphs) {
+            if (s.contains("-----")) { //Then it is (probably) a semantics rule
+                rules.add(new Rule(s));
+            }
+        }
+        return rules;
+    }
+
+    private String extractStepSymbol() {
+        String[] specParagraphs = _specification.split(("\n\n")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
+        for(String s: specParagraphs) {
+            if (s.contains("-----")) { //Then it is (probably) a semantics rule
+                //For the moment, we assume that the step symbols used are either --> (usually used in small-step semantics) or || (usually used in big-step semantics)
+                if (s.contains("-->")) { return "-->"; }
+                else if (s.contains("||")) { return "||"; }
+            }
+        }
+        System.err.println("Error: Non-supported step-relation symbol. Please use --> (small-step) or || (big-step). ");
+        System.exit(1);
+        return ""; //TODO Throw exception instead of stopping the program
+    }
+
+    public String getStepSymbol() {
+        return _stepSymbol;
+    }
+
+    //TODO Implement
     public Set<String> getNonTerminals() {
         Set<String> setOfNonTerminals = new HashSet<>();
         String[] specLines = _specification.split("\n");
 
         return null;
+    }
+
+
+    //TODO Delegate to Rule/State object instead
+    public void insertIntoAllStates(String s) {
+        _specification = _specification.replaceAll("\n<", String.format("\n<%s, ", s));
+        _specification = _specification.replaceAll("--> <", String.format("--> <%s, ", s));
+        _specification = _specification.replaceAll("\\|\\| <", String.format("|| <%s, ", s));
+    }
+
+    public void print() {
+        System.out.println(_specification);
     }
 }

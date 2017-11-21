@@ -86,8 +86,6 @@ Modern operating systems rely mostly on access-control mechanisms to protect use
 
 Developping sound information-flow control mechanisms can be a laborious and error-prone task, particularly when dealing with complex programming languages, due to the numerous ways through which information may flow in a program.
 
-%This is usually done by associating sensitive information with a label, which is then propagated whenever the information is used; a process called tainting. 
-
 %Background and Related Work: Describe the specialized (but pertinent) background necessary to appreciate the work. Include references to the literature where appropriate, and briefly explain where your work departs from that done by others.
 \section{Background and Related Work}\label{section:background}
 Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}, which essentially states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, a mechanism must take into account two types of information flows: \emph{explicit flows} and \emph{implicit flows}~\cite{DBLP:journals/cacm/Denning76}. 
@@ -113,7 +111,7 @@ Implicit flows can be prevented using a program counter, $pc$, which keeps track
 \section{Approach and Uniqueness}
 Information-flow control mechanisms are usually designed and implemented from the ground-up by a human. In order to make this process less laborious and reduce the risk of errors, we have created a tool called \ottifc\ that takes as input a programming language's specification (i.e., syntax and semantics) and produces a mechanism's specification (e.g., instrumented semantics). 
 
-As the name implies, the specifications that \ottifc\ takes as input (and outputs) is written in Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10}. Ott is a tool that can generate LaTeX, Coq or Isabelle/HOL versions of a programming language's specification. The specification is written in a concise and readable ASCII notation that ressembles what one would write in informal mathematics (see following Listings).
+As the name implies, the specifications that \ottifc\ takes as input (and outputs) are written in Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10}. Ott is a tool that can generate LaTeX, Coq or Isabelle/HOL versions of a programming language's specification. The specification is written in a concise and readable ASCII notation that ressembles what one would write in informal mathematics (see following Listings).
 
 Hence, the development process of a mechanism using Ott and \ottifc\ would look like this:
 \begin{enumerate}
@@ -122,7 +120,7 @@ Hence, the development process of a mechanism using Ott and \ottifc\ would look 
   \item Use Ott to export the mechanism to LaTeX/Coq/Isabelle/HOL and complete the implementation.
 \end{enumerate}
 
-For the moment, \ottifc\ supports only languages whose specification respects certain  rules. Namely, that the syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and that the program configurations be of the form $\langle command, memory\rangle$. 
+For the moment, \ottifc\ supports only languages whose specification respects certain rules. Namely, that the syntax be composed of expressions, which may only read the memory, and commands, which may read or write the memory; and that the program configurations be of the form $\langle command, memory\rangle$. 
 
 To illustrate our approach, consider the imperative language whose syntax is defined in Listing~\ref{listing:input-syntax} and (partial) semantics in Listings~\ref{listing:input-semantics-assign} and \ref{listing:input-semantics-if}.
 \newpage
