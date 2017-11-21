@@ -29,6 +29,10 @@ memory, m :: memory_ ::=
    | empty                              ::  :: empty
    | m [ x |-> n ]                      ::  :: cell
 
+output, o :: output_ ::=
+   | none                               ::  :: none
+   | o '::' ( c , n )                   ::  :: append
+
 formula :: formula_ ::=
    | judgement                          ::  :: judgement
    | m ( x ) = n                        ::  :: lookup
@@ -55,103 +59,103 @@ Jop :: '' ::=
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< a , m > --> < a' , m' > :: :: arith_ops :: 'aexp_' by
+< a , m , o > --> < a' , m' , o' > :: :: arith_ops :: 'aexp_' by
 
 ----------------- :: int_constant
-<n, m> --> <n, m>
+<n, m, o> --> <n, m, o>
 
 m(x) = n
 ----------------- :: lookup
-<x, m> --> <n, m>
+<x, m, o> --> <n, m, o>
 
 %%% Addition %%%
-<a1, m> --> <a1', m>
+<a1, m, o> --> <a1', m, o>
 ------------------------------ :: add_aexp_aexp
-<a1 + a2, m> --> <a1' + a2, m>
+<a1 + a2, m, o> --> <a1' + a2, m, o>
 
-<a2, m> --> <a2', m>
+<a2, m, o> --> <a2', m, o>
 ----------------------------- :: add_int_aexp
-<n1 + a2, m> --> <n1 + n2, m>
+<n1 + a2, m, o> --> <n1 + n2, m, o>
 
 n1 + n2 = n3
 ------------------------:: add_int_int
-<n1 + n2, m> --> <n3, m>
+<n1 + n2, m, o> --> <n3, m, o>
 
 %%% Multiplication %%%
-<a1, m> --> <a1', m>
+<a1, m, o> --> <a1', m, o>
 ------------------------------ :: mult_aexp_aexp
-<a1 * a2, m> --> <a1' * a2, m>
+<a1 * a2, m, o> --> <a1' * a2, m, o>
 
-<a2, m> --> <a2', m>
+<a2, m, o> --> <a2', m, o>
 ----------------------------- :: mult_int_aexp
-<n1 * a2, m> --> <n1 * n2, m>
+<n1 * a2, m, o> --> <n1 * n2, m, o>
 
 n1 * n2 = n3
 ------------------------ :: mult_int_int
-<n1 * n2, m> --> <n3, m>
+<n1 * n2, m, o> --> <n3, m, o>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Boolean Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< b , m > --> < b' , m' > :: :: bool_ops :: 'bexp_' by
+< b , m , o > --> < b' , m' , o > :: :: bool_ops :: 'bexp_' by
 
-<a1, m> --> <a1', m>
+<a1, m, o> --> <a1', m, o>
 ------------------------------ :: lt_aexp_aexp
-<a1 < a2, m> --> <a1' < a2, m>
+<a1 < a2, m, o> --> <a1' < a2, m, o>
 
-<a2, m> --> <a2', m>
+<a2, m, o> --> <a2', m, o>
 ----------------------------- :: lt_int_aexp
-<n1 < a2, m> --> <n1 < n2, m>
+<n1 < a2, m, o> --> <n1 < n2, m, o>
 
 n1 < n2 = true
 ------------------------ :: lt_int_int
-<n1 < n2, m> --> <true, m>
+<n1 < n2, m, o> --> <true, m, o>
 
 n1 < n2 = false
 ------------------------ :: lt_int_int
-<n1 < n2, m> --> <false, m>
+<n1 < n2, m, o> --> <false, m, o>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< cmd , m > --> < cmd' , m' > :: :: cmd_ops :: 'cmd_' by
+< cmd , m , o > --> < cmd' , m' , o' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
-<a, m> --> <a', m>
+<a, m, o> --> <a', m, o>
 ----------------------------- :: assign_aexp
-<x := a, m> --> <x := a', m>
+<x := a, m, o> --> <x := a', m, o>
 
 ----------------------------- :: assign_int
-<x := n, m> --> <stop, m[x |-> n]>
+<x := n, m, o> --> <stop, m[x |-> n], o>
 
 %%% Sequence %%%
-<cmd1, m> --> <cmd1', m'>
+<cmd1, m, o> --> <cmd1', m', o'>
 -------------------------------- :: seq1
-<cmd1 ; cmd2, m> --> <cmd1' ; cmd2, m'>
+<cmd1 ; cmd2, m, o> --> <cmd1' ; cmd2, m', o'>
 
 --------------------------- :: seq2
-<skip ; cmd2, m> --> <cmd2, m>
+<skip ; cmd2, m, o> --> <cmd2, m, o>
 
 
 %%% If %%%
-<b, m> --> <b', m>
+<b, m, o> --> <b', m, o>
 ---------------------------------------------------------------- :: if_eval
-<if b then cmd1 else cmd2 end, m> --> <if b' then cmd1 else cmd2 end, m>
+<if b then cmd1 else cmd2 end, m, o> --> <if b' then cmd1 else cmd2 end, m, o>
 
 ---------------------------------------------------------------- :: if_true
-<if true then cmd1 else cmd2 end, m> --> <cmd1, m>
+<if true then cmd1 else cmd2 end, m, o> --> <cmd1, m, o>
 
 ---------------------------------------------------------------- :: if_false
-<if false then cmd1 else cmd2 end, m> --> <cmd2, m>
+<if false then cmd1 else cmd2 end, m, o> --> <cmd2, m, o>
 
 %%% While %%%
 --------------------------------------------------------------------------- :: while
-<while b do cmd end, m> --> <if b then cmd ; while b do cmd end else skip end, m>
+<while b do cmd end, m, o> --> <if b then cmd ; while b do cmd end else skip end, m, o>
 
 %%% Read %%%
 m(c) = n
 --------------------------------------------------------------------------- :: read
-<read x from c, m> --> <stop, m[x |-> n]>
+<read x from c, m, o> --> <stop, m[x |-> n], o>
 
 %%% Write %%%
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to c, m> --> <stop, m[c |-> n]>
+<write x to c, m, o> --> <stop, m[c |-> n], o::(c,n)>
