@@ -27,22 +27,24 @@ commands, cmd :: cmd_ ::=
 
 memory, m :: memory_ ::=
    | empty                              ::  :: empty
-   | m [ x |-> n ]                      ::  :: cell
+   | m [ x |-> n ]                      ::  :: update_variable
+   | m [ c |-> n ]                      ::  :: update_channel
 
 output, o :: output_ ::=
    | none                               ::  :: none
-   | o '::' ( c , n )                   ::  :: append
+   | o '::' ( c <- n )                   ::  :: append
 
 formula :: formula_ ::=
    | judgement                          ::  :: judgement
    | m ( x ) = n                        ::  :: lookup
+   | m ( c ) = n                        ::  :: channel_lookup
    | n1 + n2 = n3                       ::  :: addition
    | n1 * n2 = n3                       ::  :: multiplication
    | n1 < n2 = true                     ::  :: lt_true
    | n1 < n2 = false                    ::  :: lt_false
 
 terminals :: terminals_ ::=
-  |  ->                                ::   :: arrow      {{ tex \rightarrow }}
+  | <-                                 ::   :: arrow      {{ tex \leftarrow }}
   | |-                                 ::   :: turnstile  {{ tex \vdash }}
   | |->                                ::   :: mapsto     {{ tex \mapsto }}
   | -->                                ::   :: red        {{ tex \longrightarrow }}
@@ -51,6 +53,7 @@ terminals :: terminals_ ::=
   | '}'                                ::   :: rightbrace {{ tex \} }}
   | '<'                                ::   :: leftangle {{ tex \langle}}
   | '>'                                ::   :: rightangle {{ tex \rangle}}
+  | '::'                               ::   :: append_sym
 
 %----------------------------------------------------------------%
 %                    BIG-STEP SEMANTICS                        %
@@ -144,4 +147,4 @@ m(c) = n
 
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to c, m, o> || <stop, m[c |-> n], o::(c,n)>
+<write x to c, m, o> || <stop, m[c |-> n], o::(c <- n)>

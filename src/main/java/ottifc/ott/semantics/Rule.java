@@ -22,6 +22,7 @@ public class Rule {
 
     private List<String> extractPreconditions() {
         List<String> preconditions = new ArrayList<String>();
+        String s = _rule.split("----")[0];
 
     }
 
@@ -29,7 +30,7 @@ public class Rule {
         String lines[] = _rule.split("\r\n");
         String separator = "";
         for(String line : lines) {
-            if (line.startsWith("---")) {
+            if (line.startsWith("----")) {
                 separator = line;
             }
         }
