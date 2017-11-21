@@ -1,12 +1,16 @@
 package ottifc.ott.semantics;
 
+import ottifc.ott.Specification;
+
 public class Rule {
     String _rule;
     State _initialState;
     State _finalState;
+    String[] _preconditions;
 
     public Rule(String rule) {
         _rule = rule;
+
         _initialState = extractInitialState();
         _finalState = extractFinalState();
     }
@@ -22,7 +26,9 @@ public class Rule {
     }
 
     private State extractFinalState() {
-        return null;
+        String s[] = _rule.split("\n");
+        String finalState = s[s.length-1].split("-->")[1];
+        return new State(finalState);
     }
 
     private State extractInitialState() {

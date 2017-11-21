@@ -15,10 +15,10 @@ public class Monitor {
 
     //Generates and outputs the monitor
     public void generate() {
-        if (_options.contains(Option.IMPLICIT_FLOWS)) {
+        if (_options.contains(Option.IMPLICIT_FLOWS)) { //The pc variable is necessary only to prevent implicit flows
             _spec.insertIntoAllStates("pc");
         }
-        _spec.insertIntoAllStates("E");
+        _spec.insertIntoAllStates("E"); //The typing environment is always inserted when generating the monitor
         _spec.print();
     }
 }
