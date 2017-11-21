@@ -15,19 +15,20 @@ bool_expr, b :: be_ ::=
     | a1 < a2                           ::  :: less_than
 
 commands, c :: cmd_ ::=
+    | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
     | c1 ; c2                           ::  :: sequence
     | if b then c1 else c2 end          ::  :: if
     | while b do c end                  ::  :: while 
 
-store, s :: store_ ::=
+memory, m :: memory_ ::=
    | empty                              ::  :: empty
-   | s [ x |-> n ]                      ::  :: cell
+   | m [ x |-> n ]                      ::  :: cell
 
 formula :: formula_ ::=
    | judgement                          ::  :: judgement
-   | s ( x ) = n                        ::  :: lookup
+   | m ( x ) = n                        ::  :: lookup
    | n1 + n2 = n3                       ::  :: addition
    | n1 * n2 = n3                       ::  :: multiplication
    | n1 < n2 = true                     ::  :: lt_true
@@ -52,80 +53,80 @@ Jop :: '' ::=
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< a , s > || < a' , s' > :: :: arith_ops :: 'aexp_' by
+< a , m > || < a' , m' > :: :: arith_ops :: 'aexp_' by
 
 ----------------- :: int_constant
-<n, s> || <n, s>
+<n, m> || <n, m>
 
-s(x) = n
+m(x) = n
 ----------------- :: lookup
-<x, s> || <n, s>
+<x, m> || <n, m>
 
 %%% Addition %%%
-<a1, s> || <n1, s>
-<a2, s> || <n2, s>
+<a1, m> || <n1, m>
+<a2, m> || <n2, m>
 n1 + n2 = n3
 ------------------------------ :: add
-<a1 + a2, s> || <n3, s>
+<a1 + a2, m> || <n3, m>
 
 
 %%% Multiplication %%%
-<a1, s> || <n1, s>
-<a2, s> || <n2, s>
+<a1, m> || <n1, m>
+<a2, m> || <n2, m>
 n1 * n2 = n3
 ------------------------------ :: mult
-<a1 * a2, s> || <n3, s>
+<a1 * a2, m> || <n3, m>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Boolean Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< b , s > || < b' , s' > :: :: bool_ops :: 'bexp_' by
+< b , m > || < b' , m' > :: :: bool_ops :: 'bexp_' by
 
-<a1, s> || <n1, s>
-<a2, s> || <n2, s>
+<a1, m> || <n1, m>
+<a2, m> || <n2, m>
 n1 < n2 = true
 ------------------------------ :: lt_true
-<a1 < a2, s> || <true, s>
+<a1 < a2, m> || <true, m>
 
-<a1, s> || <n1, s>
-<a2, s> || <n2, s>
+<a1, m> || <n1, m>
+<a2, m> || <n2, m>
 n1 < n2 = false
 ------------------------------ :: lt_false
-<a1 < a2, s> || <false, s>
+<a1 < a2, m> || <false, m>
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< c , s > || < c' , s' > :: :: cmd_ops :: 'cmd_' by
+< c , m > || < c' , m' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
-<a, s> || <n, s>
+<a, m> || <n, m>
 ----------------------------- :: assign
-<x := a, s> || <skip, s[x |-> n]>
+<x := a, m> || <stop, m[x |-> n]>
 
 %%% Sequence %%%
-<c1, s> || <skip, s'>
-<c2, s'> || <skip, s''>
+<c1, m> || <stop, m'>
+<c2, m'> || <stop, m''>
 -------------------------------- :: sequence
-<c1 ; c2, s> || <skip, s''>
+<c1 ; c2, m> || <stop, m''>
 
 %%% If %%%
-<b, s> || <true, s>
-<c1, s> || <skip, s'>
+<b, m> || <true, m>
+<c1, m> || <stop, m'>
 ---------------------------------------------------------------- :: if_true
-<if b then c1 else c2 end, s> || <skip, s'>
+<if b then c1 else c2 end, m> || <stop, m'>
 
-<b, s> || <false, s>
-<c2, s> || <skip, s'>
+<b, m> || <false, m>
+<c2, m> || <stop, m'>
 ---------------------------------------------------------------- :: if_false
-<if b then c1 else c2 end, s> || <skip, s'>
+<if b then c1 else c2 end, m> || <stop, m'>
 
 %%% While %%%
-<b, s> || <true, s>
-<c, s> || <skip, s'>
-<while b do c end, s'> || <skip, s''>
+<b, m> || <true, m>
+<c, m> || <stop, m'>
+<while b do c end, m'> || <stop, m''>
 --------------------------------------------------------------------------- :: while_true
-<while b do c end, s> || <skip, s''>
+<while b do c end, m> || <stop, m''>
 
-<b, s> || <false, s>
+<b, m> || <false, m>
 --------------------------------------------------------------------------- :: while_false
-<while b do c end, s> || <skip, s>
+<while b do c end, m> || <stop, m>

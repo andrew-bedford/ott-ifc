@@ -15,19 +15,20 @@ bool_expr, b :: be_ ::=
     | a1 < a2                           ::  :: less_than
 
 commands, c :: cmd_ ::=
+    | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
     | c1 ; c2                           ::  :: sequence
     | if b then c1 else c2 end          ::  :: if
     | while b do c end                  ::  :: while 
 
-store, s :: store_ ::=
+memory, m :: memory_ ::=
    | empty                              ::  :: empty
-   | s [ x |-> n ]                      ::  :: cell
+   | m [ x |-> n ]                      ::  :: cell
 
 formula :: formula_ ::=
    | judgement                          ::  :: judgement
-   | s ( x ) = n                        ::  :: lookup
+   | m ( x ) = n                        ::  :: lookup
    | n1 + n2 = n3                       ::  :: addition
    | n1 * n2 = n3                       ::  :: multiplication
    | n1 < n2 = true                     ::  :: lt_true
@@ -51,93 +52,93 @@ Jop :: '' ::=
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< a , s > --> < a' , s' > :: :: arith_ops :: 'aexp_' by
+< a , m > --> < a' , m' > :: :: arith_ops :: 'aexp_' by
 
 ----------------- :: int_constant
-<n, s> --> <n, s>
+<n, m> --> <n, m>
 
-s(x) = n
+m(x) = n
 ----------------- :: lookup
-<x, s> --> <n, s>
+<x, m> --> <n, m>
 
 %%% Addition %%%
-<a1, s> --> <a1', s>
+<a1, m> --> <a1', m>
 ------------------------------ :: add_aexp_aexp
-<a1 + a2, s> --> <a1' + a2, s>
+<a1 + a2, m> --> <a1' + a2, m>
 
-<a2, s> --> <a2', s>
+<a2, m> --> <a2', m>
 ----------------------------- :: add_int_aexp
-<n1 + a2, s> --> <n1 + n2, s>
+<n1 + a2, m> --> <n1 + n2, m>
 
 n1 + n2 = n3
 ------------------------:: add_int_int
-<n1 + n2, s> --> <n3, s>
+<n1 + n2, m> --> <n3, m>
 
 %%% Multiplication %%%
-<a1, s> --> <a1', s>
+<a1, m> --> <a1', m>
 ------------------------------ :: mult_aexp_aexp
-<a1 * a2, s> --> <a1' * a2, s>
+<a1 * a2, m> --> <a1' * a2, m>
 
-<a2, s> --> <a2', s>
+<a2, m> --> <a2', m>
 ----------------------------- :: mult_int_aexp
-<n1 * a2, s> --> <n1 * n2, s>
+<n1 * a2, m> --> <n1 * n2, m>
 
 n1 * n2 = n3
 ------------------------ :: mult_int_int
-<n1 * n2, s> --> <n3, s>
+<n1 * n2, m> --> <n3, m>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Boolean Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< b , s > --> < b' , s' > :: :: bool_ops :: 'bexp_' by
+< b , m > --> < b' , m' > :: :: bool_ops :: 'bexp_' by
 
-<a1, s> --> <a1', s>
+<a1, m> --> <a1', m>
 ------------------------------ :: lt_aexp_aexp
-<a1 < a2, s> --> <a1' < a2, s>
+<a1 < a2, m> --> <a1' < a2, m>
 
-<a2, s> --> <a2', s>
+<a2, m> --> <a2', m>
 ----------------------------- :: lt_int_aexp
-<n1 < a2, s> --> <n1 < n2, s>
+<n1 < a2, m> --> <n1 < n2, m>
 
 n1 < n2 = true
 ------------------------ :: lt_int_int
-<n1 < n2, s> --> <true, s>
+<n1 < n2, m> --> <true, m>
 
 n1 < n2 = false
 ------------------------ :: lt_int_int
-<n1 < n2, s> --> <false, s>
+<n1 < n2, m> --> <false, m>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< c , s > --> < c' , s' > :: :: cmd_ops :: 'cmd_' by
+< c , m > --> < c' , m' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
-<a, s> --> <a', s>
+<a, m> --> <a', m>
 ----------------------------- :: assign_aexp
-<x := a, s> --> <x := a', s>
+<x := a, m> --> <x := a', m>
 
 ----------------------------- :: assign_int
-<x := n, s> --> <skip, s[x |-> n]>
+<x := n, m> --> <stop, m[x |-> n]>
 
 %%% Sequence %%%
-<c1, s> --> <c1', s'>
+<c1, m> --> <c1', m'>
 -------------------------------- :: seq1
-<c1 ; c2, s> --> <c1' ; c2, s'>
+<c1 ; c2, m> --> <c1' ; c2, m'>
 
 --------------------------- :: seq2
-<skip ; c2, s> --> <c2, s>
+<skip ; c2, m> --> <c2, m>
 
 
 %%% If %%%
-<b, s> --> <b', s>
+<b, m> --> <b', m>
 ---------------------------------------------------------------- :: if_eval
-<if b then c1 else c2 end, s> --> <if b' then c1 else c2 end, s>
+<if b then c1 else c2 end, m> --> <if b' then c1 else c2 end, m>
 
 ---------------------------------------------------------------- :: if_true
-<if true then c1 else c2 end, s> --> <c1, s>
+<if true then c1 else c2 end, m> --> <c1, m>
 
 ---------------------------------------------------------------- :: if_false
-<if false then c1 else c2 end, s> --> <c2, s>
+<if false then c1 else c2 end, m> --> <c2, m>
 
 %%% While %%%
 --------------------------------------------------------------------------- :: while
-<while b do c end, s> --> <if b then c ; while b do c end else skip end, s>
+<while b do c end, m> --> <if b then c ; while b do c end else skip end, m>
