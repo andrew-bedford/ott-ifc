@@ -33,6 +33,14 @@ public class Rule {
         _preconditions.add(precondition);
     }
 
+    public void removePrecondition(String precondition) {
+        _preconditions.remove(precondition);
+    }
+
+    public void setPreconditions(Set<String> preconditions) {
+        _preconditions = preconditions;
+    }
+
     public State getInitialState() {
         return _initialState;
     }
@@ -54,15 +62,20 @@ public class Rule {
 
     }
 
-    //TODO Delegate to Rule/State object instead
     public void insertIntoAllStates(String s) {
         getInitialState().insertVariable(s);
         getFinalState().insertVariable(s);
+
+        Set<String> newPreconditions = new HashSet<>();
+
         for(String precondition : _preconditions) {
             precondition = precondition.replaceAll("<", String.format("<%s, ", s));
+            newPreconditions.add(precondition);
+
             //precondition = precondition.replaceAll("--> <", String.format("--> <%s, ", s));
             //precondition = precondition.replaceAll("\\|\\| <", String.format("|| <%s, ", s));
         }
+        _preconditions = newPreconditions;
 
     }
 

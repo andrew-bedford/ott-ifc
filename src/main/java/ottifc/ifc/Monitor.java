@@ -3,6 +3,7 @@ package ottifc.ifc;
 import ottifc.ott.Specification;
 import ottifc.ott.semantics.Rule;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class Monitor {
         insertEnvironmentAndCounterInStates();
 
         List<Rule> rules = _spec.getRules();
+        Set<String> commandsAffectingControlFlow = getCommandsWhichMayAffectControlFlow();
         for(Rule r : rules) {
             if (r.getInitialState().containsCommands()) {
 
@@ -40,15 +42,23 @@ public class Monitor {
                 Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
                 insertEnvironmentUpdates(r, expressionVariables, modifiedVariables);
 
-                if (r.getFinalState().isOutputModified()) {
-                    Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
-                    modifiedChannels.removeAll(modifiedVariables);
-                    for(String modifiedChannel : modifiedChannels) {
-                        String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + modifiedChannel;
-                        r.addPrecondition(guard);
+                addGuards(r, expressionVariables, modifiedVariables);
+
+                //If the current rule involves one of the commands that may affect the control-flow
+                if (commandsAffectingControlFlow.contains(r.getInitialState().getCommand())) {
+                    Set<String> newPreconditions = new HashSet<>();
+                    for(String precondition : r.getPreconditions()) {
+                        if (precondition.contains("cmd")) { //FIXME Temporary, only for the proof-of-concept
+                            newPreconditions.add(precondition.replaceAll("pc", "pc |_| " + getSupremumOfSet(expressionVariables)));
+                        }
+                        else {
+                            newPreconditions.add(precondition);
+                        }
                     }
 
+                    r.setPreconditions(newPreconditions);
                 }
+
 
                 r.print();
                 System.out.println("");
@@ -58,6 +68,33 @@ public class Monitor {
 
 
         //_spec.print();
+    }
+
+    private void addGuards(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {
+        if (r.getFinalState().isOutputModified()) {
+            Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
+            modifiedChannels.removeAll(modifiedVariables);
+            for(String modifiedChannel : modifiedChannels) {
+                String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + modifiedChannel;
+                r.addPrecondition(guard);
+            }
+
+        }
+    }
+
+    private Set<String> getCommandsWhichMayAffectControlFlow() {
+        Set<String> commandSet = new HashSet<>();
+        for(Rule r1 : _spec.getRules()) {
+            if (r1.getInitialState().containsCommands()) {
+                //Look for another rule which has the same initial state, but a different final state
+                for(Rule r2 : _spec.getRules()) {
+                    if (!r1.equals(r2) && r1.getInitialState().equals(r2.getInitialState()) && !r1.getFinalState().equals(r2.getFinalState())) {
+                        commandSet.add(r1.getInitialState().getCommand());
+                    }
+                }
+            }
+        }
+        return commandSet;
     }
 
     private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {

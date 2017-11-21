@@ -138,4 +138,20 @@ public class State {
     public void insertVariable(String s) {
         _state = _state.replace("<", String.format("<%s, ", s));
     }
+
+    @Override public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof State))return false;
+
+        State otherState = (State)other;
+
+        if (!this._state.equals(otherState._state)) { return false; }
+
+        return true;
+    }
+
+    @Override public int hashCode() {
+        return _state.hashCode();
+    }
 }
