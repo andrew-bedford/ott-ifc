@@ -99,7 +99,7 @@ public class Monitor {
 
     private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {
         for(String modifiedVariable : modifiedVariables) {
-            r.getFinalState().addUpdateToEnvironment(modifiedVariable, getSupremumOfSet(expressionVariables));
+            r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc |_| " + getSupremumOfSet(expressionVariables));
         }
     }
 
