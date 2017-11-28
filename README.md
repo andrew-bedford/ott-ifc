@@ -5,7 +5,8 @@ As the name implies, the specifications that Ott-IFC takes as input (and outputs
 
 ## Usage
 ```
--i [.ott file]      Input specification
+-i [.ott file]                       Specification to use as input.
+-m [generation | verification]       Ott-IFC's mode. Use "generation" to generate a mechanism and "verification" to verify an existing mechanism.
 ```
 
 ### Assumptions
