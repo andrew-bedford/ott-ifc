@@ -70,6 +70,11 @@ public class Monitor {
         //_spec.print();
     }
 
+    //TODO Implement
+    public void verify() {
+
+    }
+
     private void addGuards(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {
         if (r.getFinalState().isOutputModified()) {
             Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
