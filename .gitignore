@@ -33,3 +33,7 @@ out/*
 *.fdb_latexmk
 *.bbl
 *.blg
+*.nav
+*.snm
+*.toc
+*.vrb

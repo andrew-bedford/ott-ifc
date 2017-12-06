@@ -3,9 +3,10 @@ Developping sound information-flow control mechanisms can be a laborious and err
 
 As the name implies, the specifications that Ott-IFC takes as input (and outputs) are written in [Ott](https://github.com/ott-lang/ott). Ott is a tool that can generate LaTeX, Coq or Isabelle/HOL versions of a programming language's specification. The specification is written in a concise and readable ASCII notation that resembles what one would write in informal mathematics.
 
-##Example
+## Example
+Consider the imperative language whose syntax and (partial) semantics are defined below:
 ```
-%grammar
+grammar
     arith_expr, a :: ae_ ::=
         | x                                 ::  :: variable
         | n                                 ::  :: int

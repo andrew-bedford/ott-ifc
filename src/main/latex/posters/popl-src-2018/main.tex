@@ -1,0 +1,161 @@
+%see https://www.overleaf.com/10499096qftbbdzshvqy#/39157539/ or http://www.latextemplates.com/template/jacobs-landscape-posterfor example 
+
+\documentclass[final]{beamer}
+\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{mathpartir}
+\usepackage{graphicx}
+\include{notation}
+\usepackage{booktabs} % Top and bottom rules for tables
+
+\usetheme{confposter} % Use the confposter theme supplied with this template
+
+\setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
+\setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
+\setbeamercolor{block alerted title}{fg=white,bg=dblue!70} % Colors of the highlighted block titles
+\setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
+% Many more colors are available for use in beamerthemeconfposter.sty
+
+%-----------------------------------------------------------
+% Define the column widths and overall poster size
+% To set effective sepwid, onecolwid and twocolwid values, first choose how many columns you want and how much separation you want between columns
+% In this template, the separation width chosen is 0.024 of the paper width and a 4-column layout
+% onecolwid should therefore be (1-(# of columns+1)*sepwid)/# of columns e.g. (1-(4+1)*0.024)/4 = 0.22
+% Set twocolwid to be (2*onecolwid)+sepwid = 0.464
+% Set threecolwid to be (3*onecolwid)+2*sepwid = 0.708
+
+\newlength{\sepwid}
+\newlength{\onecolwid}
+\newlength{\twocolwid}
+\newlength{\threecolwid}
+\setlength{\paperwidth}{48in} % A0 width: 46.8in
+\setlength{\paperheight}{36in} % A0 height: 33.1in
+\setlength{\sepwid}{0.024\paperwidth} % Separation width (white space) between columns
+\setlength{\onecolwid}{0.22\paperwidth} % Width of one column
+\setlength{\twocolwid}{0.464\paperwidth} % Width of two columns
+\setlength{\threecolwid}{0.708\paperwidth} % Width of three columns
+\setlength{\topmargin}{-0.5in} % Reduce the top margin size
+%-----------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+
+\title{Generating Information-Flow Control Mechanisms from Programming Language Specifications} % Poster title
+
+\author{Andrew Bedford (andrew.bedford.1@ulaval.ca)} % Author(s)
+
+\institute{Laval University, Canada} % Institution(s)
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+\addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
+\addtobeamertemplate{block alerted end}{}{\vspace*{2ex}} % White space under highlighted (alert) blocks
+
+\setlength{\belowcaptionskip}{2ex} % White space under figures
+\setlength\belowdisplayshortskip{2ex} % White space under equations
+
+\begin{frame}[fragile] % The whole poster is enclosed in one beamer frame
+
+\begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid} % The first column
+
+%\begin{alertblock}{Abstract}
+%We introduce the concept of \emph{fading labels}. Fading labels are security labels that stop propagating their taint after a fixed amount of uses. Their use allows mechanisms to spend more resources on more important information.
+%\end{alertblock}
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Motivation}
+    Modern operating systems rely mostly on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released for processing. To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea is to use techniques from programming languages, such as program analysis, monitoring, rewriting and type checking, to enforce information-flow policies (e.g., information from a private file should not saved in a public file). Mechanisms that enforce such policies (e.g., \cite{DBLP:journals/jcs/VolpanoIS96, DBLP:conf/csfw/ChudnovN10, DBLP:conf/csfw/AskarovCM15, DBLP:journals/compsec/BedfordCDKT17}) are called \emph{information-flow control mechanisms}. 
+\end{block}
+
+\setbeamercolor{block alerted title}{fg=white,bg=norange}
+\begin{alertblock}{Problem}
+    Developping sound information-flow control mechanisms can be a laborious and error-prone task, particularly when dealing with complex programming languages, due to the numerous ways through which information may flow in a program.
+\end{alertblock}
+
+\begin{block}{Background}
+    Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}, which essentially states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, a mechanism must take into account two types of information flows: \emph{explicit flows} and \emph{implicit flows}~\cite{DBLP:journals/cacm/Denning76}. 
+    
+    An insecure explicit information flow (Listing~\ref{listing:explicit-flow}) occurs when private information flows directly into public information. 
+    \begin{lstlisting}[captionpos=b, caption=Insecure explicit flow, label=listing:explicit-flow]
+      public := private
+    \end{lstlisting}
+    Explicit flows can be prevented by associating labels to sensitive information and propagating them whenever the information is used; a process known as \emph{tainting}.
+    
+    An insecure implicit information flow (Listing~\ref{listing:implicit-flow}) occurs when private information influences public information\\through the control-flow of the application.
+    \pagebreak
+    \begin{lstlisting}[captionpos=b, caption=Insecure implicit flow, label=listing:implicit-flow]
+      if (private > 0) then
+        public := 0
+      else
+        public := 1
+      end
+    \end{lstlisting}
+    Implicit flows can be prevented using a program counter, $pc$, which keeps track of the context in which a command is executed.
+\end{block}
+
+\end{column}
+\begin{column}{\onecolwid}
+
+\begin{block}{Ott-IFC}
+    Information-flow control mechanisms are usually designed and implemented from the ground-up by a human. In order to make this process less laborious and reduce the risk of errors, we have created a tool called \ottifc\ that takes as input a programming language's specification (i.e., syntax and semantics) and produces a mechanism's specification (e.g., instrumented semantics). 
+    
+    As the name implies, the specifications that \ottifc\ takes as input (and outputs) are written in Ott~\cite{DBLP:journals/jfp/SewellNOPRSS10}. Ott is a tool that can generate LaTeX, Coq or Isabelle/HOL versions of a programming language's specification. The specification is written in a concise and readable ASCII notation that ressembles what one would write in informal mathematics (see following Listings).
+\end{block}
+
+\begin{alertblock}{Definition}
+
+\end{alertblock}
+
+%\setbeamercolor{block alerted title}{fg=white,bg=norange} % Change the alert block title colors
+\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
+\begin{alertblock}{Example}
+    \begin{lstlisting}[captionpos=b,caption=~,label=listing:lost-information]
+    read value from privateFile;
+    w := 0;
+    x := value + 1;
+    x' := value + 2;
+    y := x mod 3;
+    z := y * 4;
+    write z to publicFile
+    \end{lstlisting}
+
+    \begin{figure}[ht]
+    \includegraphics[width=\columnwidth]{images/derivations-graph-large.png}
+    \caption{PDG-like representation of Listing~\ref{listing:lost-information}}
+    \label{figure:derivations}
+    \end{figure}
+\end{alertblock}
+
+\end{column}
+
+\begin{column}{\onecolwid}
+
+\begin{block}{Future Work}
+    \begin{itemize}
+        \item Language Support
+        \item Parametrization
+        \item Generating Formal Proofs
+        \item Verifying Existing Mechanisms
+    \end{itemize}
+\end{block}
+
+    \begin{block}{Acknowledgements}
+        We would like to thank Josée Desharnais, Nadia Tawbi and the anonymous reviewers for their helpful comments.
+    \end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}
+
