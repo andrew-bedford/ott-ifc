@@ -19,24 +19,25 @@ public class Main {
             //TODO
             System.out.println("Display HELP");
         }
-        //Note: We use the same parameters as Ott for the input file: "-i" or "--input"
+        //Note: We use the same parameters as Ott for the input file: "-i"
         else if (ParameterHelper.contains("i")) {
             String filePath = ParameterHelper.get("i", 0);
 
             verifyFileExists(filePath);
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
+            //TODO Use something else than System.err to produce colored text
             System.err.println("---------------------------------------------");
-            System.err.println("|             Original ott                  |");
+            System.err.println("|                    ott                    |");
             System.err.println("---------------------------------------------");
-            Thread.sleep(100);
+            System.err.flush();
             System.out.println(fileContents);
 
 
             System.err.println("---------------------------------------------");
-            System.err.println("|                 ott-ifc                   |");
+            System.err.println("|                  ott-ifc                  |");
             System.err.println("---------------------------------------------");
-            Thread.sleep(100);
+            System.err.flush();
             Specification spec = new Specification(fileContents);
             //spec.getVars("metavar");
             //spec.getVars("indexvar");

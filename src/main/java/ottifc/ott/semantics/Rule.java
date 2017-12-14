@@ -69,7 +69,8 @@ public class Rule {
         Set<String> newPreconditions = new HashSet<>();
 
         for(String precondition : _preconditions) {
-            precondition = precondition.replaceAll("<", String.format("<%s, ", s));
+            precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", s));
+            //precondition = precondition.replaceAll("<", String.format("<%s, ", s));
             newPreconditions.add(precondition);
 
             //precondition = precondition.replaceAll("--> <", String.format("--> <%s, ", s));
@@ -131,6 +132,12 @@ public class Rule {
         return filteredSet;
     }
 
+    /*
+    Example: The final state returned corresponds to "c"
+    a              a
+    -------   or   -------
+    b --> c        b || c
+    */
     private State extractFinalState() {
         String s[] = _rule.split("\r\n");
         String finalState = "";
@@ -144,6 +151,13 @@ public class Rule {
         return new State(finalState);
     }
 
+
+    /*
+    Example: The initial state returned corresponds to "b"
+    a              a
+    -------   or   -------
+    b --> c        b || c
+    */
     private State extractInitialState() {
         String s[] = _rule.split("\r\n");
         String finalState = "";

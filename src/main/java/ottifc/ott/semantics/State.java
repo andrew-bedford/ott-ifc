@@ -45,41 +45,18 @@ public class State {
 
     public String getCommand() {
         String[] s = _state.split(",");
-        if (s.length == 3) {
-            return s[0].substring(1, s[0].length()); //Removes the "<" at the beginning
-        }
-        else if (s.length == 5) {
-            return s[2].substring(1, s[2].length()); //Removes the "<" at the beginning
-        }
+        return s[0].substring(1, s[0].length()); //Removes the "<" at the beginning
 
-        //TODO Throw exception
-        return "";
     }
 
     public String getMemory() {
         String[] s = _state.split(",");
-        if (s.length == 3) {
-            return s[1];
-        }
-        else if (s.length == 5) {
-            return s[3];
-        }
-
-        //TODO Throw exception
-        return "";
+        return s[1];
     }
 
     public String getOutput() {
         String[] s = _state.split(",");
-        if (s.length == 3) {
-            return s[2];
-        }
-        else if (s.length == 5) { //TODO Could be 4 or more than 5 depending on the selected options (5 is when explicit and implicit are selected)
-            return s[4];
-        }
-
-        //TODO Throw exception
-        return "";
+        return s[2];
     }
 
 
@@ -100,7 +77,7 @@ public class State {
     }
 
     public void addUpdateToEnvironment(String variable, String value) {
-        _state = _state.replace("E", String.format("E[%s |-> %s]", variable, value));
+        _state = _state.replace(", E", String.format(", E[%s |-> %s]", variable, value));
     }
 
     public Set<String> getModifiedVariables() {
@@ -136,7 +113,7 @@ public class State {
     }
 
     public void insertVariable(String s) {
-        _state = _state.replace("<", String.format("<%s, ", s));
+        _state = _state.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", s));
     }
 
     @Override public boolean equals(Object other) {
