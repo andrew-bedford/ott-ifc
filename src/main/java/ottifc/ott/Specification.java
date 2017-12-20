@@ -138,10 +138,39 @@ public class Specification {
     }
 
     //Example: For boolean expressions, bool_expr ::= true | false | a1 < a2, it returns the set {true, false, a < a}
-    public Set<String> getProductions(String nonTerminal) {
-        Set<String> setOfNonTerminals = new HashSet<>();
+    public Set<String> getAbstractProductions(String nonTerminal) {
+        Set<String> setOfAbstractProductions = new HashSet<>();
         String[] specLines = _specification.split(System.getProperty("line.separator"));
-        return null;
+        Boolean inGrammarSection = false;
+        Boolean foundNonTerminal = false;
+
+        for (String line : specLines) {
+            if (inGrammarSection && !(line.trim().startsWith("%") || line.trim().startsWith("|")) && line.contains("::")) {
+                if (!foundNonTerminal) {
+                    //Lines in the grammar section look like this: arith_expr, a :: ae_ ::= | x ::  :: variable
+                    String[] nonTerminals = line.replace(" ", "").split("::")[0].split(",");
+                    for (String n : nonTerminals) {
+                        if (n.equals(nonTerminal)) {
+                            foundNonTerminal = true;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+
+            if (foundNonTerminal && line.trim().startsWith("|")) {
+                String production = line.split("\\|")[1].split("::")[0].trim();
+                String abstractProduction = production.replaceAll("[\\d']",""); //Assumes that none of the non-terminals have digits in the middle of their names
+                setOfAbstractProductions.add(abstractProduction);
+            }
+
+            if (line.startsWith("grammar")) { inGrammarSection = true; }
+            if (line.startsWith("defns")) { inGrammarSection = false; break; }
+        }
+        return setOfAbstractProductions;
     }
 
     public void print() {

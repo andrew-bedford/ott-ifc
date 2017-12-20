@@ -23,6 +23,7 @@ public class Main {
         //Note: We use the same parameters as Ott for the input file: "-i"
         else if (ParameterHelper.contains("i")) {
             String filePath = ParameterHelper.get("i", 0);
+            
 
             verifyFileExists(filePath);
             String fileContents = FileHelper.convertFileToString(new File(filePath));
@@ -34,7 +35,6 @@ public class Main {
             System.err.flush();
             System.out.println(fileContents);
 
-
             System.err.println("---------------------------------------------");
             System.err.println("|                  ott-ifc                  |");
             System.err.println("---------------------------------------------");
@@ -43,9 +43,9 @@ public class Main {
             //spec.getVars("metavar");
             //spec.getVars("indexvar");
             //spec.getRules();
-
-            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-            m.generate();
+            spec.getAbstractProductions("arith_expr");
+            //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            //m.generate();
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);
