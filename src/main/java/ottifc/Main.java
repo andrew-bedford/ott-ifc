@@ -42,13 +42,10 @@ public class Main {
             Specification spec = new Specification(fileContents);
             //spec.getVars("metavar");
             //spec.getVars("indexvar");
-            Set<String> asd = spec.getNonTerminals();
-            for (String s : asd) {
-                System.out.println(s);
-            }
+            //spec.getRules();
 
-            //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-            //m.generate();
+            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            m.generate();
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);

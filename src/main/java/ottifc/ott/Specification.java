@@ -30,7 +30,7 @@ public class Specification {
     public Set<String> getVars(String vartype) {
         Set<String> setOfVars = new HashSet<>();
 
-        String[] specLines = _specification.split("\n");
+        String[] specLines = _specification.split(System.getProperty("line.separator"));
         for(String line : specLines) {
             String trimmedLine = line.trim();
             if (trimmedLine.startsWith("grammar")) {
@@ -65,11 +65,11 @@ public class Specification {
     }
 
     private void removeCommentsFromSpecification() {
-        String lines[] = _specification.split("\r\n");
+        String lines[] = _specification.split(System.getProperty("line.separator"));
         String specificationWithoutComments = "";
         for(String line : lines) {
             if (!line.startsWith("%")) {
-                specificationWithoutComments += line + "\r\n";
+                specificationWithoutComments += line + System.getProperty("line.separator");
             }
         }
         _specification = specificationWithoutComments;
@@ -78,9 +78,9 @@ public class Specification {
 
     private List<Rule> extractRules() {
         List<Rule> rules = new ArrayList<Rule>();
-        String[] specParagraphs = _specification.split(("\r\n\r\n")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
+        String[] specParagraphs = _specification.split(System.getProperty("line.separator")+System.getProperty("line.separator")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
         for(String s: specParagraphs) {
-            if (s.contains("-----")) { //Then it is (probably) a semantics rule
+            if (s.contains("-----") && (s.contains("||") || s.contains("-->"))) { //Then it is (probably) a semantics rule
                 rules.add(new Rule(s));
             }
         }
@@ -88,7 +88,7 @@ public class Specification {
     }
 
     private String extractStepSymbol() {
-        String[] specParagraphs = _specification.split(("\r\n\r\n")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
+        String[] specParagraphs = _specification.split(System.getProperty("line.separator")+System.getProperty("line.separator")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
         for(String s: specParagraphs) {
             if (s.contains("-----")) { //Then it is (probably) a semantics rule
                 //For the moment, we assume that the step symbols used are either --> (usually used in small-step semantics) or || (usually used in big-step semantics)
@@ -105,7 +105,7 @@ public class Specification {
         return _stepSymbol;
     }
 
-g    public Set<String> getNonTerminals() {
+    public Set<String> getNonTerminals() {
         Set<String> setOfNonTerminals = new HashSet<>();
         String[] specLines = _specification.split(System.getProperty("line.separator"));
 
@@ -135,6 +135,13 @@ g    public Set<String> getNonTerminals() {
 
 
         return setOfNonTerminals;
+    }
+
+    //Example: For boolean expressions, bool_expr ::= true | false | a1 < a2, it returns the set {true, false, a < a}
+    public Set<String> getProductions(String nonTerminal) {
+        Set<String> setOfNonTerminals = new HashSet<>();
+        String[] specLines = _specification.split(System.getProperty("line.separator"));
+        return null;
     }
 
     public void print() {

@@ -83,7 +83,7 @@ public class Rule {
     private Set<String> extractPreconditions() {
         Set<String> preconditions = new HashSet<String>();
         String s = _rule.split("----")[0];
-        String[] lines = s.split("\r\n");
+        String[] lines = s.split(System.getProperty("line.separator"));
         for(String line : lines) {
             if (!line.trim().isEmpty()) {
                 preconditions.add(line.trim());
@@ -93,7 +93,7 @@ public class Rule {
     }
 
     private String extractSeparator() {
-        String lines[] = _rule.split("\r\n");
+        String lines[] = _rule.split(System.getProperty("line.separator"));
         String separator = "";
         for(String line : lines) {
             if (line.startsWith("----")) {
@@ -105,7 +105,7 @@ public class Rule {
 
     //FIXME Temporary. Instead of simply searching for ::, compare the last variables of the states to see if they are the same
     public boolean modifiesOutputTrace(State initialState, State finalState) {
-        String s[] = _rule.split("\r\n");
+        String s[] = _rule.split(System.getProperty("line.separator"));
         return s[s.length-1].contains("::");
     }
 
@@ -139,7 +139,7 @@ public class Rule {
     b --> c        b || c
     */
     private State extractFinalState() {
-        String s[] = _rule.split("\r\n");
+        String s[] = _rule.split(System.getProperty("line.separator"));
         String finalState = "";
         String lastLine = s[s.length-1];
         if (lastLine.contains("-->")) {
@@ -159,7 +159,7 @@ public class Rule {
     b --> c        b || c
     */
     private State extractInitialState() {
-        String s[] = _rule.split("\r\n");
+        String s[] = _rule.split(System.getProperty("line.separator"));
         String finalState = "";
         String lastLine = s[s.length-1].trim();
         if (lastLine.contains("-->")) {
