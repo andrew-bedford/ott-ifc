@@ -105,12 +105,36 @@ public class Specification {
         return _stepSymbol;
     }
 
-    //TODO Implement
-    public Set<String> getNonTerminals() {
+g    public Set<String> getNonTerminals() {
         Set<String> setOfNonTerminals = new HashSet<>();
-        String[] specLines = _specification.split("\r\n");
+        String[] specLines = _specification.split(System.getProperty("line.separator"));
 
-        return null;
+        //Ott files are usually decomposed in three sections: meta/variables, grammar and definitions.
+        Boolean inMetaVariablesSection = true;
+        Boolean inGrammarSection = false;
+        Boolean inDefinitionsSection = false;
+
+        for (String line : specLines) {
+            if (inMetaVariablesSection && (line.startsWith("metavar") || line.startsWith("indexvar"))) {
+                //Lines in the metavar sections look like this: indexvar index, i, j ::= {{ coq nat }}
+                String[] metavariables = line.replace("metavar", "").replace("indexvar","").replace(" ", "").split("::=")[0].split(","); //Extracts the "i" and "j" from the example above
+                for (String m : metavariables) { setOfNonTerminals.add(m); }
+            }
+
+            if (inGrammarSection && !(line.trim().startsWith("%") || line.trim().startsWith("|")) && line.contains("::")) {
+                //Lines in the grammar section look like this: arith_expr, a :: ae_ ::= | x ::  :: variable
+                String[] nonTerminals = line.replace(" ", "").split("::")[0].split(",");
+                for (String n : nonTerminals) { setOfNonTerminals.add(n); }
+            }
+
+            if (inDefinitionsSection) { break; }
+
+            if (line.startsWith("grammar")) { inMetaVariablesSection = false; inGrammarSection = true; inDefinitionsSection = false; }
+            if (line.startsWith("defns")) { inMetaVariablesSection = false; inGrammarSection = false; inDefinitionsSection = true; }
+        }
+
+
+        return setOfNonTerminals;
     }
 
     public void print() {
