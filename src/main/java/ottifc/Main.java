@@ -25,7 +25,7 @@ public class Main {
             String filePath = ParameterHelper.get("i", 0);
             
 
-            verifyFileExists(filePath);
+            FileHelper.verifyFileExists(filePath);
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
             //TODO Use something else than System.err to produce colored text
@@ -43,9 +43,9 @@ public class Main {
             //spec.getVars("metavar");
             //spec.getVars("indexvar");
             //spec.getRules();
-            spec.getAbstractProductions("arith_expr");
-            //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-            //m.generate();
+            //spec.getAbstractProductions("b");
+            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            m.generate();
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);
@@ -60,12 +60,7 @@ public class Main {
 
     }
 
-    private static void verifyFileExists(String filePath) {
-        if (!FileHelper.fileExists(filePath)) {
-            System.err.println("Error: File '"+filePath+"' not found.");
-            System.exit(1);
-        }
-    }
+
 
 
 }

@@ -20,4 +20,11 @@ public class FileHelper {
             return "";
         }
     }
+
+    public static void verifyFileExists(String filePath) {
+        if (!FileHelper.fileExists(filePath)) {
+            System.err.println("Error: File '"+filePath+"' not found.");
+            System.exit(1);
+        }
+    }
 }
