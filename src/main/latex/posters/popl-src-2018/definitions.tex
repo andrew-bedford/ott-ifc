@@ -1,5 +1,7 @@
 \newcommand{\ottifc}{Ott-IFC}
-
+\newcommand{\config}[3]{\ensuremath{\langle #1, #2, #3 \rangle}}
+\newcommand{\emits}[3]{\ensuremath{#2\downarrow_{#1}#3}}
+\newcommand{\proj}[2]{\ensuremath{{#1 \! \upharpoonright  \! {#2}}}}
 
 \definecolor{grey}{rgb}{0.8,0.8,0.8}
 \definecolor{code-background}{RGB}{255, 248, 220}
@@ -24,9 +26,9 @@
     framextopmargin=0pt,
     framexbottommargin=0pt,
     keepspaces=true,                 			% keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-    keywordstyle=\bfseries,       						% keyword style
+    keywordstyle=\color{code-keyword},       						% keyword style
     language=ML,                 				% the language of the code
-    morekeywords={Lemma, Proof, Qed},            % if you want to add more keywords to the set
+    morekeywords={Lemma, Proof, Qed, if, then, else, end, skip},            % if you want to add more keywords to the set
     numbers=none,                    			% where to put the line-numbers; possible values are (none, left, right)
     numbersep=0pt,	                   			% how far the line-numbers are from the code
     numberstyle=\tt\tiny\color{code-linenumber}, 	% the style that is used for the line-numbers

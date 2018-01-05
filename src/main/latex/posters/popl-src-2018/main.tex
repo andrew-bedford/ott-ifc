@@ -1,7 +1,7 @@
 %see https://www.overleaf.com/10499096qftbbdzshvqy#/39157539/ or http://www.latextemplates.com/template/jacobs-landscape-posterfor example 
 
 \documentclass[final]{beamer}
-\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage[scale=1.1]{beamerposter} % Use the beamerposter package for laying out the poster
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \include{definitions}
 \usepackage{booktabs} % Top and bottom rules for tables
+\usepackage{mathpartir}
 
 \usetheme{confposter} % Use the confposter theme supplied with this template
 
@@ -79,9 +80,9 @@
 %----------------------------------------------------------------------------------------
 
 \begin{block}{\textsc{Motivation}}
-    Modern operating systems rely on access-control mechanisms to protect users information. However, access control mechanisms are insufficient as they cannot regulate the propagation of information once it has been released. 
+    Modern operating systems rely on access-control mechanisms to protect users information. However, these mechanisms are insufficient as they cannot regulate the propagation of information once it has been released. 
     
-    To address this issue, a new research trend called \emph{language-based information-flow security} has emerged. The idea is to use techniques from programming languages, such as program analysis and type checking, to enforce information-flow policies. Mechanisms that enforce such policies are called \emph{information-flow control mechanisms}. 
+    \hspace{1.5cm}To address this issue, a new research trend called \emph{language-based information-flow security} has emerged. The idea is to use techniques from programming languages, such as program analysis and type checking, to enforce information-flow policies. Mechanisms that enforce such policies are called \emph{information-flow control mechanisms}. 
 \end{block}
 
 \setbeamercolor{block alerted title}{fg=white,bg=coqatoo-pink}
@@ -90,29 +91,51 @@
 \end{alertblock}
 
 \begin{block}{\textsc{Background}}
-    Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}, which states that private information may not interfere with the publicly observable behavior of a program. To enforce non-interference, two types of information flows must be taken into account: 
+    Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}, which states that private information may not interfere with the publicly observable behavior of a program. More formally:
+    \vspace{-0.31cm}
+    \setbeamercolor{block alerted title}{bg=white}
+    \begin{alertblock}{}
+        \textit{A program $p$ satisfies non-interference if for any $\ell \in {\cal L}$, and for any two memories $m$ and $m'$ that are $\ell$-equivalent, and for any trace $o$ such that $\emits{}{\config{p}{m}{\epsilon}}{o} $, then there is some trace $o'$, such that $\emits{}{\config{p}{m'}{\epsilon}}{o'}$ and $\proj{o}{\ell}$ is a prefix of $\proj{o'}{\ell}$ (or vice versa).}
+    \end{alertblock}
+    \vspace{-1cm}
+    \color{black}
+    
+    
+    To enforce non-interference, two types of information flows must be taken into account: 
     \begin{enumerate}
-        \item \emph{Explicit flows} occur when private information flows directly into public information. 
-        \item \emph{Implicit flows} occur when private information influences public information through the control-flow of the application.
+        \item{\emph{Explicit flows} occur when private information flows directly into public information.
+            \begin{lstlisting}[label=listing:explicit-flow,gobble=15]
+                public := private
+            \end{lstlisting}} 
+        \item{\emph{Implicit flows} occur when private information influences public information through the control-flow of the application.
+            \begin{lstlisting}[label=listing:implicit-flow,gobble=15]
+                if (private > 0) then
+                  public := 0
+                else
+                  public := 1
+                end
+            \end{lstlisting}}
     \end{enumerate}
 \end{block}
+
 
 \end{column}
 \begin{column}{\twocolwid}
 
-\begin{block}{\textsc{Ott-IFC}}
-We have created a tool called \emph{\ottifc} that takes as input a programming language's specification (i.e., syntax and semantics, written in \emph{Ott}) and produces a mechanism's specification. The development process of a mechanism using Ott and \ottifc\ looks like this:
+\begin{block}{\textsc{Approach and Uniqueness}}
+We have created a tool called \emph{\ottifc} that takes as input a programming language's specification (i.e., syntax and semantics, written in \emph{Ott}) and produces a mechanism's specification. 
+%The development process of a mechanism using Ott and \ottifc\ looks like this:
 
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-\begin{enumerate}
-\item Write a specification of the language on which we want to enforce non-interference in Ott.
-\item Use \ottifc\ to generate the mechanism.
-\item Use Ott to export the mechanism to LaTeX/Coq/Isabelle/HOL and complete the implementation.
-\end{enumerate}    
-\end{minipage}
-\hfill%
-\begin{minipage}[t]{0.48\linewidth}
+%\noindent
+%\begin{minipage}[t]{0.48\linewidth}
+%\begin{enumerate}
+%\item Write a specification of the language on which we want to enforce non-interference in Ott.
+%\item Use \ottifc\ to generate the mechanism.
+%\item Use Ott to export the mechanism to LaTeX/Coq/Isabelle/HOL and complete the implementation.
+%\end{enumerate}    
+%\end{minipage}
+%\hfill%
+%\begin{minipage}[t]{0.48\linewidth}
 \begin{alertblock}{Example}
 a ::= x | n | a1 + a2 | a1 * a2 
 b ::= true | false | a1 < a2
@@ -120,8 +143,10 @@ c ::= skip | x := a | c1 ; c2 |
         if b then c1 else c2 end | 
         while b do c end   
 \end{alertblock}      
-\end{minipage}
+%\end{minipage}
+
 \end{block}
+
 
 
 \noindent
@@ -224,10 +249,15 @@ We have also begun to draft a soundness proof, that is, a proof showing that the
     \end{itemize}
 \end{block}
 
-    \begin{block}{\textsc{Acknowledgements}}
-        We would like to thank Josée Desharnais, Nadia Tawbi for their support and the anonymous reviewers for their comments.
-        
-    \end{block}
+%    \begin{block}{\textsc{Acknowledgements}}
+%        We would like to thank Josée Desharnais, Nadia Tawbi for their support and the anonymous reviewers for their comments.
+%        
+%    \end{block}
+
+%\begin{block}{References}
+%    \bibliographystyle{acm}
+%    \bibliography{references}
+%\end{block}
 \end{column}
 \end{columns}
 \end{frame}
