@@ -137,57 +137,26 @@ We have created a tool called \emph{\ottifc} that takes as input a programming l
 %\hfill%
 %\begin{minipage}[t]{0.48\linewidth}
 \begin{alertblock}{Example}
-a ::= x | n | a1 + a2 | a1 * a2 
-b ::= true | false | a1 < a2
-c ::= skip | x := a | c1 ; c2 | 
-        if b then c1 else c2 end | 
-        while b do c end   
+\begin{lstlisting}
+arith_expr, a ::= x | n | a1 + a2 | a1 * a2 
+bool_expr, b ::= true | false | a1 < a2
+commands, c ::= skip | x := a | c1 ; c2 | if b then c1 else c2 end | while b do c end | read x from ch | write x to ch  
+\end{lstlisting}
 \end{alertblock}      
 %\end{minipage}
-
 \end{block}
-
-
-
+\vspace{-1.5cm}
+\color{black}
+To prevent explicit flows, Ott-IFC identifies the semantic rules that may modify the memory m (e.g., rule assign). In each of those rules, it updates the modified variable's label with the label of the expressions that are used in the rule.
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
 \begin{alertblock}{Input}
 \begin{lstlisting}
-<a, m> || <n, m>
----------------------------------
-<x := a, m> || <skip, m[x |-> n]>\end{lstlisting}        
-\end{alertblock}
-\end{minipage}
-\hfill%
-\begin{minipage}[t]{0.48\linewidth}
-\setbeamercolor{block alerted title}{fg=white,bg=norange}
-\begin{alertblock}{Output}
-\begin{lstlisting}
-  <a, m> || <n, m>
-  E |- a : ta
-  E |- x : tx
-  ta <= tx
-  ---------------------------------
-  <x:=a, m, E, pc> || <skip, m[x |-> n], E[x |-> ta], pc>    
-\end{lstlisting}
-\end{alertblock}
-\end{minipage}
-
-
-
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-\begin{alertblock}{Input}
-\begin{lstlisting}[basicstyle=\small]
-<b , m > || < true , m >
-<c1 , m > || < skip , m1 >
---------------------------------------------
-<if b then c1 else c2 end, m> || <skip , m1>
-
-<b , m> || < false , m>
-<c2 , m> || < skip , m2>
---------------------------------------------
-<if b then c1 else c2 end, m> || <skip , m2>
+$$
+<a, m, o> || <n, m, o>
+-----------------------------------------------------
+<x := a, m, o> || <stop, m[x |-> n], o>
+$$
 \end{lstlisting}        
 \end{alertblock}
 \end{minipage}
@@ -196,20 +165,92 @@ c ::= skip | x := a | c1 ; c2 |
 \setbeamercolor{block alerted title}{fg=white,bg=norange}
 \begin{alertblock}{Output}
 \begin{lstlisting}
-E |- b : l_b
-<cmd1, m, o, pc |_| l_b, E> || <stop, m1, o1, pc |_| l_b, E>
-<b, m, o, pc, E> || <true, m, o, pc, E>
-----------------------------------------------------------------
-<if b then cmd1 else cmd2 end, m, o, pc, E> ||  <stop, m1, o1, pc, E>
-
-E |- b : l_b
-<b, m, o, pc, E> || <false, m, o, pc, E>
-<cmd2, m, o, pc |_| l_b, E> || <stop, m2, o2, pc |_| l_b, E>
-----------------------------------------------------------------
-<if b then cmd1 else cmd2 end, m, o, pc, E> ||  <stop, m2, o2, pc, E>
+<a, m, o, pc, E> || <n, m, o, pc, E>
+E |- a : la
+-----------------------------------------------------
+<x := a, m, o, pc, E> || <stop, m[x |-> n], o, pc, E[x |-> pc |_| la]>
+\end{lstlisting}
+\end{alertblock}
+\end{minipage}\\
+\color{black}
+If an output is produced, it inserts a guard condition to ensure that no leak occurs.
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\begin{alertblock}{Input}
+\begin{lstlisting}
+$$
+$$
+$$
+m(x) = n
+-----------------------------------------------------
+<write x to ch, m, o> || <stop, m[ch |-> n], 
+  o::(ch ; n)>
+\end{lstlisting}        
+\end{alertblock}
+\end{minipage}
+\hfill%
+\begin{minipage}[t]{0.48\linewidth}
+\setbeamercolor{block alerted title}{fg=white,bg=norange}
+\begin{alertblock}{Output}
+\begin{lstlisting}
+E |- x : lx
+E |- ch : lch
+lx |_| pc <= lch
+m(x) = n
+-----------------------------------------------------
+<write x to ch, m, o, pc, E> ||  <stop, m[ch |-> n], 
+  o::(ch ; n), pc, E>
 \end{lstlisting}
 \end{alertblock}
 \end{minipage}
+
+\color{black}
+To prevent implicit flows, it identifies commands that may influence the control-flow of the application. It then updates to the program counter pc with the level of the expressions that are present in the rule.\\
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\begin{alertblock}{Input}
+\begin{lstlisting}
+$$
+$$
+<b, m, o> || <true, m, o>
+<c1, m, o> || <stop, m1, o1>
+-----------------------------------------------------
+<if b then c1 else c2 end, m, o> || <stop, m1, o1>
+
+
+
+
+<b, m, o> || <false, m, o>
+<c2, m, o> || <stop, m2, o2>
+-----------------------------------------------------
+<if b then c1 else c2 end, m, o> || <stop, m2, o2>
+$$
+\end{lstlisting}        
+\end{alertblock}
+\end{minipage}
+\hfill%
+\begin{minipage}[t]{0.48\linewidth}
+\setbeamercolor{block alerted title}{fg=white,bg=norange}
+\begin{alertblock}{Output}
+\begin{lstlisting}
+E |- b : lb
+<b, m, o, pc, E> || <true, m, o, pc, E>
+<c1, m, o, pc |_| lb, E> || <stop, m1, o1, pc |_| lb, E>
+E1 = updateModifVars(c2)
+-----------------------------------------------------
+<if b then c1 else c2 end, m, o, pc, E> ||  <stop, m1, o1, pc, E1>
+
+E |- b : lb
+<b, m, o, pc, E> || <false, m, o, pc, E>
+<c2, m, o, pc |_| lb, E> || <stop, m2, o2, pc |_| lb, E>
+E2 = updateModifVars(c1)
+-----------------------------------------------------
+<if b then c1 else c2 end, m, o, pc, E> ||  <stop, m2, o2, pc, E2>
+\end{lstlisting}
+\end{alertblock}
+\end{minipage}
+
+
 
 %\setbeamercolor{block alerted title}{fg=white,bg=norange} % Change the alert block title colors
 %\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
@@ -232,7 +273,7 @@ E |- b : l_b
 We have implemented a prototype of our algorithm and validated that it works on two imperative languages. It currently supports languages whose specification: 
 \begin{enumerate}
 \item is composed of expressions, which may only read the memory, and commands, which may read or write the memory
-\item program configurations are of the form $\langle command, memory\rangle$. 
+\item states are of the form $\langle command, memory, outputs\rangle$. 
 \end{enumerate}
 
 We have also begun to draft a soundness proof, that is, a proof showing that the generated mechanisms enforce non-interference.
@@ -244,15 +285,14 @@ We have also begun to draft a soundness proof, that is, a proof showing that the
     \begin{itemize}
         \item Add support for a greater variety of languages
         \item Parametrize Ott-IFC so that it can generate multiple types of mechanisms
-        \item Automatically generate 
+        \item Automatically generate a skeleton of proof in Coq
         \item Use Ott-IFC's rewriting rules to verify existing mechanisms
     \end{itemize}
 \end{block}
 
-%    \begin{block}{\textsc{Acknowledgements}}
-%        We would like to thank Josée Desharnais, Nadia Tawbi for their support and the anonymous reviewers for their comments.
-%        
-%    \end{block}
+\begin{block}{\textsc{Acknowledgements}}
+    We would like to thank Josée Desharnais, Nadia Tawbi for their support and the anonymous reviewers for their comments.    
+\end{block}
 
 %\begin{block}{References}
 %    \bibliographystyle{acm}
