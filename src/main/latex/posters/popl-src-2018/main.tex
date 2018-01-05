@@ -47,7 +47,7 @@
 
 \title{Generating Information-Flow Control Mechanisms from\\ Programming Language Specifications} % Poster title
 
-\author{Andrew Bedford (github.com/andrew-bedford)} % Author(s)
+\author{Andrew Bedford (andrew.bedford.1@ulaval.ca)} % Author(s)
 
 \institute{Laval University, Canada} % Institution(s)
 
@@ -82,7 +82,7 @@
 \begin{block}{\textsc{Motivation}}
     Modern operating systems rely on access-control mechanisms to protect users information. However, these mechanisms are insufficient as they cannot regulate the propagation of information once it has been released. 
     
-    \hspace{1.5cm}To address this issue, a new research trend called \emph{language-based information-flow security} has emerged. The idea is to use techniques from programming languages, such as program analysis and type checking, to enforce information-flow policies. Mechanisms that enforce such policies are called \emph{information-flow control mechanisms}. 
+    \hspace{1.5cm}To address this issue, a new research trend called \emph{language-based information-flow security}~\cite{DBLP:journals/jsac/SabelfeldM03} has emerged. The idea is to use techniques from programming languages, such as program analysis and type checking, to enforce information-flow policies. Mechanisms that enforce such policies are called \emph{information-flow control mechanisms}. 
 \end{block}
 
 \setbeamercolor{block alerted title}{fg=white,bg=coqatoo-pink}
@@ -91,7 +91,7 @@
 \end{alertblock}
 
 \begin{block}{\textsc{Background}}
-    Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}, which states that private information may not interfere with the publicly observable behavior of a program. More formally:
+    Most information-flow control mechanisms seek to enforce a policy called \emph{non-interference}~\cite{DBLP:conf/sp/GoguenM82a}, which states that private information may not interfere with the publicly observable behavior of a program. More formally:
     \vspace{-0.31cm}
     \setbeamercolor{block alerted title}{bg=white}
     \begin{alertblock}{}
@@ -123,7 +123,7 @@
 \begin{column}{\twocolwid}
 
 \begin{block}{\textsc{Approach and Uniqueness}}
-We have created a tool called \emph{\ottifc} that takes as input a programming language's specification (i.e., syntax and semantics, written in \emph{Ott}) and produces a mechanism's specification. 
+These mechanisms are usually designed and implemented completely by a human. We have created a tool called \emph{\ottifc} that automates parts of the process. It takes as input a programming language's specification (i.e., syntax and semantics) and produces a mechanism's specification. 
 %The development process of a mechanism using Ott and \ottifc\ looks like this:
 
 %\noindent
@@ -138,8 +138,7 @@ We have created a tool called \emph{\ottifc} that takes as input a programming l
 %\begin{minipage}[t]{0.48\linewidth}
 \begin{alertblock}{Example}
 \begin{lstlisting}
-arith_expr, a ::= x | n | a1 + a2 | a1 * a2 
-bool_expr, b ::= true | false | a1 < a2
+arith_expr, a ::= x | n | a1 + a2 | a1 * a2                                    bool_expr, b ::= true | false | a1 < a2
 commands, c ::= skip | x := a | c1 ; c2 | if b then c1 else c2 end | while b do c end | read x from ch | write x to ch  
 \end{lstlisting}
 \end{alertblock}      
@@ -168,7 +167,8 @@ $$
 <a, m, o, pc, E> || <n, m, o, pc, E>
 E |- a : la
 -----------------------------------------------------
-<x := a, m, o, pc, E> || <stop, m[x |-> n], o, pc, E[x |-> pc |_| la]>
+<x := a, m, o, pc, E> || <stop, m[x |-> n], o, pc, 
+  E[x |-> pc |_| la]>
 \end{lstlisting}
 \end{alertblock}
 \end{minipage}\\
@@ -270,7 +270,7 @@ E2 = updateModifVars(c1)
 \begin{column}{\onecolwid}
 
 \begin{block}{\textsc{Current Status}}
-We have implemented a prototype of our algorithm and validated that it works on two imperative languages. It currently supports languages whose specification: 
+We have implemented a prototype of our algorithm~\cite{GitHub:ott-ifc} and validated that it works on two imperative languages. It currently supports languages whose specification: 
 \begin{enumerate}
 \item is composed of expressions, which may only read the memory, and commands, which may read or write the memory
 \item states are of the form $\langle command, memory, outputs\rangle$. 
@@ -294,10 +294,10 @@ We have also begun to draft a soundness proof, that is, a proof showing that the
     We would like to thank Josée Desharnais, Nadia Tawbi for their support and the anonymous reviewers for their comments.    
 \end{block}
 
-%\begin{block}{References}
-%    \bibliographystyle{acm}
-%    \bibliography{references}
-%\end{block}
+\begin{block}{References}
+    \bibliographystyle{acm}
+    \bibliography{references}
+\end{block}
 \end{column}
 \end{columns}
 \end{frame}
