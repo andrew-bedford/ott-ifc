@@ -123,7 +123,7 @@
 \begin{column}{\twocolwid}
 
 \begin{block}{\textsc{Approach and Uniqueness}}
-These mechanisms are usually designed and implemented completely by a human. We have created a tool called \emph{\ottifc} that automates parts of the process. It takes as input a programming language's specification (i.e., syntax and semantics) and produces a mechanism's specification. 
+These mechanisms are usually designed and implemented completely by a human. We have created a tool called \emph{\ottifc} that automates part of the process. It takes as input a programming language's specification (i.e., syntax and semantics) and produces a mechanism's specification. 
 %The development process of a mechanism using Ott and \ottifc\ looks like this:
 
 %\noindent
@@ -144,11 +144,12 @@ commands, c ::= skip | x := a | c1 ; c2 | if b then c1 else c2 end | while b do 
 \end{alertblock}      
 %\end{minipage}
 \end{block}
-\vspace{-1.5cm}
+\vspace{-1.6cm}
 \color{black}
-To prevent explicit flows, Ott-IFC identifies the semantic rules that may modify the memory m (e.g., rule assign). In each of those rules, it updates the modified variable's label with the label of the expressions that are used in the rule.
+To prevent explicit flows, Ott-IFC identifies the semantic rules that may modify the memory m (e.g., rule assign). In each of those rules, it updates the modified variable's label with the label of the expressions that are used in the rule.\\
+\vspace{-1cm}
 \noindent
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \begin{alertblock}{Input}
 \begin{lstlisting}
 $$
@@ -160,7 +161,7 @@ $$
 \end{alertblock}
 \end{minipage}
 \hfill%
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \setbeamercolor{block alerted title}{fg=white,bg=norange}
 \begin{alertblock}{Output}
 \begin{lstlisting}
@@ -173,9 +174,10 @@ E |- a : la
 \end{alertblock}
 \end{minipage}\\
 \color{black}
-If an output is produced, it inserts a guard condition to ensure that no leak occurs.
+If an output is produced, it inserts a guard condition to ensure that no leak occurs.\\
+\vspace{-1cm}
 \noindent
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \begin{alertblock}{Input}
 \begin{lstlisting}
 $$
@@ -189,7 +191,7 @@ m(x) = n
 \end{alertblock}
 \end{minipage}
 \hfill%
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \setbeamercolor{block alerted title}{fg=white,bg=norange}
 \begin{alertblock}{Output}
 \begin{lstlisting}
@@ -206,8 +208,9 @@ m(x) = n
 
 \color{black}
 To prevent implicit flows, it identifies commands that may influence the control-flow of the application. It then updates to the program counter pc with the level of the expressions that are present in the rule.\\
+\vspace{-1cm}
 \noindent
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \begin{alertblock}{Input}
 \begin{lstlisting}
 $$
@@ -229,7 +232,7 @@ $$
 \end{alertblock}
 \end{minipage}
 \hfill%
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
 \setbeamercolor{block alerted title}{fg=white,bg=norange}
 \begin{alertblock}{Output}
 \begin{lstlisting}
@@ -249,22 +252,6 @@ E2 = updateModifVars(c1)
 \end{lstlisting}
 \end{alertblock}
 \end{minipage}
-
-
-
-%\setbeamercolor{block alerted title}{fg=white,bg=norange} % Change the alert block title colors
-%\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
-
-
-
-
-    %\begin{figure}[ht]
-    %\includegraphics[width=\columnwidth]{images/derivations-graph-large.png}
-    %\caption{PDG-like representation of Listing~\ref{listing:lost-information}}
-    %\label{figure:derivations}
-    %\end{figure}
-%\end{alertblock}
-
 \end{column}
 
 \begin{column}{\onecolwid}

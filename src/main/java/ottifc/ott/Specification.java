@@ -27,23 +27,39 @@ public class Specification {
     }
 
     //TODO Use enum for the vartype?
-    public Set<String> getVars(String vartype) {
+
+
+
+    public Set<String> getMetaVars() {
+        return getVars("metavar");
+    }
+
+    public Set<String> getIndexVars() {
+        return getVars("indexvar");
+    }
+
+
+    /**
+     *
+     * @param vartype "metavar" or "indexvar"
+     * @return The set of variables present in the file header
+     *
+     * Example:
+     * If the header is:
+     *     metavar integer, n ::= {{ coq nat }} {{ lex  numeral }}
+     *     indexvar index, i, j ::= {{ coq nat }}
+     * then getVars("metavars") would return {integer, n}
+     */
+    private Set<String> getVars(String vartype) {
         Set<String> setOfVars = new HashSet<>();
 
         String[] specLines = _specification.split(System.getProperty("line.separator"));
         for(String line : specLines) {
             String trimmedLine = line.trim();
-            if (trimmedLine.startsWith("grammar")) {
-                System.out.println("GRAMMAR BEGINS : " + trimmedLine);
-            }
-            else if (trimmedLine.startsWith("defns")) {
-                System.out.println("DEFINITIONS BEGINS : " + trimmedLine);
-            }
             if (trimmedLine.startsWith(vartype)) {
                 String[] metavars = trimmedLine.substring(trimmedLine.indexOf(" "), trimmedLine.length()).split("::=")[0].split(",");
                 for (String metavar : metavars) {
                     setOfVars.add(metavar.trim());
-                    System.err.println(String.format("%s : %s", vartype, metavar.trim()));
                 }
             }
 
@@ -171,6 +187,29 @@ public class Specification {
             if (line.startsWith("defns")) { inGrammarSection = false; break; }
         }
         return setOfAbstractProductions;
+    }
+
+    public boolean isNonTerminal(String word) {
+        Set<String> nonTerminals = getNonTerminals();
+        return nonTerminals.contains(word);
+    }
+
+    public void test() {
+        /*
+        String test = "while b do cmd end";
+        String[] words = test.split(" ");
+        for (String word : words) {
+            if (isNonTerminal(word)) {
+
+            }
+        }*/
+        System.out.println(getAbstractProductions("a"));
+        Set<String> possibleProductions = getAbstractProductions("a");
+
+        for(String production : possibleProductions) {
+            
+        }
+
     }
 
     public void print() {

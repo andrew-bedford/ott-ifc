@@ -103,10 +103,9 @@ public class Rule {
         return separator;
     }
 
-    //FIXME Temporary. Instead of simply searching for ::, compare the last variables of the states to see if they are the same
+    //FIXME Temporary. Instead of simply searching for ::, look at the third element of the state (since we assume <c, m, o>
     public boolean modifiesOutputTrace(State initialState, State finalState) {
-        String s[] = _rule.split(System.getProperty("line.separator"));
-        return s[s.length-1].contains("::");
+        return getFinalState().isOutputModified();
     }
 
     public Set<String> getExpressionVariablesUsedInPreconditions() {

@@ -5,6 +5,7 @@ import helpers.ParameterHelper;
 import ottifc.ifc.Monitor;
 import ottifc.ifc.Option;
 import ottifc.ott.Specification;
+import ottifc.ott.semantics.Rule;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -29,23 +30,24 @@ public class Main {
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
             //TODO Use something else than System.err to produce colored text
-            System.err.println("---------------------------------------------");
-            System.err.println("|                    ott                    |");
-            System.err.println("---------------------------------------------");
-            System.err.flush();
+            System.out.println("---------------------------------------------");
+            System.out.println("|                    ott                    |");
+            System.out.println("---------------------------------------------");
             System.out.println(fileContents);
 
-            System.err.println("---------------------------------------------");
-            System.err.println("|                  ott-ifc                  |");
-            System.err.println("---------------------------------------------");
-            System.err.flush();
+            System.out.println("---------------------------------------------");
+            System.out.println("|                  ott-ifc                  |");
+            System.out.println("---------------------------------------------");
             Specification spec = new Specification(fileContents);
-            //spec.getVars("metavar");
-            //spec.getVars("indexvar");
-            //spec.getRules();
-            //spec.getAbstractProductions("b");
-            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-            m.generate();
+            for(Rule r : spec.getRules()) {
+                //Get abstract System.out.println(r.getInitialState().getCommand().replaceAll("[\\d']",""));
+            }
+            spec.test();
+
+
+
+            //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            //m.generate();
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);

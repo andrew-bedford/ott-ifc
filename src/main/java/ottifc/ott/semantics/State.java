@@ -69,8 +69,8 @@ public class State {
     }
 
     public Boolean isOutputModified() {
-        String ouptut = getOutput();
-        if (getOutput().contains("::")) {
+        String output = getOutput();
+        if (output.contains("::")) {
             return true;
         }
         return false;
