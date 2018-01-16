@@ -18,8 +18,9 @@ public class Main {
         ParameterHelper.parse(args);
 
         if (ParameterHelper.isEmpty() || ParameterHelper.contains("-help") || ParameterHelper.contains("h")) {
-            //TODO
-            System.out.println("Display HELP");
+            System.out.println("Usage:");
+            System.out.println("  -i [.ott file]                       Specification to use as input.");
+            System.out.println("  -m [generation | verification]       Ott-IFC's mode. Use 'generation' to generate a mechanism and 'verification' to verify an existing mechanism.");
         }
         //Note: We use the same parameters as Ott for the input file: "-i"
         else if (ParameterHelper.contains("i")) {
@@ -29,7 +30,6 @@ public class Main {
             FileHelper.verifyFileExists(filePath);
             String fileContents = FileHelper.convertFileToString(new File(filePath));
 
-            //TODO Use something else than System.err to produce colored text
             System.out.println("---------------------------------------------");
             System.out.println("|                    ott                    |");
             System.out.println("---------------------------------------------");
@@ -43,8 +43,6 @@ public class Main {
                 //Get abstract System.out.println(r.getInitialState().getCommand().replaceAll("[\\d']",""));
             }
             spec.test();
-
-
 
             //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             //m.generate();
