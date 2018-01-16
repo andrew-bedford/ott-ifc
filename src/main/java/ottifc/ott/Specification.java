@@ -194,22 +194,45 @@ public class Specification {
         return nonTerminals.contains(word);
     }
 
-    public void test() {
-        /*
-        String test = "while b do cmd end";
-        String[] words = test.split(" ");
-        for (String word : words) {
-            if (isNonTerminal(word)) {
+    public boolean isMetaVariable(String word) {
+        Set<String> metaVars = getMetaVars();
+        Set<String> indexVars = getIndexVars();
+        if (metaVars.contains(word) || indexVars.contains(word)) { return true; }
 
+        return false;
+    }
+
+    public Set<String> getUnfoldedPossibleProductionsForNonTerminal(String nonTerminal) {
+        Set<String> possibleProductions = getAbstractProductions(nonTerminal);
+        System.out.println("From : " + possibleProductions);
+
+        Set<String> unfoldedProductions = new HashSet<>(possibleProductions);
+        for(String p1 : possibleProductions) {
+            Set<String> asd = getNonTerminalsPresentInAbstractProduction(p1);
+            for (String p2 : possibleProductions) {
+                unfoldedProductions.add(p2.replace(nonTerminal+ " ", p1 + " "));
+                unfoldedProductions.add(p2.replace(" " + nonTerminal, " " + p1));
+                unfoldedProductions.add(p2.replace(" " + nonTerminal +" ", " " + p1 + " "));
             }
-        }*/
-        System.out.println(getAbstractProductions("a"));
-        Set<String> possibleProductions = getAbstractProductions("a");
-
-        for(String production : possibleProductions) {
-            
         }
 
+        System.out.println("To : " + unfoldedProductions);
+
+        return unfoldedProductions;
+    }
+
+    //For example, the abstract production "a < a" would return the set {a}
+    public Set<String> getNonTerminalsPresentInAbstractProduction(String s) {
+        Set<String> results = new HashSet<>();
+        String[] words = s.split(" ");
+        for (String word : words) {
+            if (isNonTerminal(word)) {
+                results.add(word);
+            }
+        }
+
+        System.out.println("Non terminal in " + s + " :" + results.toString());
+        return results;
     }
 
     public void print() {

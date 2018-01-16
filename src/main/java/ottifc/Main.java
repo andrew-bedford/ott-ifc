@@ -39,13 +39,12 @@ public class Main {
             System.out.println("|                  ott-ifc                  |");
             System.out.println("---------------------------------------------");
             Specification spec = new Specification(fileContents);
-            for(Rule r : spec.getRules()) {
-                //Get abstract System.out.println(r.getInitialState().getCommand().replaceAll("[\\d']",""));
-            }
-            spec.test();
+
+            spec.getUnfoldedPossibleProductionsForNonTerminal("a");
 
             //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             //m.generate();
+
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);
