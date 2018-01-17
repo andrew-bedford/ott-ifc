@@ -36,7 +36,7 @@ public class Monitor {
         for(Rule r : rules) {
             if (_spec.isCommandRule(r)) {
 
-                Set<String> expressionVariables = r.getExpressionVariablesUsedInPreconditionsWithoutConstants();
+                Set<String> expressionVariables = r.getExpressionVariablesUsedInPreconditions();
                 insertLabelDefinitions(r, expressionVariables);
 
                 Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();

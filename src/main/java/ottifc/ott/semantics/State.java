@@ -58,6 +58,7 @@ public class State {
         return false;
     }
 
+    //FIXME Temporary. Instead of simply searching for ::, look at the third element of the state (since we assume <c, m, o>
     public Boolean isOutputModified() {
         String output = getOutput();
         if (output.contains("::")) {

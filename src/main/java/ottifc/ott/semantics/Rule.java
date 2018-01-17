@@ -105,7 +105,6 @@ public class Rule {
         return separator;
     }
 
-    //FIXME Temporary. Instead of simply searching for ::, look at the third element of the state (since we assume <c, m, o>
     public boolean modifiesOutputTrace(State initialState, State finalState) {
         return getFinalState().isOutputModified();
     }
@@ -113,27 +112,26 @@ public class Rule {
     public Set<String> getExpressionVariablesUsedInPreconditions() {
         Set<String> expressionVariables = new HashSet<>();
         Set<String> expressionNonTerminals = _spec.getExpressionNonTerminals();
-        for(String precondition: _preconditions) {
+        for(String precondition : _preconditions) {
             for (String ent : expressionNonTerminals) {
+
                 Pattern p = Pattern.compile("[^\\w]("+ent+"[0-9\\']?)");
-                Matcher m = p.matcher(precondition);
+                Matcher m;
+
+                //TODO Move this test elsewhere, don't think that it should be this function's responsibility to filter the expression variables
+                // If the precondition of the form : <a, m, o, pc, E> --> <a', m, o, pc, E>, return the expression variables only present in the initial state so that the algo adds E |- a : l_a, but not E |- a' : l_a'
+                if (precondition.contains(_spec.getStepSymbol())) {
+                    m = p.matcher(precondition.split(_spec.getStepSymbol())[0]);
+                }
+                else {
+                    m = p.matcher(precondition);
+                }
                 while (m.find()) {
                     expressionVariables.add(m.group(1));
                 }
             }
         }
         return expressionVariables;
-    }
-
-    public Set<String> getExpressionVariablesUsedInPreconditionsWithoutConstants() {
-        Set<String> expressionVariables = getExpressionVariablesUsedInPreconditions();
-        Set<String> filteredSet = new HashSet<>();
-        for(String expressionVariable : expressionVariables) {
-            if (!expressionVariable.startsWith("true") && !expressionVariable.startsWith("false") && !expressionVariable.startsWith("n")) { //FIXME
-                filteredSet.add(expressionVariable);
-            }
-        }
-        return filteredSet;
     }
 
     /*
