@@ -111,7 +111,7 @@ public class Rule {
     public Set<String> getExpressionVariablesUsedInPreconditions() {
         Set<String> expressionVariables = new HashSet<>();
         for(String precondition: _preconditions) {
-            Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|(ch[0-9\\']?)|true|false");
+            Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|(ch[0-9\\']?)|true|false"); //FIXME Automatically generate the regex pattern instead of using a hard-coded one. The hard-coded one is used only for the proof-of-concept.
             Matcher m = p.matcher(precondition);
             while (m.find()) {
                 expressionVariables.add(m.group());
@@ -124,7 +124,7 @@ public class Rule {
         Set<String> expressionVariables = getExpressionVariablesUsedInPreconditions();
         Set<String> filteredSet = new HashSet<>();
         for(String expressionVariable : expressionVariables) {
-            if (!expressionVariable.startsWith("true") && !expressionVariable.startsWith("false") && !expressionVariable.startsWith("n")) {
+            if (!expressionVariable.startsWith("true") && !expressionVariable.startsWith("false") && !expressionVariable.startsWith("n")) { //FIXME
                 filteredSet.add(expressionVariable);
             }
         }

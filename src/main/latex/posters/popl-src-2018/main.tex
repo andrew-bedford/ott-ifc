@@ -239,14 +239,14 @@ $$
 E |- b : lb
 <b, m, o, pc, E> || <true, m, o, pc, E>
 <c1, m, o, pc |_| lb, E> || <stop, m1, o1, pc |_| lb, E>
-E1 = updateModifVars(c2)
+E1 = updateModifVars(E, pc, b, c2)
 -----------------------------------------------------
 <if b then c1 else c2 end, m, o, pc, E> ||  <stop, m1, o1, pc, E1>
 
 E |- b : lb
 <b, m, o, pc, E> || <false, m, o, pc, E>
 <c2, m, o, pc |_| lb, E> || <stop, m2, o2, pc |_| lb, E>
-E2 = updateModifVars(c1)
+E2 = updateModifVars(E, pc, b, c1)
 -----------------------------------------------------
 <if b then c1 else c2 end, m, o, pc, E> ||  <stop, m2, o2, pc, E2>
 \end{lstlisting}
