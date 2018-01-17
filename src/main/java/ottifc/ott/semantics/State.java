@@ -46,7 +46,12 @@ public class State {
     public String getCommand() {
         String[] s = _state.split(",");
         return s[0].substring(1, s[0].length()); //Removes the "<" at the beginning
+    }
 
+    public String getAbstractCommand() {
+        String command = getCommand();
+        String abstractCommand = command.replaceAll("[\\d']","");
+        return abstractCommand;
     }
 
     public String getMemory() {

@@ -2,10 +2,7 @@ package ottifc.ott;
 
 import ottifc.ott.semantics.Rule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +21,20 @@ public class Specification {
 
     public List<Rule> getRules() {
         return _rules;
+    }
+
+    public Set<Rule> getRules(String specificProduction) {
+        Set<Rule> rulesRelatedToSpecificProduction = new HashSet<>();
+        Set<String> possibleProductions = getUnfoldedPossibleProductions(specificProduction);
+
+        for (Rule r : getRules()) {
+            String commandInInitialState = r.getInitialState().getAbstractCommand();
+            if (possibleProductions.contains(commandInInitialState)) {
+                rulesRelatedToSpecificProduction.add(r);
+            }
+        }
+
+        return rulesRelatedToSpecificProduction;
     }
 
     //TODO Use enum for the vartype?
@@ -223,6 +234,26 @@ public class Specification {
 
         //None of the rules modified the memory
         return true;
+    }
+
+
+    //TODO Find better variable and function names
+    //For example, for the "if b then cmd else cmd end", will return { "if b then...", "if true then...", "if false then...", ... }
+    public Set<String> getUnfoldedPossibleProductions(String production) {
+        Set<String> possibleValues = new HashSet<>();
+        Set<String> nonTerminalsToUnfold = getNonTerminalsPresentInAbstractProduction(production);
+        possibleValues.add(production);
+
+        for(String nonTerminalToUnfold : nonTerminalsToUnfold) {
+            Set<String> possibleProductionsOfNonTerminalToUnfold = getUnfoldedPossibleProductionsForNonTerminal(nonTerminalToUnfold);
+            for (String p : possibleProductionsOfNonTerminalToUnfold) {
+                possibleValues.add(production.replace(nonTerminalToUnfold+ " ", p + " "));
+                possibleValues.add(production.replace(" " + nonTerminalToUnfold, " " + p));
+                possibleValues.add(production.replace(" " + nonTerminalToUnfold +" ", " " + p + " "));
+            }
+        }
+
+        return possibleValues;
     }
 
     public Set<String> getUnfoldedPossibleProductionsForNonTerminal(String nonTerminal) {

@@ -41,6 +41,13 @@ public class Main {
             Specification spec = new Specification(fileContents);
 
             //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
+            Set<Rule> rulesForIf = spec.getRules("if b then cmd else cmd end");
+            for (Rule r : rulesForIf) {
+                r.print();
+            }
+
+
+
             //Set<String> asd = spec.getNonTerminalsPresentInAbstractProduction("if b then cmd else cmd end");
             System.out.println("Expression? a = " + spec.isExpression("a"));
             System.out.println("Expression? b = " + spec.isExpression("b"));
