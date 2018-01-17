@@ -40,7 +40,12 @@ public class Main {
             System.out.println("---------------------------------------------");
             Specification spec = new Specification(fileContents);
 
-            spec.getUnfoldedPossibleProductionsForNonTerminal("a");
+            //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
+            //Set<String> asd = spec.getNonTerminalsPresentInAbstractProduction("if b then cmd else cmd end");
+            System.out.println("Expression? a = " + spec.isExpression("a"));
+            System.out.println("Expression? b = " + spec.isExpression("b"));
+            System.out.println("Expression? cmd = " + spec.isExpression("cmd"));
+            System.out.println("Command? cmd = " + spec.isCommand("cmd"));
 
             //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             //m.generate();
