@@ -81,6 +81,21 @@ public class Specification {
         return rulesRelatedToSpecificProduction;
     }
 
+    public Set<Rule> getCommandRules() {
+        Set<Rule> commandRules = new HashSet<>();
+        Set<String> commandNonTerminals = getCommandNonTerminals();
+        for(String cnt : commandNonTerminals) {
+            commandRules.addAll(getRules(cnt));
+        }
+
+        return commandRules;
+    }
+
+    public boolean isCommandRule(Rule r) {
+        Set<Rule> commandRules = getCommandRules();
+        return commandRules.contains(r);
+    }
+
     public Set<String> getMetaVars() {
         return getVars("metavar");
     }

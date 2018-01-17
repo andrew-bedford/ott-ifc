@@ -172,4 +172,19 @@ public class Rule {
         return new State(finalState);
     }
 
+    @Override public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof State))return false;
+
+        Rule otherRule = (Rule)other;
+
+        if (!this._rule.equals(otherRule._rule)) { return false; }
+
+        return true;
+    }
+
+    @Override public int hashCode() {
+        return _rule.hashCode();
+    }
 }

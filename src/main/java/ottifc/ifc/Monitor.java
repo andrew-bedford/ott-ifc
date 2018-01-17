@@ -34,7 +34,7 @@ public class Monitor {
         List<Rule> rules = _spec.getRules();
         Set<String> commandsAffectingControlFlow = getCommandsWhichMayAffectControlFlow();
         for(Rule r : rules) {
-            if (r.getInitialState().containsCommands()) {
+            if (_spec.isCommandRule(r)) {
 
                 Set<String> expressionVariables = r.getExpressionVariablesUsedInPreconditionsWithoutConstants();
                 insertLabelDefinitions(r, expressionVariables);
@@ -58,7 +58,6 @@ public class Monitor {
 
                     r.setPreconditions(newPreconditions);
                 }
-
 
                 r.print();
                 System.out.println("");
@@ -97,8 +96,9 @@ public class Monitor {
     private Set<String> getCommandsWhichMayAffectControlFlow() {
         Set<String> commandSet = new HashSet<>();
         for(Rule r1 : _spec.getRules()) {
-            if (r1.getInitialState().containsCommands()) {
+            if (_spec.isCommandRule(r1)) {
                 //Look for another rule which has the same initial state, but a different final state
+                //FIXME Is not quite sufficient, they could both modify the memory by executing different commands but have the "same" final state (i.e., both use the same variable names)
                 for(Rule r2 : _spec.getRules()) {
                     if (!r1.equals(r2) && r1.getInitialState().equals(r2.getInitialState()) && !r1.getFinalState().equals(r2.getFinalState())) {
                         commandSet.add(r1.getInitialState().getCommand());

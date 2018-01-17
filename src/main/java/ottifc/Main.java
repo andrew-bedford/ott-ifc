@@ -10,6 +10,7 @@ import ottifc.ott.semantics.Rule;
 import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
@@ -39,9 +40,9 @@ public class Main {
             Specification spec = new Specification(fileContents);
 
             //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
-            List<Rule> rulesForCmd = spec.getRules("cmd");
+            Set<Rule> rulesForCmd = spec.getCommandRules();
             for (Rule r : rulesForCmd) {
-                r.print();
+               // r.print();
             }
 
             //System.out.println("Commands = " + spec.getCommandNonTerminals());
@@ -49,8 +50,8 @@ public class Main {
 
 
 
-//            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-//            m.generate();
+            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+            m.generate();
 
         }
         else if (ParameterHelper.contains("m")) {

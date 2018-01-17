@@ -13,21 +13,6 @@ public class State {
         _state = state;
     }
 
-    //TODO Generate the regex patterns from the syntax instead of using a hard-coded one. The hard-coded one is used only for the proof-of-concept.
-    public boolean containsExpressions() {
-        Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|(c[0-9\\']?)|true|false");
-        Matcher m = p.matcher(_state);
-        return m.find();
-    }
-
-    //TODO See containsExpression's TODO
-    public boolean containsCommands() {
-        Pattern p = Pattern.compile("skip|x := a|x := n|cmd1 ; cmd2|skip ; cmd2|while b do cmd end|if b then cmd1 else cmd2 end|read x from c|write x to c|cmd[0-9\\']?");
-        Matcher m = p.matcher(_state);
-        Boolean result = m.find();
-        return result;
-    }
-
     public String toString() {
         return _state;
     }
