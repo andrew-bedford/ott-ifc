@@ -10,6 +10,9 @@ public class Specification {
     String _specification;
     String _stepSymbol;
     List<Rule> _rules; //We use a list to preserve the original rule order
+    Set<String> _commandNonTerminals;
+    Set<String> _expressionNonTerminals;
+    Set<String> _reservedNonTerminals = new HashSet<>(Arrays.asList("memory", "m", "output", "o", "formula", "terminals"));
 
     public Specification(String specification) {
         _specification = specification;
@@ -17,15 +20,56 @@ public class Specification {
         removeCommentsFromSpecification();
         _stepSymbol = extractStepSymbol();
         _rules = extractRules();
+        _commandNonTerminals = extractCommandNonTerminals();
+        _expressionNonTerminals = extractExpressionNonTerminals();
     }
+
+    private Set<String> extractCommandNonTerminals() {
+        Set<String> metaVars = getNonTerminals();
+        Set<String> commands = new HashSet<>();
+        for (String mv : metaVars) {
+            if (isCommand(mv)) {
+                commands.add(mv);
+            }
+        }
+
+        return commands;
+    }
+
+    private Set<String> extractExpressionNonTerminals() {
+        Set<String> metaVars = getNonTerminals();
+        Set<String> expressions = new HashSet<>();
+        for (String mv : metaVars) {
+            if (isExpression(mv) && !isReservedNonTerminal(mv)) {
+                expressions.add(mv);
+            }
+        }
+
+        return expressions;
+    }
+
+    private boolean isReservedNonTerminal(String nonTermianl) {
+        return _reservedNonTerminals.contains(nonTermianl);
+    }
+
+    public Set<String> getCommandNonTerminals() { return _commandNonTerminals; }
+
+    public Set<String> getExpressionNonTerminals() { return _expressionNonTerminals; }
 
     public List<Rule> getRules() {
         return _rules;
     }
 
-    public List<Rule> getRules(String specificProduction) {
+    //TODO Define and use types for commands, expressions and non-terminals
+    public List<Rule> getRules(String specificCommandExpressionOrNonTerminal) {
         List<Rule> rulesRelatedToSpecificProduction = new LinkedList<>();
-        Set<String> possibleProductions = getUnfoldedPossibleProductions(specificProduction);
+        Set<String> possibleProductions;
+        if (isNonTerminal(specificCommandExpressionOrNonTerminal)) {
+            possibleProductions = getUnfoldedPossibleProductionsForNonTerminal(specificCommandExpressionOrNonTerminal);
+        }
+        else {
+            possibleProductions = getUnfoldedPossibleProductions(specificCommandExpressionOrNonTerminal);
+        }
 
         for (Rule r : getRules()) {
             String commandInInitialState = r.getInitialState().getAbstractCommand();
@@ -36,10 +80,6 @@ public class Specification {
 
         return rulesRelatedToSpecificProduction;
     }
-
-    //TODO Use enum for the vartype?
-
-
 
     public Set<String> getMetaVars() {
         return getVars("metavar");

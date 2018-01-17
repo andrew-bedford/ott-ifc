@@ -10,9 +10,6 @@ import ottifc.ott.semantics.Rule;
 import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
@@ -42,21 +39,18 @@ public class Main {
             Specification spec = new Specification(fileContents);
 
             //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
-            List<Rule> rulesForIf = spec.getRules("if b then cmd else cmd end");
-            for (Rule r : rulesForIf) {
+            List<Rule> rulesForCmd = spec.getRules("cmd");
+            for (Rule r : rulesForCmd) {
                 r.print();
             }
 
+            //System.out.println("Commands = " + spec.getCommandNonTerminals());
+            //System.out.println("Expressions = " + spec.getExpressionNonTerminals());
 
 
-            //Set<String> asd = spec.getNonTerminalsPresentInAbstractProduction("if b then cmd else cmd end");
-            System.out.println("Expression? a = " + spec.isExpression("a"));
-            System.out.println("Expression? b = " + spec.isExpression("b"));
-            System.out.println("Expression? cmd = " + spec.isExpression("cmd"));
-            System.out.println("Command? cmd = " + spec.isCommand("cmd"));
 
-            //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
-            //m.generate();
+//            Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
+//            m.generate();
 
         }
         else if (ParameterHelper.contains("m")) {

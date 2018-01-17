@@ -48,7 +48,7 @@ public class Monitor {
                 if (commandsAffectingControlFlow.contains(r.getInitialState().getCommand())) {
                     Set<String> newPreconditions = new HashSet<>();
                     for(String precondition : r.getPreconditions()) {
-                        if (precondition.contains("cmd")) { //FIXME Temporary, only for the proof-of-concept
+                        if (containsCommandNonTerminal(precondition)) {
                             newPreconditions.add(precondition.replaceAll("pc", "pc |_| " + getSupremumOfSet(expressionVariables)));
                         }
                         else {
@@ -68,6 +68,13 @@ public class Monitor {
 
 
         //_spec.print();
+    }
+
+    private boolean containsCommandNonTerminal(String s) {
+        for (String nt : _spec.getCommandNonTerminals()) {
+            if (s.contains(nt)) { return true; }
+        }
+        return false;
     }
 
     //TODO Implement
