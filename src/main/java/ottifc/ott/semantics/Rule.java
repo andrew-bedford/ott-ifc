@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Rule {
+    Specification _spec;
     String _rule;
     State _initialState;
     State _finalState;
@@ -17,7 +18,8 @@ public class Rule {
     String _stepSymbol;
     Set<String> _preconditions;
 
-    public Rule(String rule) {
+    public Rule(Specification spec, String rule) {
+        _spec = spec;
         _rule = rule;
         _preconditions = extractPreconditions();
         _separator = extractSeparator();
@@ -110,11 +112,14 @@ public class Rule {
 
     public Set<String> getExpressionVariablesUsedInPreconditions() {
         Set<String> expressionVariables = new HashSet<>();
+        Set<String> expressionNonTerminals = _spec.getExpressionNonTerminals();
         for(String precondition: _preconditions) {
-            Pattern p = Pattern.compile("(x[0-9\\']?)|(n[0-9\\']?)|(a[0-9\\']?)|(b[0-9\\']?)|(ch[0-9\\']?)|true|false"); //FIXME Automatically generate the regex pattern instead of using a hard-coded one. The hard-coded one is used only for the proof-of-concept.
-            Matcher m = p.matcher(precondition);
-            while (m.find()) {
-                expressionVariables.add(m.group());
+            for (String ent : expressionNonTerminals) {
+                Pattern p = Pattern.compile("[^\\w]("+ent+"[0-9\\']?)");
+                Matcher m = p.matcher(precondition);
+                while (m.find()) {
+                    expressionVariables.add(m.group(1));
+                }
             }
         }
         return expressionVariables;

@@ -28,7 +28,7 @@ public class Specification {
         Set<String> metaVars = getNonTerminals();
         Set<String> commands = new HashSet<>();
         for (String mv : metaVars) {
-            if (isCommand(mv)) {
+            if (isCommandNonTerminal(mv)) {
                 commands.add(mv);
             }
         }
@@ -40,7 +40,7 @@ public class Specification {
         Set<String> metaVars = getNonTerminals();
         Set<String> expressions = new HashSet<>();
         for (String mv : metaVars) {
-            if (isExpression(mv) && !isReservedNonTerminal(mv)) {
+            if (isExpressionNonTerminal(mv) && !isReservedNonTerminal(mv)) {
                 expressions.add(mv);
             }
         }
@@ -163,7 +163,7 @@ public class Specification {
         String[] specParagraphs = _specification.split(System.getProperty("line.separator")+System.getProperty("line.separator")); // We split the specification using \n\n because between each rule, there must be an additionnal \n
         for(String s: specParagraphs) {
             if (s.contains("-----") && (s.contains("||") || s.contains("-->"))) { //Then it is (probably) a semantics rule
-                rules.add(new Rule(s));
+                rules.add(new Rule(this, s));
             }
         }
         return rules;
@@ -269,12 +269,14 @@ public class Specification {
     }
 
     //For example, isCommand("cmd") should return true
-    public boolean isCommand(String nonTerminal) {
+    public boolean isCommandNonTerminal(String nonTerminal) {
         //If it is not an expression, then it is necessarily a command
-        return !isExpression(nonTerminal);
+        return !isExpressionNonTerminal(nonTerminal);
     }
 
-    public boolean isExpression(String nonTerminal) {
+    public boolean isExpressionNonTerminal(String nonTerminal) {
+        if (isReservedNonTerminal(nonTerminal)) { return false; }
+
         Set<String> possibleValues = getUnfoldedPossibleProductionsForNonTerminal(nonTerminal);
         boolean noneOfTheRulesModifyTheMemory = true;
         for(Rule r : getRules()) {
