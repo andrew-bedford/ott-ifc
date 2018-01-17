@@ -9,6 +9,7 @@ import ottifc.ott.semantics.Rule;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +42,7 @@ public class Main {
             Specification spec = new Specification(fileContents);
 
             //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
-            Set<Rule> rulesForIf = spec.getRules("if b then cmd else cmd end");
+            List<Rule> rulesForIf = spec.getRules("if b then cmd else cmd end");
             for (Rule r : rulesForIf) {
                 r.print();
             }

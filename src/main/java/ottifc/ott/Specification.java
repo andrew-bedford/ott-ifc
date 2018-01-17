@@ -23,8 +23,8 @@ public class Specification {
         return _rules;
     }
 
-    public Set<Rule> getRules(String specificProduction) {
-        Set<Rule> rulesRelatedToSpecificProduction = new HashSet<>();
+    public List<Rule> getRules(String specificProduction) {
+        List<Rule> rulesRelatedToSpecificProduction = new LinkedList<>();
         Set<String> possibleProductions = getUnfoldedPossibleProductions(specificProduction);
 
         for (Rule r : getRules()) {
