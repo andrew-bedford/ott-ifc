@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3518e6c6-4601-4012-a6e9-b2dab6daec1b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java" afterPath="$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java" afterPath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java" afterPath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" afterPath="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Specification.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Specification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="165" column="32" lean-forward="false" selection-start-line="165" selection-start-column="32" selection-end-line="165" selection-end-column="32" />
+            <state relative-caret-position="263">
+              <caret line="276" column="54" lean-forward="true" selection-start-line="276" selection-start-column="54" selection-end-line="276" selection-end-column="54" />
               <folding>
                 <element signature="e#1646#1647#0" expanded="true" />
                 <element signature="e#1712#1713#0" expanded="true" />
@@ -37,8 +35,8 @@
                 <element signature="e#3488#3489#0" expanded="true" />
                 <element signature="e#6927#6928#0" expanded="true" />
                 <element signature="e#6961#6962#0" expanded="true" />
-                <element signature="e#15641#15642#0" expanded="true" />
-                <element signature="e#15691#15692#0" expanded="true" />
+                <element signature="e#15681#15682#0" expanded="true" />
+                <element signature="e#15731#15732#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,8 +65,8 @@
       <file leaf-file-name="Rule.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-525">
-              <caret line="134" column="5" lean-forward="false" selection-start-line="134" selection-start-column="5" selection-end-line="134" selection-end-column="5" />
+            <state relative-caret-position="852">
+              <caret line="164" column="31" lean-forward="true" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
               <folding>
                 <element signature="e#6061#6062#0" expanded="true" />
                 <element signature="e#6100#6101#0" expanded="true" />
@@ -77,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="State.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="State.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1275">
-              <caret line="90" column="43" lean-forward="true" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
+            <state relative-caret-position="444">
+              <caret line="82" column="17" lean-forward="true" selection-start-line="82" selection-start-column="17" selection-end-line="82" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3979#3980#0" expanded="true" />
@@ -94,8 +92,8 @@
       <file leaf-file-name="Monitor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="38" column="95" lean-forward="false" selection-start-line="38" selection-start-column="95" selection-end-line="38" selection-end-column="95" />
+            <state relative-caret-position="193">
+              <caret line="41" column="65" lean-forward="false" selection-start-line="41" selection-start-column="65" selection-end-line="41" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -142,6 +140,9 @@
       <find>isExpression</find>
       <find>isCommand</find>
       <find>get</find>
+      <find>&quot;ch&quot;</find>
+      <find>&quot;ch</find>
+      <find>isExpres</find>
     </findStrings>
     <replaceStrings>
       <replace>stop</replace>
@@ -174,10 +175,10 @@
         <option value="$PROJECT_DIR$/src/main/java/helpers/FileHelper.java" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/java/ottifc/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" />
         <option value="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java" />
         <option value="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" />
       </list>
     </option>
   </component>
@@ -240,6 +241,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="ottifc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="ottifc" type="462c0819:PsiDirectoryNode" />
+              <item name="ifc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
@@ -896,10 +906,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="852">
+          <caret line="164" column="31" lean-forward="true" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
+          <folding>
+            <element signature="e#6061#6062#0" expanded="true" />
+            <element signature="e#6100#6101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="41" column="65" lean-forward="false" selection-start-line="41" selection-start-column="65" selection-end-line="41" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="82" column="17" lean-forward="true" selection-start-line="82" selection-start-column="17" selection-end-line="82" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3979#3980#0" expanded="true" />
+            <element signature="e#4019#4020#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="165" column="32" lean-forward="false" selection-start-line="165" selection-start-column="32" selection-end-line="165" selection-end-column="32" />
+        <state relative-caret-position="263">
+          <caret line="276" column="54" lean-forward="true" selection-start-line="276" selection-start-column="54" selection-end-line="276" selection-end-column="54" />
           <folding>
             <element signature="e#1646#1647#0" expanded="true" />
             <element signature="e#1712#1713#0" expanded="true" />
@@ -911,41 +954,8 @@
             <element signature="e#3488#3489#0" expanded="true" />
             <element signature="e#6927#6928#0" expanded="true" />
             <element signature="e#6961#6962#0" expanded="true" />
-            <element signature="e#15641#15642#0" expanded="true" />
-            <element signature="e#15691#15692#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-525">
-          <caret line="134" column="5" lean-forward="false" selection-start-line="134" selection-start-column="5" selection-end-line="134" selection-end-column="5" />
-          <folding>
-            <element signature="e#6061#6062#0" expanded="true" />
-            <element signature="e#6100#6101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="95" lean-forward="false" selection-start-line="38" selection-start-column="95" selection-end-line="38" selection-end-column="95" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="90" column="43" lean-forward="true" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3979#3980#0" expanded="true" />
-            <element signature="e#4019#4020#0" expanded="true" />
+            <element signature="e#15681#15682#0" expanded="true" />
+            <element signature="e#15731#15732#0" expanded="true" />
           </folding>
         </state>
       </provider>

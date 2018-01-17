@@ -282,7 +282,7 @@ public class Specification {
         for(Rule r : getRules()) {
             //We verify if the rule is for this non-terminal
             if (possibleValues.contains(r.getInitialState().getCommand())) {
-                if (r.getFinalState().isMemoryModified()) {
+                if (r.getFinalState().isMemoryModified() || r.getFinalState().isOutputModified()) {
                     //The rule modifies the memory, hence the non-terminal cannot be an expression
                     return false;
                 }
