@@ -72,11 +72,7 @@ public class Rule {
 
         for(String precondition : _preconditions) {
             precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", s));
-            //precondition = precondition.replaceAll("<", String.format("<%s, ", s));
             newPreconditions.add(precondition);
-
-            //precondition = precondition.replaceAll("--> <", String.format("--> <%s, ", s));
-            //precondition = precondition.replaceAll("\\|\\| <", String.format("|| <%s, ", s));
         }
         _preconditions = newPreconditions;
 

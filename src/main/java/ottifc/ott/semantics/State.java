@@ -94,7 +94,9 @@ public class State {
             for(String memoryUpdate : memoryUpdates) {
                 if (memoryUpdate.contains("[")) {
                     String updatedVariable = memoryUpdate.trim().split("\\[")[1].trim();
-                    if (!updatedVariable.equals("ch")) {
+                    //TODO Verify if updatedVariable's name is equal to the variable
+                    String output = getOutput();
+                    if (!output.contains(updatedVariable)) {
                         modifiedVariables.add(updatedVariable); //Take the right-hand side after [, it should contain the variable's name
                     }
                 }

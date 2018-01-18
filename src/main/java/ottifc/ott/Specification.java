@@ -278,7 +278,6 @@ public class Specification {
         if (isReservedNonTerminal(nonTerminal)) { return false; }
 
         Set<String> possibleValues = getUnfoldedPossibleProductionsForNonTerminal(nonTerminal);
-        boolean noneOfTheRulesModifyTheMemory = true;
         for(Rule r : getRules()) {
             //We verify if the rule is for this non-terminal
             if (possibleValues.contains(r.getInitialState().getCommand())) {
