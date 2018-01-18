@@ -126,7 +126,7 @@ public class Rule {
                 //TODO Move this test elsewhere, don't think that it should be this function's responsibility to filter the expression variables
                 // If the precondition of the form : <a, m, o, pc, E> --> <a', m, o, pc, E>, return the expression variables only present in the initial state so that the algo adds E |- a : l_a, but not E |- a' : l_a'
                 if (precondition.contains(_spec.getStepSymbol())) {
-                    m = p.matcher(precondition.split(_spec.getStepSymbol())[0]);
+                    m = p.matcher(precondition.split(_spec.getStepSymbol().replace("|", "\\|"))[0]);
                 }
                 else {
                     m = p.matcher(precondition);
