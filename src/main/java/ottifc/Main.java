@@ -39,19 +39,10 @@ public class Main {
             System.out.println("---------------------------------------------");
             Specification spec = new Specification(fileContents);
 
-            //spec.getUnfoldedPossibleProductionsForNonTerminal("i");
-            Set<Rule> rulesForCmd = spec.getCommandRules();
-            for (Rule r : rulesForCmd) {
-               // r.print();
-            }
-
-            //System.out.println("Commands = " + spec.getCommandNonTerminals());
-            //System.out.println("Expressions = " + spec.getExpressionNonTerminals());
-
-
-
             Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             m.generate();
+
+            //System.out.println(spec.getUnfoldedPossibleCommands());
 
         }
         else if (ParameterHelper.contains("m")) {

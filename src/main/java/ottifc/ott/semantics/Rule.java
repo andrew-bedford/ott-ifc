@@ -1,5 +1,6 @@
 package ottifc.ott.semantics;
 
+import helpers.StringHelper;
 import ottifc.ott.Specification;
 
 import java.util.ArrayList;
@@ -64,18 +65,26 @@ public class Rule {
 
     }
 
-    public void insertIntoAllStates(String s) {
+    public void insertIntoAllCommandStates(String s) {
         getInitialState().insertVariable(s);
         getFinalState().insertVariable(s);
 
         Set<String> newPreconditions = new HashSet<>();
 
         for(String precondition : _preconditions) {
-            precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", s));
+            if (precondition.contains(_spec.getStepSymbol())) {
+                String iniSt = StringHelper.getStringWithoutNumbersOrApostrophes(precondition.split(_spec.getStepSymbol().replace("|","\\|"))[0]);
+                State initialState = new State(iniSt);
+                String initialStateCommand = initialState.getAbstractCommand();
+                Set<String> specificationPossibleCommands = _spec.getUnfoldedPossibleCommands();
+                if (_spec.isCommandNonTerminal(initialStateCommand) || specificationPossibleCommands.contains(initialStateCommand)) {
+                    precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", s));
+                }
+            }
+
             newPreconditions.add(precondition);
         }
         _preconditions = newPreconditions;
-
     }
 
     private Set<String> extractPreconditions() {

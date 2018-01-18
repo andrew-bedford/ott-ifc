@@ -125,11 +125,11 @@ public class Monitor {
     private void insertEnvironmentAndCounterInStates() {
         if (_options.contains(Option.IMPLICIT_FLOWS)) { //The pc variable is necessary only to prevent implicit flows
             for(Rule r : _spec.getRules()) {
-                r.insertIntoAllStates("pc");
+                r.insertIntoAllCommandStates("pc");
             }
         }
         for(Rule r : _spec.getRules()) {
-            r.insertIntoAllStates("E"); //The typing environment is always inserted when generating the monitor
+            r.insertIntoAllCommandStates("E"); //The typing environment is always inserted when generating the monitor
         }
     }
 }

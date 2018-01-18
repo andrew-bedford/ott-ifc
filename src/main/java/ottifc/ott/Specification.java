@@ -270,11 +270,14 @@ public class Specification {
 
     //For example, isCommand("cmd") should return true
     public boolean isCommandNonTerminal(String nonTerminal) {
-        //If it is not an expression, then it is necessarily a command
+        if (!isNonTerminal(nonTerminal)) { return false; }
+
+        //If it is not an expression, then it is (probably) a command
         return !isExpressionNonTerminal(nonTerminal);
     }
 
     public boolean isExpressionNonTerminal(String nonTerminal) {
+        if (!isNonTerminal(nonTerminal)) { return false; }
         if (isReservedNonTerminal(nonTerminal)) { return false; }
 
         Set<String> possibleValues = getUnfoldedPossibleProductionsForNonTerminal(nonTerminal);
@@ -292,6 +295,14 @@ public class Specification {
         return true;
     }
 
+    public Set<String> getUnfoldedPossibleCommands() {
+        Set<String> result = new HashSet<>();
+        Set<String> commandNonTerminals = getCommandNonTerminals();
+        for (String cnt : commandNonTerminals) {
+            result.addAll(getUnfoldedPossibleProductionsForNonTerminal(cnt));
+        }
+        return result;
+    }
 
     //TODO Find better variable and function names
     //For example, for the "if b then cmd else cmd end", will return { "if b then...", "if true then...", "if false then...", ... }
