@@ -42,9 +42,6 @@ public class Main {
 
             Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             m.generate();
-
-            //System.out.println(spec.getUnfoldedPossibleCommands());
-
         }
         else if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);
