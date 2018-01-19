@@ -194,24 +194,35 @@ public class Rule {
     }
 
     public void insertEnvironments() {
-        getInitialState().insertVariable("E");
-        getFinalState().insertVariable("E");
+        String lastEnvironmentSuffix = "";
 
         List<String> newPreconditions = new LinkedList<>();
-
         for(String precondition : _preconditions) {
             if (precondition.contains(_spec.getStepSymbol())) {
-                String iniSt = precondition.split(_spec.getStepSymbol().replace("|","\\|"))[0];
-                State initialState = new State(iniSt);
+                State initialState = new State(precondition.split(_spec.getStepSymbol().replace("|","\\|"))[0]);
+                State finalState = new State(precondition.split(_spec.getStepSymbol().replace("|","\\|"))[1]);
                 String initialStateAbstractCommand = initialState.getAbstractCommand();
                 Set<String> specificationPossibleCommands = _spec.getUnfoldedPossibleCommands();
                 if (_spec.isCommandNonTerminal(initialStateAbstractCommand) || specificationPossibleCommands.contains(initialStateAbstractCommand)) {
+                    //We ensure that the environment names follows the naming convention of the user's memory and output variables.
+                    //For example, if we have <cmd2, m1, o1> || <stop, m2, o2>, then the inserted environment variables should be E1 in the initial state and E2 in the final state.
+                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemory()).trim();
+                    precondition = precondition.replaceAll("<(.*?[^-])> ((-->)|(\\|\\|))", String.format("<$1, %s%s> $2", "E", initialEnvironmentSuffix));
 
-                    precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", "E"));
+                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemory()).trim();
+                    precondition = precondition.replaceAll("((-->)|(\\|\\|)) <(.*?[^-])>", String.format("$1 <$4, %s%s>", "E", finalEnvironmentSuffix));
+
+                    lastEnvironmentSuffix = finalEnvironmentSuffix;
                 }
             }
 
             newPreconditions.add(precondition);
         }
-        _preconditions = newPreconditions;    }
+        _preconditions = newPreconditions;
+
+        String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(getInitialState().getMemory()).trim();
+        getInitialState().insertVariable("E"+initialEnvironmentSuffix);
+
+        getFinalState().insertVariable("E"+lastEnvironmentSuffix);
+    }
 }

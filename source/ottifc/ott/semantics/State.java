@@ -49,6 +49,15 @@ public class State {
         return s[2];
     }
 
+    public String getProgramCounter() {
+        String[] s = _state.split(",");
+        return s[3];
+    }
+
+    public String getEnvironment() {
+        String[] s = _state.split(",");
+        return s[4].replace(">","");
+    }
 
     public Boolean isMemoryModified() {
         String memory = getMemory();
@@ -68,7 +77,9 @@ public class State {
     }
 
     public void addUpdateToEnvironment(String variable, String value) {
-        _state = _state.replace(", E", String.format(", E[%s |-> %s]", variable, value));
+        String environmentBeforeUpdate = getEnvironment();
+        String environmentAfterUpdate = String.format("%s[%s |-> %s]", environmentBeforeUpdate, variable, value);
+        _state = _state.replace(environmentBeforeUpdate, environmentAfterUpdate);
     }
 
     public Set<String> getModifiedVariables() {
