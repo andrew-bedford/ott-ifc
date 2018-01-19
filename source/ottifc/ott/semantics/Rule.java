@@ -3,10 +3,7 @@ package ottifc.ott.semantics;
 import helpers.StringHelper;
 import ottifc.ott.Specification;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +14,7 @@ public class Rule {
     State _finalState;
     String _separator;
     String _stepSymbol;
-    Set<String> _preconditions;
+    List<String> _preconditions;
 
     public Rule(Specification spec, String rule) {
         _spec = spec;
@@ -28,7 +25,7 @@ public class Rule {
         _finalState = extractFinalState();
     }
 
-    public Set<String> getPreconditions() {
+    public List<String> getPreconditions() {
         return _preconditions;
     }
 
@@ -40,7 +37,7 @@ public class Rule {
         _preconditions.remove(precondition);
     }
 
-    public void setPreconditions(Set<String> preconditions) {
+    public void setPreconditions(List<String> preconditions) {
         _preconditions = preconditions;
     }
 
@@ -69,7 +66,7 @@ public class Rule {
         getInitialState().insertVariable(s);
         getFinalState().insertVariable(s);
 
-        Set<String> newPreconditions = new HashSet<>();
+        List<String> newPreconditions = new LinkedList<>();
 
         for(String precondition : _preconditions) {
             if (precondition.contains(_spec.getStepSymbol())) {
@@ -87,8 +84,8 @@ public class Rule {
         _preconditions = newPreconditions;
     }
 
-    private Set<String> extractPreconditions() {
-        Set<String> preconditions = new HashSet<String>();
+    private List<String> extractPreconditions() {
+        List<String> preconditions = new LinkedList<>();
         String s = _rule.split("----")[0];
         String[] lines = s.split(System.getProperty("line.separator"));
         for(String line : lines) {
@@ -108,10 +105,6 @@ public class Rule {
             }
         }
         return separator;
-    }
-
-    public boolean modifiesOutputTrace(State initialState, State finalState) {
-        return getFinalState().isOutputModified();
     }
 
     public Set<String> getExpressionVariablesUsedInPreconditions() {
@@ -195,4 +188,30 @@ public class Rule {
     @Override public int hashCode() {
         return _rule.hashCode();
     }
+
+    public void insertProgramCounters() {
+        insertIntoAllCommandStates("pc");
+    }
+
+    public void insertEnvironments() {
+        getInitialState().insertVariable("E");
+        getFinalState().insertVariable("E");
+
+        List<String> newPreconditions = new LinkedList<>();
+
+        for(String precondition : _preconditions) {
+            if (precondition.contains(_spec.getStepSymbol())) {
+                String iniSt = precondition.split(_spec.getStepSymbol().replace("|","\\|"))[0];
+                State initialState = new State(iniSt);
+                String initialStateAbstractCommand = initialState.getAbstractCommand();
+                Set<String> specificationPossibleCommands = _spec.getUnfoldedPossibleCommands();
+                if (_spec.isCommandNonTerminal(initialStateAbstractCommand) || specificationPossibleCommands.contains(initialStateAbstractCommand)) {
+
+                    precondition = precondition.replaceAll("<(.*?[^-])>", String.format("<$1, %s>", "E"));
+                }
+            }
+
+            newPreconditions.add(precondition);
+        }
+        _preconditions = newPreconditions;    }
 }

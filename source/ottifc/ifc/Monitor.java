@@ -4,6 +4,7 @@ import ottifc.ott.Specification;
 import ottifc.ott.semantics.Rule;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class Monitor {
 
                 //If the current rule involves one of the commands that may affect the control-flow
                 if (commandsAffectingControlFlow.contains(r.getInitialState().getCommand())) {
-                    Set<String> newPreconditions = new HashSet<>();
+                    List<String> newPreconditions = new LinkedList<>();
                     for(String precondition : r.getPreconditions()) {
                         if (containsCommandNonTerminal(precondition)) {
                             newPreconditions.add(precondition.replaceAll("pc", "pc |_| " + getSupremumOfSet(expressionVariables)));
@@ -125,11 +126,12 @@ public class Monitor {
     private void insertEnvironmentAndCounterInStates() {
         if (_options.contains(Option.IMPLICIT_FLOWS)) { //The pc variable is necessary only to prevent implicit flows
             for(Rule r : _spec.getRules()) {
-                r.insertIntoAllCommandStates("pc");
+                r.insertProgramCounters();
             }
         }
         for(Rule r : _spec.getRules()) {
-            r.insertIntoAllCommandStates("E"); //The typing environment is always inserted when generating the monitor
+            r.insertEnvironments();
+
         }
     }
 }

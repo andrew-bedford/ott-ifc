@@ -2,39 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3518e6c6-4601-4012-a6e9-b2dab6daec1b" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" afterPath="$PROJECT_DIR$/.gitattributes" />
       <change beforePath="$PROJECT_DIR$/.idea/ott-ifc.iml" afterPath="$PROJECT_DIR$/.idea/ott-ifc.iml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/examples/imperative-bigstep.ott" afterPath="$PROJECT_DIR$/documents/examples/imperative-bigstep.ott" />
-      <change beforePath="$PROJECT_DIR$/examples/imperative-smallstep.ott" afterPath="$PROJECT_DIR$/documents/examples/imperative-smallstep.ott" />
-      <change beforePath="$PROJECT_DIR$/examples/peterson_caml.ott" afterPath="$PROJECT_DIR$/documents/examples/peterson_caml.ott" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/helpers/FileHelper.java" afterPath="$PROJECT_DIR$/source/helpers/FileHelper.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/helpers/ParameterHelper.java" afterPath="$PROJECT_DIR$/source/helpers/ParameterHelper.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/helpers/StringHelper.java" afterPath="$PROJECT_DIR$/source/helpers/StringHelper.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/Main.java" afterPath="$PROJECT_DIR$/source/ottifc/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ifc/Monitor.java" afterPath="$PROJECT_DIR$/source/ottifc/ifc/Monitor.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ifc/Option.java" afterPath="$PROJECT_DIR$/source/ottifc/ifc/Option.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/Specification.java" afterPath="$PROJECT_DIR$/source/ottifc/ott/Specification.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java" afterPath="$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/State.java" afterPath="$PROJECT_DIR$/source/ottifc/ott/semantics/State.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ottifc/ott/syntax/Grammar.java" afterPath="$PROJECT_DIR$/source/ottifc/ott/syntax/Grammar.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-2018/acm-reference-format.bst" afterPath="$PROJECT_DIR$/documents/papers/popl-src-2018/acm-reference-format.bst" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-2018/definitions.tex" afterPath="$PROJECT_DIR$/documents/papers/popl-src-2018/definitions.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-2018/main.pdf" afterPath="$PROJECT_DIR$/documents/papers/popl-src-2018/main.pdf" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-2018/main.tex" afterPath="$PROJECT_DIR$/documents/papers/popl-src-2018/main.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-2018/references.bib" afterPath="$PROJECT_DIR$/documents/papers/popl-src-2018/references.bib" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-extended-2018/acm-reference-format.bst" afterPath="$PROJECT_DIR$/documents/papers/popl-src-extended-2018/acm-reference-format.bst" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-extended-2018/definitions.tex" afterPath="$PROJECT_DIR$/documents/papers/popl-src-extended-2018/definitions.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-extended-2018/main.pdf" afterPath="$PROJECT_DIR$/documents/papers/popl-src-extended-2018/main.pdf" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-extended-2018/main.tex" afterPath="$PROJECT_DIR$/documents/papers/popl-src-extended-2018/main.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/papers/popl-src-extended-2018/references.bib" afterPath="$PROJECT_DIR$/documents/papers/popl-src-extended-2018/references.bib" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/beamerposter.sty" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/beamerposter.sty" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/beamerthemeconfposter.sty" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/beamerthemeconfposter.sty" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/definitions.tex" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/definitions.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/images/ott-ifc.png" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/images/ott-ifc.png" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/main.pdf" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/main.pdf" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/main.tex" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/main.tex" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/mathpartir.sty" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/mathpartir.sty" />
-      <change beforePath="$PROJECT_DIR$/src/main/latex/posters/popl-src-2018/references.bib" afterPath="$PROJECT_DIR$/documents/posters/popl-src-2018/references.bib" />
+      <change beforePath="$PROJECT_DIR$/source/helpers/StringHelper.java" afterPath="$PROJECT_DIR$/source/helpers/StringHelper.java" />
+      <change beforePath="$PROJECT_DIR$/source/ottifc/Main.java" afterPath="$PROJECT_DIR$/source/ottifc/Main.java" />
+      <change beforePath="$PROJECT_DIR$/source/ottifc/ifc/Monitor.java" afterPath="$PROJECT_DIR$/source/ottifc/ifc/Monitor.java" />
+      <change beforePath="$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java" afterPath="$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,8 +28,8 @@
       <file leaf-file-name="Specification.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/ottifc/ott/Specification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="224" column="0" lean-forward="false" selection-start-line="224" selection-start-column="0" selection-end-line="224" selection-end-column="0" />
+            <state relative-caret-position="464">
+              <caret line="376" column="0" lean-forward="true" selection-start-line="376" selection-start-column="0" selection-end-line="376" selection-end-column="0" />
               <folding>
                 <element signature="e#1646#1647#0" expanded="true" />
                 <element signature="e#1712#1713#0" expanded="true" />
@@ -74,14 +48,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Rule.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Rule.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1360">
-              <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+            <state relative-caret-position="458">
+              <caret line="199" column="54" lean-forward="false" selection-start-line="199" selection-start-column="54" selection-end-line="199" selection-end-column="54" />
               <folding>
-                <element signature="e#6457#6458#0" expanded="true" />
-                <element signature="e#6496#6497#0" expanded="true" />
+                <element signature="e#1011#1012#0" expanded="true" />
+                <element signature="e#1057#1058#0" expanded="true" />
+                <element signature="e#6247#6248#0" expanded="true" />
+                <element signature="e#6286#6287#0" expanded="true" />
+                <element signature="e#6329#6330#0" expanded="true" />
+                <element signature="e#6377#6378#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RuleTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/ottifc/ott/semantics/RuleTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -100,7 +90,7 @@
       <file leaf-file-name="imperative-bigstep.ott" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/documents/examples/imperative-bigstep.ott">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2516">
+            <state relative-caret-position="569">
               <caret line="148" column="77" lean-forward="false" selection-start-line="148" selection-start-column="77" selection-end-line="148" selection-end-column="77" />
               <folding />
             </state>
@@ -110,7 +100,7 @@
       <file leaf-file-name="State.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/ottifc/ott/semantics/State.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
+            <state relative-caret-position="-1392">
               <caret line="13" column="5" lean-forward="false" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -123,11 +113,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Monitor.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Monitor.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/ottifc/ifc/Monitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+            <state relative-caret-position="399">
+              <caret line="49" column="69" lean-forward="false" selection-start-line="49" selection-start-column="69" selection-end-line="49" selection-end-column="69" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -138,8 +128,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/ottifc/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="41" column="12" lean-forward="false" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="12" />
+            <state relative-caret-position="266">
+              <caret line="43" column="25" lean-forward="true" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -150,11 +140,13 @@
       <file leaf-file-name="StringHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/helpers/StringHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="61" lean-forward="false" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="61" />
+            <state relative-caret-position="153">
+              <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
               <folding>
                 <element signature="e#119#120#0" expanded="true" />
                 <element signature="e#167#168#0" expanded="true" />
+                <element signature="e#229#230#0" expanded="true" />
+                <element signature="e#279#280#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -192,6 +184,7 @@
       <find>&quot;ch</find>
       <find>isExpress</find>
       <find>replaceAll</find>
+      <find>_spec</find>
     </findStrings>
     <replaceStrings>
       <replace>stop</replace>
@@ -229,6 +222,12 @@
         <option value="$PROJECT_DIR$/src/main/java/helpers/StringHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/ottifc/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/ottifc/ott/semantics/Rule.java" />
+        <option value="$PROJECT_DIR$/.gitattributes" />
+        <option value="$PROJECT_DIR$/tests/ottifc/ott/semantics/RuleTest.java" />
+        <option value="$PROJECT_DIR$/source/helpers/StringHelper.java" />
+        <option value="$PROJECT_DIR$/source/ottifc/Main.java" />
+        <option value="$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java" />
+        <option value="$PROJECT_DIR$/source/ottifc/ifc/Monitor.java" />
       </list>
     </option>
   </component>
@@ -258,8 +257,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -270,75 +270,90 @@
             <path>
               <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
               <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
+              <item name="documents" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
+              <item name="documents" type="462c0819:PsiDirectoryNode" />
+              <item name="examples" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
               <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="helpers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
               <item name="ottifc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
               <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
               <item name="ottifc" type="462c0819:PsiDirectoryNode" />
               <item name="ott" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
               <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
               <item name="ottifc" type="462c0819:PsiDirectoryNode" />
               <item name="ott" type="462c0819:PsiDirectoryNode" />
               <item name="semantics" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-              <item name="ottifc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ott-ifc" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ott-ifc" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-              <item name="ottifc" type="462c0819:PsiDirectoryNode" />
-              <item name="ott" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="Downloaded.Files.Path" value="C:\Users\Andrew Bedford\Documents\GitHub\ott-ifc\libraries" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="ottifc.ott.semantics" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="ottifc.ott.semantics.Rule" />
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Andrew Bedford\GitHub\ott-ifc\src\test\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="helpers" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Andrew Bedford\Documents\GitHub\ott-ifc\documentation" />
       <recent name="C:\Users\Andrew Bedford\Documents\GitHub\ott-ifc\source" />
       <recent name="C:\Users\Andrew Bedford\Documents\GitHub\ott-ifc" />
       <recent name="$PROJECT_DIR$/examples" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="helpers" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Andrew Bedford\GitHub\ott-ifc\src\test\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -403,7 +418,7 @@
       </extension>
       <option name="MAIN_CLASS_NAME" value="ottifc.Main" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="-i documentation/examples/imperative-bigstep.ott" />
+      <option name="PROGRAM_PARAMETERS" value="-i documents/examples/imperative-bigstep.ott" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jre-9.0.1" />
@@ -422,7 +437,7 @@
       </extension>
       <option name="MAIN_CLASS_NAME" value="ottifc.Main" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="-i documentation/examples/imperative-smallstep.ott" />
+      <option name="PROGRAM_PARAMETERS" value="-i documents/examples/imperative-smallstep.ott" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jre-9.0.1" />
@@ -524,7 +539,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34994698" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33404028" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33404028" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -589,7 +604,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java</url>
-          <line>79</line>
+          <line>76</line>
           <properties />
           <option name="timeStamp" value="30" />
         </line-breakpoint>
@@ -599,13 +614,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/source/helpers/ParameterHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="8" column="18" lean-forward="false" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/ottifc/ott/syntax/Grammar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -867,13 +875,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/ottifc/ott/syntax/Grammar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/ottifc/ifc/Option.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -888,20 +889,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitattributes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="0">
@@ -909,6 +897,12 @@
             <folding />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -927,43 +921,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="9" lean-forward="false" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/ottifc/ott/syntax/Grammar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/ottifc/ott/semantics/RuleTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/documents/examples/imperative-bigstep.ott">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2516">
+        <state relative-caret-position="569">
           <caret line="148" column="77" lean-forward="false" selection-start-line="148" selection-start-column="77" selection-end-line="148" selection-end-column="77" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/ottifc/ott/semantics/State.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="13" column="5" lean-forward="false" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3664#3665#0" expanded="true" />
-            <element signature="e#3751#3752#0" expanded="true" />
-            <element signature="e#4117#4118#0" expanded="true" />
-            <element signature="e#4157#4158#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/helpers/StringHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="61" lean-forward="false" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="61" />
+        <state relative-caret-position="153">
+          <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
           <folding>
             <element signature="e#119#120#0" expanded="true" />
             <element signature="e#167#168#0" expanded="true" />
+            <element signature="e#229#230#0" expanded="true" />
+            <element signature="e#279#280#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/source/ottifc/ott/Specification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="224" column="0" lean-forward="false" selection-start-line="224" selection-start-column="0" selection-end-line="224" selection-end-column="0" />
+        <state relative-caret-position="464">
+          <caret line="376" column="0" lean-forward="true" selection-start-line="376" selection-start-column="0" selection-end-line="376" selection-end-column="0" />
           <folding>
             <element signature="e#1646#1647#0" expanded="true" />
             <element signature="e#1712#1713#0" expanded="true" />
@@ -981,20 +989,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/ottifc/Main.java">
+    <entry file="file://$PROJECT_DIR$/source/ottifc/ott/semantics/State.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="41" column="12" lean-forward="false" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="12" />
+        <state relative-caret-position="-1392">
+          <caret line="13" column="5" lean-forward="false" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3664#3665#0" expanded="true" />
+            <element signature="e#3751#3752#0" expanded="true" />
+            <element signature="e#4117#4118#0" expanded="true" />
+            <element signature="e#4157#4158#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/ottifc/ifc/Monitor.java">
+    <entry file="file://$PROJECT_DIR$/source/ottifc/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        <state relative-caret-position="266">
+          <caret line="43" column="25" lean-forward="true" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1003,11 +1015,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/ottifc/ott/semantics/Rule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1360">
-          <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+        <state relative-caret-position="458">
+          <caret line="199" column="54" lean-forward="false" selection-start-line="199" selection-start-column="54" selection-end-line="199" selection-end-column="54" />
           <folding>
-            <element signature="e#6457#6458#0" expanded="true" />
-            <element signature="e#6496#6497#0" expanded="true" />
+            <element signature="e#1011#1012#0" expanded="true" />
+            <element signature="e#1057#1058#0" expanded="true" />
+            <element signature="e#6247#6248#0" expanded="true" />
+            <element signature="e#6286#6287#0" expanded="true" />
+            <element signature="e#6329#6330#0" expanded="true" />
+            <element signature="e#6377#6378#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/ottifc/ifc/Monitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="49" column="69" lean-forward="false" selection-start-line="49" selection-start-column="69" selection-end-line="49" selection-end-column="69" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
