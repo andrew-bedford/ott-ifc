@@ -33,7 +33,7 @@ public class Monitor {
         insertEnvironmentAndCounterInStates();
 
         List<Rule> rules = _spec.getRules();
-        Set<String> commandsAffectingControlFlow = getCommandsWhichMayAffectControlFlow();
+        Set<Rule> commandsAffectingControlFlow = getRulesWhichMayAffectControlFlow();
         for(Rule r : rules) {
             if (_spec.isCommandRule(r)) {
 
@@ -46,10 +46,10 @@ public class Monitor {
                 addGuards(r, expressionVariables, modifiedVariables);
 
                 //If the current rule involves one of the commands that may affect the control-flow
-                if (commandsAffectingControlFlow.contains(r.getInitialState().getCommand())) {
+                if (commandsAffectingControlFlow.contains(r)) {
                     List<String> newPreconditions = new LinkedList<>();
                     for(String precondition : r.getPreconditions()) {
-                        if (containsCommandNonTerminal(precondition)) {
+                        if (!expressionVariables.isEmpty() && containsCommandNonTerminal(precondition)) {
                             newPreconditions.add(precondition.replaceAll("pc", "pc |_| " + getSupremumOfSet(expressionVariables)));
                         }
                         else {
@@ -58,6 +58,12 @@ public class Monitor {
                     }
 
                     r.setPreconditions(newPreconditions);
+
+                    if (!expressionVariables.isEmpty() && !r.getFinalState().getAbstractCommand().equals("stop")) {
+                        String programCounterWithUpdate = r.getFinalState().getProgramCounter().replace("pc", "pc |_| " + getSupremumOfSet(expressionVariables));
+                        r.getFinalState().setProgramCounter(programCounterWithUpdate);
+                    }
+
                 }
 
                 r.print();
@@ -94,7 +100,20 @@ public class Monitor {
         }
     }
 
-    private Set<String> getCommandsWhichMayAffectControlFlow() {
+    private Set<Rule> getRulesWhichMayAffectControlFlow() {
+        Set<String> commandNonTerminals = _spec.getCommandNonTerminals();
+        Set<Rule> rulesWhichMayAffectControlFlow = new HashSet<>();
+        for(String cnt : commandNonTerminals) {
+            Set<String> abstractCommands = _spec.getAbstractProductions(cnt);
+            for(String ac : abstractCommands) {
+                List<Rule> rulesForCommand = _spec.getRules(ac);
+                if (rulesForCommand.size() >= 2) { //If there are multiple rules for the same command, then we assume that it may affect the control-flow of the application
+                    rulesWhichMayAffectControlFlow.addAll(rulesForCommand);
+                }
+            }
+        }
+
+        /*
         Set<String> commandSet = new HashSet<>();
         for(Rule r1 : _spec.getRules()) {
             if (_spec.isCommandRule(r1)) {
@@ -108,6 +127,8 @@ public class Monitor {
             }
         }
         return commandSet;
+        */
+        return rulesWhichMayAffectControlFlow;
     }
 
     private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {

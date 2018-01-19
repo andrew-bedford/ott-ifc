@@ -43,7 +43,6 @@ public class Main {
             Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             m.generate();
 
-
             //System.out.println(spec.getUnfoldedPossibleCommands());
 
         }

@@ -15,6 +15,7 @@ public class Rule {
     String _separator;
     String _stepSymbol;
     List<String> _preconditions;
+    String _lastEnvironmentSuffix;
 
     public Rule(Specification spec, String rule) {
         _spec = spec;
@@ -23,6 +24,7 @@ public class Rule {
         _separator = extractSeparator();
         _initialState = extractInitialState();
         _finalState = extractFinalState();
+        _lastEnvironmentSuffix = "";
     }
 
     public List<String> getPreconditions() {
@@ -44,10 +46,12 @@ public class Rule {
     public State getInitialState() {
         return _initialState;
     }
+    public void setInitialState(State newInitialState) { _initialState = newInitialState; }
 
     public State getFinalState() {
         return _finalState;
     }
+    public void setFinalState(State newFinalState) { _finalState = newFinalState; }
 
     public String toString() {
         return _rule;
@@ -143,10 +147,10 @@ public class Rule {
         String finalState = "";
         String lastLine = s[s.length-1];
         if (lastLine.contains("-->")) {
-            finalState = s[s.length - 1].split("-->")[1];
+            finalState = s[s.length - 1].split("-->")[1].trim();
         }
         else if (lastLine.contains("||")) {
-            finalState = s[s.length - 1].split("\\|\\|")[1];
+            finalState = s[s.length - 1].split("\\|\\|")[1].trim();
         }
         return new State(finalState);
     }
@@ -194,8 +198,6 @@ public class Rule {
     }
 
     public void insertEnvironments() {
-        String lastEnvironmentSuffix = "";
-
         List<String> newPreconditions = new LinkedList<>();
         for(String precondition : _preconditions) {
             if (precondition.contains(_spec.getStepSymbol())) {
@@ -212,7 +214,7 @@ public class Rule {
                     String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemory()).trim();
                     precondition = precondition.replaceAll("((-->)|(\\|\\|)) <(.*?[^-])>", String.format("$1 <$4, %s%s>", "E", finalEnvironmentSuffix));
 
-                    lastEnvironmentSuffix = finalEnvironmentSuffix;
+                    _lastEnvironmentSuffix = finalEnvironmentSuffix;
                 }
             }
 
@@ -223,6 +225,6 @@ public class Rule {
         String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(getInitialState().getMemory()).trim();
         getInitialState().insertVariable("E"+initialEnvironmentSuffix);
 
-        getFinalState().insertVariable("E"+lastEnvironmentSuffix);
+        getFinalState().insertVariable("E"+_lastEnvironmentSuffix);
     }
 }

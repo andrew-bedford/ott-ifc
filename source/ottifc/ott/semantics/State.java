@@ -54,6 +54,10 @@ public class State {
         return s[3];
     }
 
+    public void setProgramCounter(String newValue) {
+        _state = _state.replace(getProgramCounter(), newValue);
+    }
+
     public String getEnvironment() {
         String[] s = _state.split(",");
         return s[4].replace(">","");
