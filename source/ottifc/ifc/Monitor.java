@@ -87,7 +87,7 @@ public class Monitor {
             Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
             modifiedChannels.removeAll(modifiedVariables);
             for(String modifiedChannel : modifiedChannels) {
-                String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + modifiedChannel;
+                String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + "l_"+modifiedChannel;
                 r.addPrecondition(guard);
             }
 
