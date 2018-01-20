@@ -1,5 +1,6 @@
 package ottifc.ifc;
 
+import helpers.StringHelper;
 import ottifc.ott.Specification;
 import ottifc.ott.semantics.Rule;
 
@@ -33,7 +34,7 @@ public class Monitor {
         insertEnvironmentAndCounterInStates();
 
         List<Rule> rules = _spec.getRules();
-        Set<Rule> commandsAffectingControlFlow = getRulesWhichMayAffectControlFlow();
+        Set<Rule> rulesAffectingControlFlow = getRulesWhichMayAffectControlFlow();
         for(Rule r : rules) {
             if (_spec.isCommandRule(r)) {
 
@@ -46,7 +47,7 @@ public class Monitor {
                 addGuards(r, expressionVariables, modifiedVariables);
 
                 //If the current rule involves one of the commands that may affect the control-flow
-                if (commandsAffectingControlFlow.contains(r)) {
+                if (rulesAffectingControlFlow.contains(r)) {
                     List<String> newPreconditions = new LinkedList<>();
                     for(String precondition : r.getPreconditions()) {
                         if (!expressionVariables.isEmpty() && containsCommandNonTerminal(precondition)) {
@@ -59,7 +60,8 @@ public class Monitor {
 
                     r.setPreconditions(newPreconditions);
 
-                    if (!expressionVariables.isEmpty() && !r.getFinalState().getAbstractCommand().equals("stop")) {
+                    //If there are no expression variables, then the pc would not be updated. And if the final state is a "stop" command, then it would serve no purpose to "execute" the stop with an updated pc
+                    if (!expressionVariables.isEmpty() && !isStopCommand(r.getFinalState().getAbstractCommand())) {
                         String programCounterWithUpdate = r.getFinalState().getProgramCounter().replace("pc", "pc |_| " + getSupremumOfSet(expressionVariables));
                         r.getFinalState().setProgramCounter(programCounterWithUpdate);
                     }
@@ -70,6 +72,17 @@ public class Monitor {
                 System.out.println("");
             }
         }
+    }
+
+    public boolean isStopCommand(String s) {
+        Set<String> possibleCommands = _spec.getUnfoldedPossibleCommands();
+        List<Rule> rulesForCommand = _spec.getRules(s);
+        Set<String> nonTerminalsPresent = _spec.getNonTerminalsPresentInAbstractProduction(StringHelper.getStringWithoutNumbersOrApostrophes(s));
+
+        //A command is considered to be a "stop" command if (1) it is a command, (2) there are no semantics rule for this command and (3) it contains no non-terminals. If it fails to meet these three requirements, then we assume that it is not a "stop" command.
+        if (!possibleCommands.contains(s) || !rulesForCommand.isEmpty() || !nonTerminalsPresent.isEmpty()) { return false; }
+
+        return true;
     }
 
     private boolean containsCommandNonTerminal(String s) {
