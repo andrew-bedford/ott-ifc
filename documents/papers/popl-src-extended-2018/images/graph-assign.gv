@@ -1,0 +1,4 @@
+digraph{
+node [shape=box];
+"x := a" -> "x := n"
+}

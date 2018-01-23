@@ -1,0 +1,7 @@
+digraph{
+node [fontname = "courrier new"];
+node [shape=box];
+s1 [label=<cmd<sub>1</sub> ; cmd<sub>2</sub>>];
+s2 [label=<stop ; cmd<sub>2</sub>>];
+s1 -> s2
+}

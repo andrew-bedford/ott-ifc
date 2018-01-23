@@ -1,11 +1,17 @@
 \newcommand{\ottifc}{Ott-IFC}
-
+\newcommand{\config}[3]{\ensuremath{\langle #1, #2, #3 \rangle}}
+\newcommand{\emits}[3]{\ensuremath{#2\downarrow_{#1}#3}}
+\newcommand{\proj}[2]{\ensuremath{{#1 \! \upharpoonright  \! {#2}}}}
+\newcommand{\step}{{\ensuremath{\Downarrow}}}
 
 \definecolor{grey}{rgb}{0.8,0.8,0.8}
 \definecolor{code-background}{RGB}{255, 248, 220}
 \definecolor{code-comment}{RGB}{196, 42, 42}
 \definecolor{code-linenumber}{rgb}{0.5,0.5,0.5}
 \definecolor{code-keyword}{RGB}{148, 0, 211}
+\definecolor{coqatoo-pink}      {RGB}{255, 107, 104}
+\definecolor{coqatoo-gray}      {RGB}{64, 64, 64}
+\definecolor{coqatoo-yellow}    {RGB}{239, 223, 0}
 \lstset{
    backgroundcolor=\color{code-background},   	% choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
    basicstyle=\tt\footnotesize,       			% the size of the fonts that are used for the code
@@ -23,7 +29,7 @@
    keepspaces=true,                 			% keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
    keywordstyle=\color{code-keyword},       						% keyword style
    language=ML,                 				% the language of the code
-   morekeywords={Lemma, Proof, Qed, skip},            % if you want to add more keywords to the set
+   morekeywords={Lemma, Proof, Qed, if, then, else, end, skip, stop, read, from, write, to},            % if you want to add more keywords to the set
    numbers=none,                    			% where to put the line-numbers; possible values are (none, left, right)
    numbersep=5pt,	                   			% how far the line-numbers are from the code
    numberstyle=\tiny\color{code-linenumber}, 	% the style that is used for the line-numbers

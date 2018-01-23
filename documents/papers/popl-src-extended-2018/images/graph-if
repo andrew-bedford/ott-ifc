@@ -1,0 +1,9 @@
+digraph{
+node [fontname = "courrier new"];
+node [shape=box];
+s1 [label=<if b then cmd<sub>1</sub> else cmd<sub>2</sub> end>];
+s2 [label=<if true then cmd<sub>1</sub> else cmd<sub>2</sub> end>];
+s3 [label=<if false then cmd<sub>1</sub> else cmd<sub>2</sub> end>];
+s1 -> s2;
+s1 -> s3
+}
