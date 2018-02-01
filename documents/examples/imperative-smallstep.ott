@@ -15,13 +15,13 @@ bool_expr, b :: be_ ::=
     | false                             ::  :: false
     | a1 < a2                           ::  :: less_than
 
-commands, cmd :: cmd_ ::=
+commands, c :: c_ ::=
     | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
-    | cmd1 ; cmd2                       ::  :: sequence
-    | if b then cmd1 else cmd2 end      ::  :: if
-    | while b do cmd end                ::  :: while
+    | c1 ; c2                       ::  :: sequence
+    | if b then c1 else c2 end      ::  :: if
+    | while b do c end                ::  :: while
     | read x from ch                     ::  :: read
     | write x to ch                      ::  :: write
 
@@ -118,7 +118,11 @@ n1 < n2 = false
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< cmd , m , o > --> < cmd' , m' , o' > :: :: cmd_ops :: 'cmd_' by
+< c , m , o > --> < c' , m' , o' > :: :: c_ops :: 'c_' by
+
+%%% Skip %%%
+----------------------------- :: skip
+<skip, m, o> --> <stop, m, o>
 
 %%% Assignment %%%
 <a, m, o> --> <a', m, o>
@@ -129,28 +133,28 @@ defn
 <x := n, m, o> --> <stop, m[x |-> n], o>
 
 %%% Sequence %%%
-<cmd1, m, o> --> <cmd1', m', o'>
+<c1, m, o> --> <c1', m', o'>
 -------------------------------- :: seq1
-<cmd1 ; cmd2, m, o> --> <cmd1' ; cmd2, m', o'>
+<c1 ; c2, m, o> --> <c1' ; c2, m', o'>
 
 --------------------------- :: seq2
-<skip ; cmd2, m, o> --> <cmd2, m, o>
+<skip ; c2, m, o> --> <c2, m, o>
 
 
 %%% If %%%
 <b, m, o> --> <b', m, o>
 ---------------------------------------------------------------- :: if_eval
-<if b then cmd1 else cmd2 end, m, o> --> <if b' then cmd1 else cmd2 end, m, o>
+<if b then c1 else c2 end, m, o> --> <if b' then c1 else c2 end, m, o>
 
 ---------------------------------------------------------------- :: if_true
-<if true then cmd1 else cmd2 end, m, o> --> <cmd1, m, o>
+<if true then c1 else c2 end, m, o> --> <c1, m, o>
 
 ---------------------------------------------------------------- :: if_false
-<if false then cmd1 else cmd2 end, m, o> --> <cmd2, m, o>
+<if false then c1 else c2 end, m, o> --> <c2, m, o>
 
 %%% While %%%
 --------------------------------------------------------------------------- :: while
-<while b do cmd end, m, o> --> <if b then cmd ; while b do cmd end else skip end, m, o>
+<while b do c end, m, o> --> <if b then c ; while b do c end else skip end, m, o>
 
 %%% Read %%%
 m(ch) = n
