@@ -1,0 +1,165 @@
+metavar variable, x ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
+metavar channel, ch ::= {{ coq nat }} {{ coq-equality }} {{ lex alphanum }}
+metavar integer, n ::= {{ coq nat }} {{ lex  numeral }}
+indexvar index, i, j ::= {{ coq nat }}
+
+grammar
+arith_expr, a :: ae_ ::=
+    | x                                 ::  :: variable
+    | n                                 ::  :: int
+    | a1 + a2                           ::  :: addition
+    | a1 * a2                           ::  :: multiplication
+
+bool_expr, b :: be_ ::=
+    | true                              ::  :: true
+    | false                             ::  :: false
+    | a1 < a2                           ::  :: less_than
+
+commands, c :: c_ ::=
+    | stop                              ::  :: stop
+    | skip                              ::  :: skip
+    | x := a                            ::  :: assignment
+    | c1 ; c2                           ::  :: sequence
+    | if b then c1 else c2 end          ::  :: if
+    | while b do c end                  ::  :: while
+    | read x from ch                    ::  :: read
+    | write x to ch                     ::  :: write
+    | exception                         ::  :: exception
+    | throw				::  :: throw
+    | try c1 catch c2                   ::  :: try_catch
+
+memory, m :: memory_ ::=
+   | empty                              ::  :: empty
+   | m [ x |-> n ]                      ::  :: update_variable
+   | m [ ch |-> n ]                      ::  :: update_channel
+
+output, o :: output_ ::=
+   | none                               ::  :: none
+   | o '::' ( ch - n )                   ::  :: append
+
+formula :: formula_ ::=
+   | judgement                          ::  :: judgement
+   | m ( x ) = n                        ::  :: lookup
+   | m ( ch ) = n                        ::  :: channel_lookup
+   | n1 + n2 = n3                       ::  :: addition
+   | n1 * n2 = n3                       ::  :: multiplication
+   | n1 < n2 = true                     ::  :: lt_true
+   | n1 < n2 = false                    ::  :: lt_false
+
+terminals :: terminals_ ::=
+  | <-                                 ::   :: arrow      {{ tex \leftarrow }}
+  | |-                                 ::   :: turnstile  {{ tex \vdash }}
+  | |->                                ::   :: mapsto     {{ tex \mapsto }}
+  | -->                                ::   :: red        {{ tex \longrightarrow }}
+  | ||                                 ::   :: bigstep    {{ tex \Downarrow }}
+  | '{'                                ::   :: leftbrace  {{ tex \{ }}
+  | '}'                                ::   :: rightbrace {{ tex \} }}
+  | '<'                                ::   :: leftangle {{ tex \langle}}
+  | '>'                                ::   :: rightangle {{ tex \rangle}}
+  | '::'                               ::   :: append_sym
+
+%----------------------------------------------------------------%
+%                    BIG-STEP SEMANTICS                        %
+%----------------------------------------------------------------%
+defns
+Jop :: '' ::= 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
+defn 
+< a , m , o > || < a' , m' , o' > :: :: arith_ops :: 'aexp_' by
+
+----------------- :: int_constant
+<n, m, o> || <n, m, o>
+
+m(x) = n
+----------------- :: lookup
+<x, m, o> || <n, m, o>
+
+%%% Addition %%%
+<a1, m, o> || <n1, m, o>
+<a2, m, o> || <n2, m, o>
+n1 + n2 = n3
+------------------------------ :: add
+<a1 + a2, m, o> || <n3, m, o>
+
+
+%%% Multiplication %%%
+<a1, m, o> || <n1, m, o>
+<a2, m, o> || <n2, m, o>
+n1 * n2 = n3
+------------------------------ :: mult
+<a1 * a2, m, o> || <n3, m, o>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Boolean Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
+defn 
+< b , m , o > || < b' , m' , o' > :: :: bool_ops :: 'bexp_' by
+
+<a1, m, o> || <n1, m, o>
+<a2, m, o> || <n2, m, o>
+n1 < n2 = true
+------------------------------ :: lt_true
+<a1 < a2, m, o> || <true, m, o>
+
+<a1, m, o> || <n1, m, o>
+<a2, m, o> || <n2, m, o>
+n1 < n2 = false
+------------------------------ :: lt_false
+<a1 < a2, m, o> || <false, m, o>
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+defn 
+< c , m , o > || < c' , m' , o' > :: :: c_ops :: 'c_' by
+
+%%% Assignment %%%
+<a, m, o> || <n, m, o>
+----------------------------- :: assign
+<x := a, m, o> || <stop, m[x |-> n], o>
+
+%%% Sequence %%%
+<c1, m, o> || <stop, m1, o1>
+<c2, m1, o1> || <stop, m2, o2>
+-------------------------------- :: sequence
+<c1 ; c2, m, o> || <stop, m2, o2>
+
+%%% If %%%
+<b, m, o> || <true, m, o>
+<c1, m, o> || <stop, m1, o1>
+---------------------------------------------------------------- :: if_true
+<if b then c1 else c2 end, m, o> || <stop, m1, o1>
+
+<b, m, o> || <false, m, o>
+<c2, m, o> || <stop, m2, o2>
+---------------------------------------------------------------- :: if_false
+<if b then c1 else c2 end, m, o> || <stop, m2, o2>
+
+%%% While %%%
+<b, m, o> || <true, m, o>
+<c, m, o> || <stop, m', o'>
+<while b do c end, m', o''> || <stop, m'', o''>
+--------------------------------------------------------------------------- :: while_true
+<while b do c end, m, o> || <stop, m'', o''>
+
+<b, m, o> || <false, m, o>
+--------------------------------------------------------------------------- :: while_false
+<while b do c end, m, o> || <stop, m, o>
+
+m(ch) = n
+--------------------------------------------------------------------------- :: read
+<read x from ch, m, o> || <stop, m[x |-> n], o>
+
+m(x) = n
+--------------------------------------------------------------------------- :: write
+<write x to ch, m, o> || <stop, m[ch |-> n], o::(ch - n)>
+
+---------------------------------------- :: throw
+<throw, m, o> || <exception, m, o>
+
+<c1, m, o> || <stop, m', o'>
+-------------------------------------------- :: try_catch
+<try c1 catch c2, m, o> || <stop, m', o'>
+
+<c1, m, o> || <exception, m', o'>
+<c2, m', o'> || <c2'', m'', o''>
+-------------------------------------------- :: try_catch_with_exception
+<try c1 catch c2, m, o> || <c2'', m'', o''>
