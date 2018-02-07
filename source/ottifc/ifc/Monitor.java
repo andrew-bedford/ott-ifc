@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.jgrapht.*;
+
 public class Monitor {
     Specification _spec;
     Set<Option> _options;
