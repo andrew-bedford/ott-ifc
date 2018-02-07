@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jgrapht">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libraries/jgrapht-core-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/jgrapht-ext-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/jgrapht-io-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
