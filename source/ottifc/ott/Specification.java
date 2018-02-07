@@ -271,6 +271,7 @@ public class Specification {
     //For example, isCommand("cmd") should return true
     public boolean isCommandNonTerminal(String nonTerminal) {
         if (!isNonTerminal(nonTerminal)) { return false; }
+        if (isReservedNonTerminal(nonTerminal)) { return false; }
 
         //If it is not an expression, then it is (probably) a command
         return !isExpressionNonTerminal(nonTerminal);
