@@ -1,5 +1,6 @@
 package ottifc;
 
+import helpers.DebugHelper;
 import helpers.FileHelper;
 import helpers.ParameterHelper;
 import helpers.StringHelper;
@@ -29,9 +30,13 @@ public class Main {
             System.out.println("Usage:");
             System.out.println("  -i [.ott file]                       Specification to use as input.");
             System.out.println("  -m [generation | verification]       Ott-IFC's mode. Use 'generation' to generate a mechanism and 'verification' to verify an existing mechanism.");
+            System.out.println("  -d                                   Enable debug mode");
+        }
+        if (ParameterHelper.contains("d")) {
+            DebugHelper.enableDebugMode();
         }
         //Note: We use the same parameters as Ott for the input file: "-i"
-        else if (ParameterHelper.contains("i")) {
+        if (ParameterHelper.contains("i")) {
             String filePath = ParameterHelper.get("i", 0);
             
 
@@ -51,7 +56,7 @@ public class Main {
             Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
             m.generate();
         }
-        else if (ParameterHelper.contains("m")) {
+        if (ParameterHelper.contains("m")) {
             String selectedMode = ParameterHelper.get("m", 0);
 
             switch (selectedMode) {
@@ -61,7 +66,6 @@ public class Main {
                     break;
             }
         }
-
     }
 
 

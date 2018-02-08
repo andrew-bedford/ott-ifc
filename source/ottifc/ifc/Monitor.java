@@ -1,5 +1,6 @@
 package ottifc.ifc;
 
+import helpers.DebugHelper;
 import helpers.StringHelper;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -45,11 +46,8 @@ public class Monitor {
 
                 Set<String> expressionVariables = r.getExpressionVariablesUsedInPreconditions();
                 insertLabelDefinitions(r, expressionVariables);
-
-                Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
-                insertEnvironmentUpdates(r, expressionVariables, modifiedVariables);
-
-                addGuards(r, expressionVariables, modifiedVariables);
+                insertEnvironmentUpdates(r, expressionVariables);
+                addGuards(r, expressionVariables);
 
                 //If the current rule involves one of the commands that may affect the control-flow
                 if (rulesAffectingControlFlow.contains(r)) {
@@ -97,8 +95,8 @@ public class Monitor {
                     }
                 }
                 commandsToGraphs.put(abstractCommand, graph);
-                System.out.println("For command " + abstractCommand + ": ");
-                System.out.println(graph.toString()+"\n\n");
+                DebugHelper.println("Command graph of " + abstractCommand + ": ");
+                DebugHelper.println(graph.toString()+"\n\n");
             }
         }
         return commandsToGraphs;
@@ -127,8 +125,32 @@ public class Monitor {
 
     }
 
-    private void addGuards(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {
-        if (r.getFinalState().isOutputModified()) {
+    private boolean ruleHasSuccessorThatModifiesMemory(DirectedGraph graph, Rule rule) {
+        GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph, rule);
+        while (iterator.hasNext()) {
+            Rule r = iterator.next();
+            if (r.getFinalState().isMemoryModified()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean ruleHasSuccessorThatModifiesOutput(DirectedGraph graph, Rule rule) {
+        GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph, rule);
+        while (iterator.hasNext()) {
+            Rule r = iterator.next();
+            if (r.getFinalState().isOutputModified()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addGuards(Rule r, Set<String> expressionVariables) {
+        Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
+
+        if (r.getFinalState().isOutputModified()) { //Or if one of its succesors in the command graph produces an output
             Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
             modifiedChannels.removeAll(modifiedVariables);
             for(String modifiedChannel : modifiedChannels) {
@@ -146,9 +168,9 @@ public class Monitor {
             Set<String> abstractCommands = _spec.getAbstractProductions(cnt);
             for(String ac : abstractCommands) {
                 Set<Rule> terminalRules = getSetOfTerminalRules(_commandsToGraphs.get(ac));
-                System.out.println("Terminal Rules for command '"+ac+"':");
-                System.out.println(terminalRules.toString());
-                System.out.println("\n");
+                //System.out.println("Terminal Rules for command '"+ac+"':");
+                //System.out.println(terminalRules.toString());
+                //System.out.println("\n");
                 if (terminalRules.size() >= 2) { //If there are multiple rules for the same command, then we assume that it may affect the control-flow of the application
                     List<Rule> rulesForCommand = _spec.getRules(ac);
                     rulesWhichMayAffectControlFlow.addAll(rulesForCommand); //FIXME Not all rules for that command should be included, only maybe the ones a branch occurs
@@ -159,7 +181,8 @@ public class Monitor {
         return rulesWhichMayAffectControlFlow;
     }
 
-    private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables, Set<String> modifiedVariables) {
+    private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables) {
+        Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
         for(String modifiedVariable : modifiedVariables) {
             if (!expressionVariables.isEmpty()) {
                 r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc |_| " + getSupremumOfSet(expressionVariables));
