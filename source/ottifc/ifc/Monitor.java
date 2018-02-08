@@ -3,6 +3,8 @@ package ottifc.ifc;
 import helpers.StringHelper;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
 import ottifc.ott.Specification;
 import ottifc.ott.semantics.Rule;
 
@@ -80,10 +82,10 @@ public class Monitor {
     private Map<String, DirectedGraph<Rule, DefaultEdge>> buildCommandGraphs() {
         Map<String, DirectedGraph<Rule, DefaultEdge>> commandsToGraphs = new HashMap<>();
         for (String cnt : _spec.getCommandNonTerminals()) {
-            for (String command : _spec.getAbstractProductions(cnt)) {
+            for (String abstractCommand : _spec.getAbstractProductions(cnt)) {
                 DirectedGraph<Rule, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
                 DirectedGraph<String, DefaultEdge> graph2 = new DefaultDirectedGraph<>(DefaultEdge.class);
-                List<Rule> rules = _spec.getRules(command);
+                List<Rule> rules = _spec.getRules(abstractCommand);
                 for(Rule r1 : rules) {
                     graph.addVertex(r1);
                     List<Rule> rulesThatMayBeEvaluatedAfterRuleR1 = _spec.getRules(r1.getInitialState().getAbstractCommand());
@@ -94,8 +96,8 @@ public class Monitor {
                         }
                     }
                 }
-                commandsToGraphs.put(command, graph);
-                System.out.println("For command " + command + ": ");
+                commandsToGraphs.put(abstractCommand, graph);
+                System.out.println("For command " + abstractCommand + ": ");
                 System.out.println(graph.toString()+"\n\n");
             }
         }
@@ -143,9 +145,13 @@ public class Monitor {
         for(String cnt : commandNonTerminals) {
             Set<String> abstractCommands = _spec.getAbstractProductions(cnt);
             for(String ac : abstractCommands) {
-                List<Rule> rulesForCommand = _spec.getRules(ac);
-                if (rulesForCommand.size() >= 2) { //If there are multiple rules for the same command, then we assume that it may affect the control-flow of the application
-                    rulesWhichMayAffectControlFlow.addAll(rulesForCommand);
+                Set<Rule> terminalRules = getSetOfTerminalRules(_commandsToGraphs.get(ac));
+                System.out.println("Terminal Rules for command '"+ac+"':");
+                System.out.println(terminalRules.toString());
+                System.out.println("\n");
+                if (terminalRules.size() >= 2) { //If there are multiple rules for the same command, then we assume that it may affect the control-flow of the application
+                    List<Rule> rulesForCommand = _spec.getRules(ac);
+                    rulesWhichMayAffectControlFlow.addAll(rulesForCommand); //FIXME Not all rules for that command should be included, only maybe the ones a branch occurs
                 }
             }
         }
@@ -181,5 +187,20 @@ public class Monitor {
             r.insertEnvironments();
 
         }
+    }
+
+    //Note: "Terminal rules" are vertices in the graph that have no outgoing edges.
+    public Set<Rule> getSetOfTerminalRules(DirectedGraph<Rule, DefaultEdge> graph) {
+        Set<Rule> setOfTerminalVertices = new HashSet<>();
+        GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph);
+        while (iterator.hasNext()) {
+            Rule r = iterator.next();
+            Set<DefaultEdge> e = graph.outgoingEdgesOf(r);
+            if (e.isEmpty()) {
+                setOfTerminalVertices.add(r);
+            }
+        }
+
+        return setOfTerminalVertices;
     }
 }

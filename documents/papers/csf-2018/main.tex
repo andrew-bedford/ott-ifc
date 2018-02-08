@@ -336,7 +336,7 @@ It may be interesting to note that, had the big-step version of the semantics be
 	<a, m, o> || <n, m, o>
 	$\text{\color{red}E |- a : la}$
 	---------------------------------------- :: assign
-	<x := a, m, o, pc, E> || 
+	<x := a, m, o, $\text{\color{red}pc, E}$> || 
 	<stop, m[x |-> n], o, $\text{\color{red}pc, E[x |-> pc |\_| la]}$>
 \end{lstlisting}
 
@@ -379,7 +379,7 @@ We also insert a call to a function called \lstinline{updateModifVars} which wil
 \paragraph{While} Like the skip and sequence commands, the semantics rule of the while command does not modify the memory or the output trace, hence the only change is the addition of the \lstinline{pc} and \lstinline{E} variables to the configurations. Note that, while the \lstinline{pc} variable is not updated here with the label of the condition variable \lstinline{b}, it will be when the \lstinline{if} (present in the final configuration) is evaluated (line 3). 
 \begin{lstlisting}[label=listing:output-semantics-while,numbers=right,captionpos=b,caption=Ott-IFC's output for the "while" command]
 	--------------------------------------- :: while
-	<while b do c end, m, o, pc, E> --> 
+	<while b do c end, m, o, $\text{\color{red}pc, E}$> --> 
 	<if b then c ; while b do c end else skip end, m, o, $\text{\color{red}pc, E}$>
 \end{lstlisting}
 

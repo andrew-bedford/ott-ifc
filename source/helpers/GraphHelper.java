@@ -5,9 +5,14 @@ import org.jgrapht.ext.DOTExporter;
 import org.jgrapht.ext.IntegerComponentNameProvider;
 import org.jgrapht.ext.StringComponentNameProvider;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
+import ottifc.ott.semantics.Rule;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GraphHelper {
     public static void exportToDotFile(DirectedGraph<String, DefaultEdge> graph, String path) {
@@ -18,4 +23,6 @@ public class GraphHelper {
             e.printStackTrace();
         }
     }
+
+
 }
