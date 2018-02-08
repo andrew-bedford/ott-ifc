@@ -1,23 +1,24 @@
 package ottifc.ifc;
 
 import helpers.StringHelper;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import ottifc.ott.Specification;
 import ottifc.ott.semantics.Rule;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.jgrapht.*;
 
 public class Monitor {
     Specification _spec;
     Set<Option> _options;
+    Map<String, DirectedGraph<Rule, DefaultEdge>> _commandsToGraphs;
 
     public Monitor(Specification spec, Set<Option> options) {
         _spec = spec;
         _options = options;
+        _commandsToGraphs = buildCommandGraphs();
     }
 
     private String getSupremumOfSet(Set<String> set) {
@@ -74,6 +75,31 @@ public class Monitor {
                 System.out.println("");
             }
         }
+    }
+
+    private Map<String, DirectedGraph<Rule, DefaultEdge>> buildCommandGraphs() {
+        Map<String, DirectedGraph<Rule, DefaultEdge>> commandsToGraphs = new HashMap<>();
+        for (String cnt : _spec.getCommandNonTerminals()) {
+            for (String command : _spec.getAbstractProductions(cnt)) {
+                DirectedGraph<Rule, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+                DirectedGraph<String, DefaultEdge> graph2 = new DefaultDirectedGraph<>(DefaultEdge.class);
+                List<Rule> rules = _spec.getRules(command);
+                for(Rule r1 : rules) {
+                    graph.addVertex(r1);
+                    List<Rule> rulesThatMayBeEvaluatedAfterRuleR1 = _spec.getRules(r1.getInitialState().getAbstractCommand());
+                    for(Rule r2 : rulesThatMayBeEvaluatedAfterRuleR1) {
+                        graph.addVertex(r2);
+                        if (!r1.equals(r2) && !r1.getInitialState().getAbstractCommand().equals(r2.getInitialState().getAbstractCommand())) {
+                            graph.addEdge(r1, r2);
+                        }
+                    }
+                }
+                commandsToGraphs.put(command, graph);
+                System.out.println("For command " + command + ": ");
+                System.out.println(graph.toString()+"\n\n");
+            }
+        }
+        return commandsToGraphs;
     }
 
     public boolean isStopCommand(String s) {

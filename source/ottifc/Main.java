@@ -48,27 +48,7 @@ public class Main {
             System.out.println("---------------------------------------------");
             Specification spec = new Specification(fileContents);
 
-            Map<String, DirectedGraph<Rule, DefaultEdge>> commandsToGraphs = new HashMap<>();
-            for (String cnt : spec.getCommandNonTerminals()) {
-                for (String command : spec.getAbstractProductions(cnt)) {
-                    DirectedGraph<Rule, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-                    DirectedGraph<String, DefaultEdge> graph2 = new DefaultDirectedGraph<>(DefaultEdge.class);
-                    List<Rule> rules = spec.getRules(command);
-                    for(Rule r1 : rules) {
-                        graph.addVertex(r1);
-                        List<Rule> rulesThatMayBeEvaluatedAfterRuleR1 = spec.getRules(r1.getInitialState().getAbstractCommand());
-                        for(Rule r2 : rulesThatMayBeEvaluatedAfterRuleR1) {
-                            graph.addVertex(r2);
-                            if (!r1.equals(r2) && !r1.getInitialState().getAbstractCommand().equals(r2.getInitialState().getAbstractCommand())) {
-                                graph.addEdge(r1, r2);
-                            }
-                        }
-                    }
-                    commandsToGraphs.put(command, graph);
-                    System.out.println("For command " + command + ": ");
-                    System.out.println(graph.toString()+"\n\n");
-                }
-            }
+
 
 
             //Monitor m = new Monitor(spec, EnumSet.of(Option.EXPLICIT_FLOWS, Option.IMPLICIT_FLOWS));
@@ -87,13 +67,5 @@ public class Main {
 
     }
 
-    private static void exportGraphToDotFile(DirectedGraph<String, DefaultEdge> graph, String path) {
-        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<String, DefaultEdge>(new IntegerComponentNameProvider(), new StringComponentNameProvider<String>(), null);
-        try {
-            exporter.exportGraph(graph,  new FileWriter(path));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+
 }
