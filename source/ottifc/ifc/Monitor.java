@@ -28,7 +28,7 @@ public class Monitor {
         String supremum = "";
         if (set.size() >= 1) {
             for (String element : set) {
-                supremum += "l_"+element + " |_| ";
+                supremum += "l"+element + " |_| ";
             }
             supremum = supremum.substring(0, supremum.length()-5); //Removes the last " |_| "
         }
@@ -125,7 +125,40 @@ public class Monitor {
 
     }
 
-    private boolean ruleHasSuccessorThatModifiesMemory(DirectedGraph graph, Rule rule) {
+    private Set<String> getSetOfModifiedVariablesBySuccessors(Rule rule) {
+        Set<String> setOfModifiedVariables = new HashSet<>();
+        if (ruleHasSuccessorThatModifiesMemory(rule)) {
+            String abstractCommand = _spec.getAbstractCommandOfRule(rule);
+            DirectedGraph<Rule, DefaultEdge> graph = _commandsToGraphs.get(abstractCommand);
+
+            GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph, rule);
+            while (iterator.hasNext()) {
+                Rule r = iterator.next();
+                if (r.getFinalState().isMemoryModified()) {
+                    setOfModifiedVariables.addAll(r.getFinalState().getModifiedVariablesWithoutChannels());
+                }
+            }
+        }
+
+        return setOfModifiedVariables;
+    }
+
+    private boolean ruleHasPredecessor(Rule rule) {
+        String abstractCommand = _spec.getAbstractCommandOfRule(rule);
+        DirectedGraph<Rule, DefaultEdge> graph = _commandsToGraphs.get(abstractCommand);
+
+        Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(rule);
+        if (incomingEdges.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean ruleHasSuccessorThatModifiesMemory(Rule rule) {
+        String abstractCommand = _spec.getAbstractCommandOfRule(rule);
+        DirectedGraph<Rule, DefaultEdge> graph = _commandsToGraphs.get(abstractCommand);
+
         GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph, rule);
         while (iterator.hasNext()) {
             Rule r = iterator.next();
@@ -136,7 +169,10 @@ public class Monitor {
         return false;
     }
 
-    private boolean ruleHasSuccessorThatModifiesOutput(DirectedGraph graph, Rule rule) {
+    private boolean ruleHasSuccessorThatModifiesOutput(Rule rule) {
+        String abstractCommand = _spec.getAbstractCommandOfRule(rule);
+        DirectedGraph<Rule, DefaultEdge> graph = _commandsToGraphs.get(abstractCommand);
+
         GraphIterator<Rule, DefaultEdge> iterator = new DepthFirstIterator<Rule, DefaultEdge>(graph, rule);
         while (iterator.hasNext()) {
             Rule r = iterator.next();
@@ -150,11 +186,11 @@ public class Monitor {
     private void addGuards(Rule r, Set<String> expressionVariables) {
         Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
 
-        if (r.getFinalState().isOutputModified()) { //Or if one of its succesors in the command graph produces an output
+        if (r.getFinalState().isOutputModified() || ruleHasSuccessorThatModifiesOutput(r)) { //Or if one of its successors in the command graph produces an output
             Set<String> modifiedChannels = r.getFinalState().getModifiedVariables();
             modifiedChannels.removeAll(modifiedVariables);
             for(String modifiedChannel : modifiedChannels) {
-                String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + "l_"+modifiedChannel;
+                String guard = getSupremumOfSet(expressionVariables) + " |_| pc <= " + "l"+modifiedChannel;
                 r.addPrecondition(guard);
             }
 
@@ -168,12 +204,12 @@ public class Monitor {
             Set<String> abstractCommands = _spec.getAbstractProductions(cnt);
             for(String ac : abstractCommands) {
                 Set<Rule> terminalRules = getSetOfTerminalRules(_commandsToGraphs.get(ac));
-                //System.out.println("Terminal Rules for command '"+ac+"':");
-                //System.out.println(terminalRules.toString());
-                //System.out.println("\n");
+                DebugHelper.println("[getRulesWhichMayAffectControlFlow]");
+                DebugHelper.println("Terminal Rules for command '"+ac+"':");
+                DebugHelper.println(terminalRules.toString() + "\n");
                 if (terminalRules.size() >= 2) { //If there are multiple rules for the same command, then we assume that it may affect the control-flow of the application
                     List<Rule> rulesForCommand = _spec.getRules(ac);
-                    rulesWhichMayAffectControlFlow.addAll(rulesForCommand); //FIXME Not all rules for that command should be included, only maybe the ones a branch occurs
+                    rulesWhichMayAffectControlFlow.addAll(rulesForCommand); //FIXME Not all rules for that command should be included, only the ones where a branch occurs (maybe)
                 }
             }
         }
@@ -182,20 +218,41 @@ public class Monitor {
     }
 
     private void insertEnvironmentUpdates(Rule r, Set<String> expressionVariables) {
-        Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
-        for(String modifiedVariable : modifiedVariables) {
-            if (!expressionVariables.isEmpty()) {
-                r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc |_| " + getSupremumOfSet(expressionVariables));
+        if (!r.getFinalState().isMemoryModified() && ruleHasSuccessorThatModifiesMemory(r)) {
+            Set<String> modifiedVariables = getSetOfModifiedVariablesBySuccessors(r);
+            for (String modifiedVariable : modifiedVariables) {
+                if (!expressionVariables.isEmpty()) {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "l"+modifiedVariable+" |_| pc |_| " + getSupremumOfSet(expressionVariables));
+                } else {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "l"+modifiedVariable+" |_| pc");
+                }
             }
-            else {
-                r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc");
+        }
+        else if (r.getFinalState().isMemoryModified() && ruleHasPredecessor(r)) {
+            Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
+            for (String modifiedVariable : modifiedVariables) {
+                if (!expressionVariables.isEmpty()) {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "l"+modifiedVariable+" |_| pc |_| " + getSupremumOfSet(expressionVariables));
+                } else {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "l"+modifiedVariable+" |_| pc");
+                }
+            }
+        }
+        else if (r.getFinalState().isMemoryModified()) {
+            Set<String> modifiedVariables = r.getFinalState().getModifiedVariablesWithoutChannels();
+            for (String modifiedVariable : modifiedVariables) {
+                if (!expressionVariables.isEmpty()) {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc |_| " + getSupremumOfSet(expressionVariables));
+                } else {
+                    r.getFinalState().addUpdateToEnvironment(modifiedVariable, "pc");
+                }
             }
         }
     }
 
     private void insertLabelDefinitions(Rule r, Set<String> expressionVariables) {
         for(String expressionVariable : expressionVariables) {
-            r.addPrecondition(String.format("E |- %s : l_%s", expressionVariable, expressionVariable));
+            r.addPrecondition(String.format("E |- %s : l%s", expressionVariable, expressionVariable));
         }
     }
 

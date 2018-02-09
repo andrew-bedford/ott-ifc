@@ -24,6 +24,21 @@ public class Specification {
         _expressionNonTerminals = extractExpressionNonTerminals();
     }
 
+    public String getAbstractCommandOfRule(Rule r) {
+        Set<String> commandNonTerminals = getCommandNonTerminals();
+        for (String cnt : commandNonTerminals) {
+            Set<String> abstractCommands = getAbstractProductions(cnt);
+            for(String ac : abstractCommands) {
+                List<Rule> rulesForAC = getRules(ac);
+                if (rulesForAC.contains(r)) {
+                    return ac;
+                }
+            }
+        }
+
+        return "";
+    }
+
     private Set<String> extractCommandNonTerminals() {
         Set<String> metaVars = getNonTerminals();
         Set<String> commands = new HashSet<>();
