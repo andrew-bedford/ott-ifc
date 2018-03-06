@@ -14,6 +14,10 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{mathpartir}
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
 
 \input{definitions.tex}
 
@@ -71,7 +75,7 @@ While techniques to prevent insecure explicit and implicit flows are well-known 
 \subsubsection*{Contributions}
 \begin{itemize}
 	\item We present \ottifc\ and illustrate its use on a simple imperative language (Section~\ref{section:ott-ifc}).
-	\item We provide sketches for the proofs that show that the generated mechanisms are sound and do not change the semantics of the executed programs (Section~\ref{section:soundness}).
+	\item We provide rough sketches of the proofs that show that the generated mechanisms are sound and do not change the semantics of the executed programs (Section~\ref{section:soundness}).
 \end{itemize}
 
 %Approach and Uniqueness: Describe your approach in attacking the problem and clearly state how your approach is novel.
@@ -80,16 +84,18 @@ As the name implies, the specifications that \ottifc\ takes as input (and output
 
 Hence, the development process of a mechanism using Ott and \ottifc\ would look like this:
 \begin{enumerate}
-  \item Write a specification of the language on which we want to enforce non-interference in Ott.
+  \item Write specification of the language on which we want to enforce non-interference in Ott.
   \item Use \ottifc\ to generate the mechanism's specification.
   \item Use Ott to export the mechanism's specification to LaTeX, Coq or Isabelle/HOL and complete the implementation.
 \end{enumerate}
 
 For the moment, \ottifc\ requires that the language specification follows a certain format. Namely, we require:
 \begin{itemize}
-	\item that the program configurations be of the form $\langle \textit{c}, \textit{m}, \textit{o}\rangle$, where $c$ is the command to be evaluated, $m$ is the current memory and $o$ is the current output trace;
-	\item that the syntax be composed of \emph{commands}, which may read/write the memory or produce outputs, and \emph{expressions}, which may only read the memory;
-	\item that the outputs are appended to the output trace using the notation $o\!::\!(\textit{channel},\, \textit{value})$, where $\textit{value}$ represents the output's value and $\textit{channel}$ its location.
+	\item[\textbf{R1}] that it uses either small-step or big-step operational semantics;
+	\item[\textbf{R2}] that the program configurations be of the form $\langle \textit{c}, \textit{m}, \textit{o}\rangle$, where $c$ is the command to be evaluated, $m$ is the current memory and $o$ is the current output trace;
+	\item[\textbf{R3}] that the outputs be appended to the output trace using the notation $o\!::\!(\textit{channel},\, \textit{value})$, where $\textit{value}$ represents the output's value and $\textit{channel}$ its location;
+	\item[\textbf{R4}] that the syntax be composed of \emph{commands}, which may read/write the memory or produce outputs, and \emph{expressions}, which may only read the memory;
+	\item[\textbf{R5}] that the semantics preconditions don't include calls to functions which may have side-effects and that they 
 \end{itemize}
 These requirements mean that \ottifc\ won't work with most functional languages; only imperative languages are supported. This is because in functional languages, the distinction between commands and expressions is less apparent and sometimes inexistent. Note that this is not a technical limitation, but rather a choice that we made in order to simplify the approach. 
 
@@ -170,7 +176,7 @@ An example of a language that satisfies these requirements is the imperative lan
 	---------------------------------- :: mult_int_int
 	<n1 * n2, m, o> --> <n3, m, o>
 \end{lstlisting}
-\pagebreak
+
 \begin{lstlisting}[label=listing:input-semantics-booleans,captionpos=b,caption=Ott small-step semantics of boolean expressions]
 	%%% Lower Than %%%
 	<a1, m, o> --> <a1', m, o>
@@ -258,15 +264,57 @@ Using the same reasoning, we can conclude that:
 \subsection{Step 2: Constructing evaluation-order graphs}
 The next step consists in constructing \emph{evaluation-order graphs} for each command. These graphs represent the order in which the semantics rules may be evaluated for a specific command (see Figure~\ref{figure:evaluation-order-graphs}).
 \begin{figure}[h]
-\begin{minipage}{0.49\linewidth}
-	\center
-\includegraphics[width=0.33\linewidth]{images/graph-assign.png}~\\~\\
-\end{minipage}
-\begin{minipage}{0.49\linewidth}
-	\center
-	\includegraphics[width=0.4\linewidth]{images/graph-sequence.png}~\\~\\
-\end{minipage}
-\includegraphics[width=\linewidth]{images/graph-if.png}
+\begin{subfigure}[t]{0.48\linewidth}
+	\centering
+	\begin{tikzpicture}
+	\tikzset{vertex/.style = {shape=rectangle,draw,minimum height=0.75cm}}
+	\tikzset{edge/.style = {->,> = latex'}}
+	% vertices
+	\node[vertex,scale=0.7] (assign1) at  (0,1) {\lstinline{x := a}};
+	\node[vertex,scale=0.7] (assign2) at  (0,0) {\lstinline{x := n}};
+	
+	%edges
+	\draw[edge] (assign1) to (assign2);
+	\end{tikzpicture}
+	\caption{Assign}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.48\linewidth}
+	\centering
+	\begin{tikzpicture}
+	\tikzset{vertex/.style = {shape=rectangle,draw,minimum height=0.75cm}}
+	\tikzset{edge/.style = {->,> = latex'}}
+
+	\node[vertex,scale=0.7] (seq1) at  (0,1) {\lstinline{c1 ; c2}};
+	\node[vertex,scale=0.7] (seq2) at  (0,0) {\lstinline{skip ; c2}};
+	\draw[edge] (seq1) to (seq2);
+	\end{tikzpicture}
+	\caption{Sequence}
+\end{subfigure}
+
+\begin{subfigure}{1\linewidth}
+	\centering
+	\begin{tikzpicture}
+		\tikzset{vertex/.style = {shape=rectangle,draw,minimum height=0.75cm}}
+		\tikzset{edge/.style = {->,> = latex'}}
+		
+		\node[vertex,scale=0.7] (if) at  (2.25,-1) {\lstinline{if b then c1 else c2 end}};
+		\node[vertex,scale=0.7] (iftrue) at  (0,-2) {\lstinline{if true then c1 else c2 end}};
+		\node[vertex,scale=0.7] (iffalse) at  (4.5,-2) {\lstinline{if false then c1 else c2 end}};
+		
+		\draw[edge] (if) to (iftrue);
+		\draw[edge] (if) to (iffalse);
+	\end{tikzpicture}
+	\caption{Conditional}
+\end{subfigure}
+%	\center
+%\includegraphics[width=0.33\linewidth]{images/graph-assign.png}~\\~\\
+%\end{minipage}
+%\begin{minipage}{0.49\linewidth}
+%	\center
+%	\includegraphics[width=0.4\linewidth]{images/graph-sequence.png}~\\~\\
+%\end{minipage}
+%\includegraphics[width=\linewidth]{images/graph-if.png}
 \caption{Evaluation-order graphs of the assign, sequence and conditional commands.}
 \label{figure:evaluation-order-graphs}
 \end{figure}
