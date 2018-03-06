@@ -462,6 +462,10 @@ A program $p$ satisfies non-interference if for any $\ell \in \mathcal{L}$, and 
 \begin{proof}[Sketch]
 	The arguments for the proof are similar to the ones presented in Section~\ref{section:ott-ifc}. 
 	
+	We start by showing that, if the evaluation of a command may cause a branch in the execution, then it will have multiple terminal states in the command-evaluation order graph.
+
+	To show that there can be no explicit or implicit flows, we then proceed by structural induction on the types of commands: commands whose evaluation may modify the memory, commands whose evaluation may produce an output, commands whose evaluation does neither.
+	
 	We show that there can be no explicit flows because, any time that a variable's value is changed in the memory, we update its label (the only exception being channels) and that for any output, there is a guard condition. 
 	
 	We then show that there can be no implicit flows because, any time a branch in the control-flow could occur, we update the \lstinline{pc} variable with the label of \emph{all} expression variables that could have influenced the decision. We also point out that the \lstinline{pc} variable is present every time that a label is updated and in every inserted guard conditions.
