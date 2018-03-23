@@ -203,7 +203,7 @@ public class Monitor {
         for(String cnt : commandNonTerminals) {
             Set<String> abstractCommands = _spec.getAbstractProductions(cnt);
             for(String ac : abstractCommands) {
-                Set<Rule> terminalRules = getSetOfTerminalRules(_commandsToGraphs.get(ac));
+                Set<Rule> terminalRules = getSetOfTerminalRules(_commandsToGraphs.get(ac)); //Terminal rules are rules for which there is no outgoing transition
                 DebugHelper.println("[getRulesWhichMayAffectControlFlow]");
                 DebugHelper.println("Terminal Rules for command '"+ac+"':");
                 DebugHelper.println(terminalRules.toString() + "\n");

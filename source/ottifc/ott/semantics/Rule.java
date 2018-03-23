@@ -194,7 +194,33 @@ public class Rule {
     }
 
     public void insertProgramCounters() {
-        insertIntoAllCommandStates("pc");
+        List<String> newPreconditions = new LinkedList<>();
+        for(String precondition : _preconditions) {
+            if (precondition.contains(_spec.getStepSymbol())) {
+                State initialState = new State(precondition.split(_spec.getStepSymbol().replace("|","\\|"))[0]);
+                State finalState = new State(precondition.split(_spec.getStepSymbol().replace("|","\\|"))[1]);
+                String initialStateAbstractCommand = initialState.getAbstractCommand();
+                Set<String> specificationPossibleCommands = _spec.getUnfoldedPossibleCommands();
+                if (_spec.isCommandNonTerminal(initialStateAbstractCommand) || specificationPossibleCommands.contains(initialStateAbstractCommand)) {
+                    //We ensure that the pc names follows the naming convention of the user's memory and output variables.
+                    //For example, if we have <cmd2, m1, o1> || <stop, m2, o2>, then the inserted pc variables should be pc1 in the initial state and pc2 in the final state.
+                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemory()).trim();
+                    precondition = precondition.replaceAll("<(.*?[^-])> ((-->)|(\\|\\|))", String.format("<$1, %s%s> $2", "pc", initialEnvironmentSuffix));
+
+                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemory()).trim();
+                    precondition = precondition.replaceAll("((-->)|(\\|\\|)) <(.*?[^-])>", String.format("$1 <$4, %s%s>", "pc", finalEnvironmentSuffix));
+
+                    _lastEnvironmentSuffix = finalEnvironmentSuffix;
+                }
+            }
+
+            newPreconditions.add(precondition);
+        }
+        _preconditions = newPreconditions;
+
+        getInitialState().insertVariable("pc");
+
+        getFinalState().insertVariable("pc");
     }
 
     public void insertEnvironments() {
