@@ -16,7 +16,6 @@ bool_expr, b :: be_ ::=
     | a1 < a2                           ::  :: less_than
 
 commands, cmd :: cmd_ ::=
-    | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
     | cmd1 ; cmd2                           ::  :: sequence
@@ -111,40 +110,40 @@ defn
 %%% Assignment %%%
 <a, m, o> || <n, m, o>
 ----------------------------- :: assign
-<x := a, m, o> || <stop, m[x |-> n], o>
+<x := a, m, o> || <skip, m[x |-> n], o>
 
 %%% Sequence %%%
-<cmd1, m, o> || <stop, m1, o1>
-<cmd2, m1, o1> || <stop, m2, o2>
+<cmd1, m, o> || <skip, m1, o1>
+<cmd2, m1, o1> || <skip, m2, o2>
 -------------------------------- :: sequence
-<cmd1 ; cmd2, m, o> || <stop, m2, o2>
+<cmd1 ; cmd2, m, o> || <skip, m2, o2>
 
 %%% If %%%
 <b, m, o> || <true, m, o>
-<cmd1, m, o> || <stop, m1, o1>
+<cmd1, m, o> || <skip, m1, o1>
 ---------------------------------------------------------------- :: if_true
-<if b then cmd1 else cmd2 end, m, o> || <stop, m1, o1>
+<if b then cmd1 else cmd2 end, m, o> || <skip, m1, o1>
 
 <b, m, o> || <false, m, o>
-<cmd2, m, o> || <stop, m2, o2>
+<cmd2, m, o> || <skip, m2, o2>
 ---------------------------------------------------------------- :: if_false
-<if b then cmd1 else cmd2 end, m, o> || <stop, m2, o2>
+<if b then cmd1 else cmd2 end, m, o> || <skip, m2, o2>
 
 %%% While %%%
 <b, m, o> || <true, m, o>
-<cmd, m, o> || <stop, m', o'>
-<while b do cmd end, m', o''> || <stop, m'', o''>
+<cmd, m, o> || <skip, m', o'>
+<while b do cmd end, m', o''> || <skip, m'', o''>
 --------------------------------------------------------------------------- :: while_true
-<while b do cmd end, m, o> || <stop, m'', o''>
+<while b do cmd end, m, o> || <skip, m'', o''>
 
 <b, m, o> || <false, m, o>
 --------------------------------------------------------------------------- :: while_false
-<while b do cmd end, m, o> || <stop, m, o>
+<while b do cmd end, m, o> || <skip, m, o>
 
 m(ch) = n
 --------------------------------------------------------------------------- :: read
-<read x from ch, m, o> || <stop, m[x |-> n], o>
+<read x from ch, m, o> || <skip, m[x |-> n], o>
 
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to ch, m, o> || <stop, m[ch |-> n], o::(ch - n)>
+<write x to ch, m, o> || <skip, m[ch |-> n], o::(ch - n)>

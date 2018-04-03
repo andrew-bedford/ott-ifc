@@ -122,6 +122,10 @@ defn
 -------------------------------- :: sequence
 <c1 ; c2, m, o> || <stop, m2, o2>
 
+<c1, m, o> || <exception, m1, o1>
+-------------------------------- :: sequence_exception
+<c1 ; c2, m, o> || <exception, m1, o1>
+
 %%% If %%%
 <b, m, o> || <true, m, o>
 <c1, m, o> || <stop, m1, o1>

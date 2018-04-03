@@ -16,7 +16,6 @@ bool_expr, b :: be_ ::=
     | a1 < a2                           ::  :: less_than
 
 commands, c :: c_ ::=
-    | stop                              ::  :: stop
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
     | c1 ; c2                       ::  :: sequence
@@ -122,7 +121,7 @@ defn
 
 %%% Skip %%%
 ----------------------------- :: skip
-<skip, m, o> --> <stop, m, o>
+<skip, m, o> --> <skip, m, o>
 
 %%% Assignment %%%
 <a, m, o> --> <a', m, o>
@@ -130,7 +129,7 @@ defn
 <x := a, m, o> --> <x := a', m, o>
 
 ----------------------------- :: assign_int
-<x := n, m, o> --> <stop, m[x |-> n], o>
+<x := n, m, o> --> <skip, m[x |-> n], o>
 
 %%% Sequence %%%
 <c1, m, o> --> <c1', m', o'>
@@ -159,9 +158,9 @@ defn
 %%% Read %%%
 m(ch) = n
 --------------------------------------------------------------------------- :: read
-<read x from ch, m, o> --> <stop, m[x |-> n], o>
+<read x from ch, m, o> --> <skip, m[x |-> n], o>
 
 %%% Write %%%
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to ch, m, o> --> <stop, m[ch |-> n], o::(ch - n)>
+<write x to ch, m, o> --> <skip, m[ch |-> n], o::(ch - n)>
