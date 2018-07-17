@@ -44,6 +44,11 @@ public class State {
         return s[1];
     }
 
+    //For "m[x |-> a]", returns "m"
+    public String getMemoryWithoutUpdate() {
+        return getMemory().split("\\[")[0];
+    }
+
     public String getOutput() {
         String[] s = _state.split(",");
         return s[2];

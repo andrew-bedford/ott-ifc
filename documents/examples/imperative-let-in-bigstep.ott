@@ -15,18 +15,15 @@ bool_expr, b :: be_ ::=
     | false                             ::  :: false
     | a1 < a2                           ::  :: less_than
 
-commands, c :: c_ ::=
-    | stop                              ::  :: stop
+commands, cmd :: cmd_ ::=
     | skip                              ::  :: skip
     | x := a                            ::  :: assignment
-    | c1 ; c2                           ::  :: sequence
-    | if b then c1 else c2 end          ::  :: if
-    | while b do c end                  ::  :: while
-    | read x from ch                    ::  :: read
-    | write x to ch                     ::  :: write
-    | exception                         ::  :: exception
-    | throw				::  :: throw
-    | try c1 catch c2                   ::  :: try_catch
+    | cmd1 ; cmd2                           ::  :: sequence
+    | if b then cmd1 else cmd2 end          ::  :: if
+    | while b do cmd end                  ::  :: while
+    | read x from ch                     ::  :: read
+    | write x to ch                      ::  :: write
+    | let x := a in cmd                 ::  :: let_in
 
 memory, m :: memory_ ::=
    | empty                              ::  :: empty
@@ -62,7 +59,7 @@ terminals :: terminals_ ::=
 %                    BIG-STEP SEMANTICS                        %
 %----------------------------------------------------------------%
 defns
-Jop :: '' ::=
+Jop :: '' ::= 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Arithmetic Expressions %%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
@@ -109,61 +106,53 @@ n1 < n2 = false
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 defn 
-< c , m , o > || < c' , m' , o' > :: :: c_ops :: 'c_' by
+< cmd , m , o > || < cmd' , m' , o' > :: :: cmd_ops :: 'cmd_' by
 
 %%% Assignment %%%
 <a, m, o> || <n, m, o>
 ----------------------------- :: assign
-<x := a, m, o> || <stop, m[x |-> n], o>
+<x := a, m, o> || <skip, m[x |-> n], o>
+
+%%% Let in %%%
+<a, m, o> || <n, m, o>
+m(x) = n1
+<cmd, m[x |-> n], o> || <skip, m', o'>
+----------------------------- :: let_in
+<let x := a in cmd, m, o> || <skip, m'[x |-> n1], o'>
+
 
 %%% Sequence %%%
-<c1, m, o> || <stop, m1, o1>
-<c2, m1, o1> || <stop, m2, o2>
+<cmd1, m, o> || <skip, m1, o1>
+<cmd2, m1, o1> || <skip, m2, o2>
 -------------------------------- :: sequence
-<c1 ; c2, m, o> || <stop, m2, o2>
-
-<c1, m, o> || <exception, m1, o1>
--------------------------------- :: sequence_exception
-<c1 ; c2, m, o> || <exception, m1, o1>
+<cmd1 ; cmd2, m, o> || <skip, m2, o2>
 
 %%% If %%%
 <b, m, o> || <true, m, o>
-<c1, m, o> || <stop, m1, o1>
+<cmd1, m, o> || <skip, m1, o1>
 ---------------------------------------------------------------- :: if_true
-<if b then c1 else c2 end, m, o> || <stop, m1, o1>
+<if b then cmd1 else cmd2 end, m, o> || <skip, m1, o1>
 
 <b, m, o> || <false, m, o>
-<c2, m, o> || <stop, m2, o2>
+<cmd2, m, o> || <skip, m2, o2>
 ---------------------------------------------------------------- :: if_false
-<if b then c1 else c2 end, m, o> || <stop, m2, o2>
+<if b then cmd1 else cmd2 end, m, o> || <skip, m2, o2>
 
 %%% While %%%
 <b, m, o> || <true, m, o>
-<c, m, o> || <stop, m', o'>
-<while b do c end, m', o''> || <stop, m'', o''>
+<cmd, m, o> || <skip, m', o'>
+<while b do cmd end, m', o''> || <skip, m'', o''>
 --------------------------------------------------------------------------- :: while_true
-<while b do c end, m, o> || <stop, m'', o''>
+<while b do cmd end, m, o> || <skip, m'', o''>
 
 <b, m, o> || <false, m, o>
 --------------------------------------------------------------------------- :: while_false
-<while b do c end, m, o> || <stop, m, o>
+<while b do cmd end, m, o> || <skip, m, o>
 
 m(ch) = n
 --------------------------------------------------------------------------- :: read
-<read x from ch, m, o> || <stop, m[x |-> n], o>
+<read x from ch, m, o> || <skip, m[x |-> n], o>
 
 m(x) = n
 --------------------------------------------------------------------------- :: write
-<write x to ch, m, o> || <stop, m[ch |-> n], o::(ch - n)>
-
----------------------------------------- :: throw
-<throw, m, o> || <exception, m, o>
-
-<c1, m, o> || <stop, m', o'>
--------------------------------------------- :: try_catch
-<try c1 catch c2, m, o> || <stop, m', o'>
-
-<c1, m, o> || <exception, m', o'>
-<c2, m', o'> || <c2'', m'', o''>
--------------------------------------------- :: try_catch_with_exception
-<try c1 catch c2, m, o> || <c2'', m'', o''>
+<write x to ch, m, o> || <skip, m[ch |-> n], o::(ch - n)>

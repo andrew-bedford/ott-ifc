@@ -204,10 +204,10 @@ public class Rule {
                 if (_spec.isCommandNonTerminal(initialStateAbstractCommand) || specificationPossibleCommands.contains(initialStateAbstractCommand)) {
                     //We ensure that the pc names follows the naming convention of the user's memory and output variables.
                     //For example, if we have <cmd2, m1, o1> || <stop, m2, o2>, then the inserted pc variables should be pc1 in the initial state and pc2 in the final state.
-                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemory()).trim();
+                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemoryWithoutUpdate()).trim();
                     precondition = precondition.replaceAll("<(.*?[^-])> ((-->)|(\\|\\|))", String.format("<$1, %s%s> $2", "pc", initialEnvironmentSuffix));
 
-                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemory()).trim();
+                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemoryWithoutUpdate()).trim();
                     precondition = precondition.replaceAll("((-->)|(\\|\\|)) <(.*?[^-])>", String.format("$1 <$4, %s%s>", "pc", finalEnvironmentSuffix));
 
                     _lastEnvironmentSuffix = finalEnvironmentSuffix;
@@ -234,10 +234,10 @@ public class Rule {
                 if (_spec.isCommandNonTerminal(initialStateAbstractCommand) || specificationPossibleCommands.contains(initialStateAbstractCommand)) {
                     //We ensure that the environment names follows the naming convention of the user's memory and output variables.
                     //For example, if we have <cmd2, m1, o1> || <stop, m2, o2>, then the inserted environment variables should be E1 in the initial state and E2 in the final state.
-                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemory()).trim();
+                    String initialEnvironmentSuffix = StringHelper.getStringWithoutLetters(initialState.getMemoryWithoutUpdate()).trim();
                     precondition = precondition.replaceAll("<(.*?[^-])> ((-->)|(\\|\\|))", String.format("<$1, %s%s> $2", "E", initialEnvironmentSuffix));
 
-                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemory()).trim();
+                    String finalEnvironmentSuffix = StringHelper.getStringWithoutLetters(finalState.getMemoryWithoutUpdate()).trim();
                     precondition = precondition.replaceAll("((-->)|(\\|\\|)) <(.*?[^-])>", String.format("$1 <$4, %s%s>", "E", finalEnvironmentSuffix));
 
                     _lastEnvironmentSuffix = finalEnvironmentSuffix;
